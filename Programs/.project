@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>InputImages/plate02.jpg</name>
+			<type>1</type>
+			<location>A:/alll coding stuff/Workspaces and projects/Eclipse workspace/Intelligent_Sensors/Programs/InputImages/plate02.jpg</location>
+		</link>
+	</linkedResources>
 </projectDescription>
