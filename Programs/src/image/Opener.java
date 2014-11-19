@@ -44,15 +44,15 @@ public class Opener {
 	 * @return	the imageIcon for the fileName specified in the constructor
 	 * @throws Exception	imageIO exception if image does not excist or is unreadable
 	 */
-	public ImageIcon getImageIcon() throws Exception
+	public ImageIcon getImageIcon(BufferedImage image) throws Exception
 	{
-		ImageIcon imageIcon = new ImageIcon(this.getImage());
+		ImageIcon imageIcon = new ImageIcon(image);
 		return imageIcon;
 	}
 	
 	/**
 	 * This method is to return only a buffered image
-	 * @return
+	 * @return A buffered image
 	 */
 	public BufferedImage getImage(){
 		BufferedImage image = null;
