@@ -1,15 +1,11 @@
 package image;
 
-import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.JPanel;
 
 /**
  * This class will be the class that opens a picture, stores that in memory and returns that.
@@ -19,7 +15,7 @@ import javax.swing.WindowConstants;
  */
 public class Opener {
 	String fileName = "./InputImages/plate02.jpg";
-	
+	JPanel editorPanel;
 	/**
 	 * Default Constructor
 	 */
@@ -36,37 +32,31 @@ public class Opener {
 	}
 	
 	/**
-	 * Opens an image and displays that on a screen
-	 * @throws Exception this is an ImageIO exception, for example when the program cannot read or find the file
+	 * Constructor with the JPanel for the image in it
+	 * @param imagePanel
 	 */
-	public void ImageDemo() throws Exception
+	public Opener(JPanel imagePanel){
+		editorPanel = imagePanel;
+	}
+	
+	/**
+	 * Returns the loaded imageIcon for a image file to be used in a JPanel
+	 * @return	the imageIcon for the fileName specified in the constructor
+	 * @throws Exception	imageIO exception if image does not excist or is unreadable
+	 */
+	public ImageIcon getImage() throws Exception
 	{
-		SwingUtilities.invokeLater(new Runnable()
+		BufferedImage image = null;
+		try
 		{
-			public void run()
-			{
-				JFrame editorFrame = new JFrame("Image Demo");
-				editorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-				BufferedImage image = null;
-				try
-				{
-					image = ImageIO.read(new File(fileName));
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					System.exit(1);
-				}
-				ImageIcon imageIcon = new ImageIcon(image);
-				JLabel jLabel = new JLabel();
-				jLabel.setIcon(imageIcon);
-				editorFrame.getContentPane().add(jLabel, BorderLayout.CENTER);
-
-				editorFrame.pack();
-				editorFrame.setLocationRelativeTo(null);
-				editorFrame.setVisible(true);
-			}
-		});
+			image = ImageIO.read(new File(fileName));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+		ImageIcon imageIcon = new ImageIcon(image);
+		return imageIcon;
 	}
 }
