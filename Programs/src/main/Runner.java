@@ -30,7 +30,7 @@ public class Runner {
 		Opener test = new Opener();
 		JLabel picLabel = null;
 		try {
-			picLabel = new JLabel(test.getImage());
+			picLabel = new JLabel(test.getImageIcon());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
