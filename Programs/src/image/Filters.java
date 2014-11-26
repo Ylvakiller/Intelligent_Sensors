@@ -52,4 +52,25 @@ public class Filters {
 			y=0;
 		}
 	}
+	
+	/**
+	 * This method will do all the histogram equalization
+	 * @param picLabel the label to be updated with new info
+	 * @param buffer the image to process
+	 */
+	public static void histogramEqualisation(JLabel picLabel,BufferedImage buffer){
+		int CDFminRed;
+		int CDFminBlue;
+		int CDFminGreen;
+		int M = buffer.getWidth();
+		int N = buffer.getHeight();
+		int L = 256;
+		//formula: round(((CDF(v)-CDFmin)/((M*N)-CDFmin))*(L-1))
+		/*
+		 *The next arrays will first hold counts of the amount a certain value comes on 
+		 */
+		int[] redCDF;	
+		int[] blueCDF;
+		int[] greenCDF;
+	}
 }

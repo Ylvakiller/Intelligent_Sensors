@@ -36,7 +36,7 @@ public class Runner {
 		JLabel picLabel = null;
 		BufferedImage buffer = test.getImage();
 		try {
-			picLabel = new JLabel(test.getImageIcon(buffer));
+			picLabel = new JLabel(Opener.getImageIcon(buffer));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,4 +55,6 @@ public class Runner {
 		
 		menuOutput.append("End");
 	}
+	
+	
 }
