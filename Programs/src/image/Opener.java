@@ -42,9 +42,9 @@ public class Opener {
 	/**
 	 * Returns the loaded imageIcon for a image file to be used in a JPanel
 	 * @return	the imageIcon for the fileName specified in the constructor
-	 * @throws Exception	imageIO exception if image does not excist or is unreadable
+	 * @throws Exception imageIO exception if image does not exist or is unreadable
 	 */
-	public ImageIcon getImageIcon(BufferedImage image) throws Exception
+	public static ImageIcon getImageIcon(BufferedImage image) throws Exception
 	{
 		ImageIcon imageIcon = new ImageIcon(image);
 		return imageIcon;
