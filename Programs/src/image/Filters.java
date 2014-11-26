@@ -3,7 +3,7 @@ package image;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JLabel;
+import main.Runner;
 
 /**
  * This class is ment to do all the filtering of the image
@@ -17,7 +17,7 @@ public class Filters {
 	 * @param picLabel the place where to update the screen
 	 * @param buffer the image to process
 	 */
-	public static void ColorFilter(JLabel picLabel,BufferedImage buffer){
+	public static void ColorFilter(BufferedImage buffer){
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -44,7 +44,7 @@ public class Filters {
 			    Thread.currentThread().interrupt();
 			}
 			try {
-				picLabel.setIcon(Opener.getImageIcon(buffer));
+				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -58,7 +58,7 @@ public class Filters {
 	 * @param picLabel the label to be updated with new info
 	 * @param buffer the image to process
 	 */
-	public static void histogramEqualisation(JLabel picLabel,BufferedImage buffer){
+	public static void histogramEqualisation(BufferedImage buffer){
 		int CDFminRed;
 		int CDFminBlue;
 		int CDFminGreen;
