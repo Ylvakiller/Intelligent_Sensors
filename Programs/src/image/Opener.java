@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  *
  */
 public class Opener {
-	String fileName = "./InputImages/plate02.jpg";
+	String fileName = "./InputImages/plate11.jpg";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor

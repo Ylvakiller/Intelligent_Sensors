@@ -142,9 +142,37 @@ public class Filters {
 			}
 			i++;
 		}
-		Runner.menuOutput.append("Scaled cdf\n");
+		Runner.menuOutput.append("Scaled cdf, processing image\n");
 		
 
+		x=0;
+		y=0;
+		while (x<M){
+			while(y<N){
+				Color C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				red = redCDF[red];
+				green  = greenCDF[green];
+				blue = blueCDF[blue];
+				Color c2 = new Color(red, green, blue);
+				buffer.setRGB(x, y, c2.getRGB());
+				y++;
+			}
+			try {
+			    Thread.sleep(30);                 //1000 milliseconds is one second.
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+			try {
+				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			x++;
+			y=0;
+		}
 		//formula: round(((CDF(v)-CDFmin)/((M*N)-CDFmin))*(L-1))
 		
 	}
