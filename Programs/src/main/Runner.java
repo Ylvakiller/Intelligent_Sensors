@@ -21,6 +21,7 @@ public class Runner {
 	 * This is the label that the picture is rendered upon
 	 */
 	public static JLabel picLabel;
+	public static JTextArea menuOutput;
 	
 	/**
 	 * Main method, runs the whole program
@@ -34,7 +35,7 @@ public class Runner {
 		jf.getContentPane().setLayout(null);
 		jf.setSize(1100,600);
 		
-		JTextArea menuOutput = new JTextArea();
+		menuOutput = new JTextArea();
 		menuOutput.setBounds(10, 11, 241, 536);
 		jf.getContentPane().add(menuOutput);
 		menuOutput.setLineWrap(true);
