@@ -14,7 +14,6 @@ public class Filters {
 	
 	/**
 	 * This method does the color filtering
-	 * @param picLabel the place where to update the screen
 	 * @param buffer the image to process
 	 */
 	public static void ColorFilter(BufferedImage buffer){
@@ -55,7 +54,6 @@ public class Filters {
 	
 	/**
 	 * This method will do all the histogram equalization
-	 * @param picLabel the label to be updated with new info
 	 * @param buffer the image to process
 	 */
 	public static void histogramEqualisation(BufferedImage buffer){
@@ -67,10 +65,33 @@ public class Filters {
 		int L = 256;
 		//formula: round(((CDF(v)-CDFmin)/((M*N)-CDFmin))*(L-1))
 		/*
-		 *The next arrays will first hold counts of the amount a certain value comes on 
+		 *The next arrays will first hold counts of the amount a certain value is found, then the CDF and then a scaled CDF
 		 */
-		int[] redCDF;	
-		int[] blueCDF;
-		int[] greenCDF;
+		int[] redCDF = new int[256];
+		int[] greenCDF = new int[256];	
+		int[] blueCDF = new int[256];
+		int x = 0;
+		int y = 0;
+		while(x<M){
+			while(y<N){
+				Color C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				redCDF[red]++;
+				greenCDF[green]++;
+				blueCDF[blue]++;
+				y++;
+			}
+			y=0;
+			x++;
+		}
+		System.out.println("Gotten all data from image, printing values for red:");
+		x=0;
+		while (x<256){
+			System.out.println("X: " + x + " value: " + redCDF[x] );
+			x++;
+		}
+		
 	}
 }
