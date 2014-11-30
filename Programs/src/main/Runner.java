@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import image.Filters;
-import image.Opener;
+import image.FileAccess;
 
 import javax.swing.JTextArea;
 
@@ -46,11 +46,10 @@ public class Runner {
 		
 		menuOutput.append("Started\n");
 		jf.setLocationRelativeTo(null);
-		Opener test = new Opener();
 		picLabel = null;
-		BufferedImage buffer = test.getImage();
+		BufferedImage buffer = FileAccess.getImage();
 		try {
-			picLabel = new JLabel(Opener.getImageIcon(buffer));
+			picLabel = new JLabel(FileAccess.getImageIcon(buffer));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +65,7 @@ public class Runner {
 		
 		
 		Filters.histogramEqualisation(buffer);
-		test.writeImage(buffer);
+		FileAccess.writeImage(buffer);
 		Filters.ColorFilter(buffer);
 		menuOutput.append("End");
 	}

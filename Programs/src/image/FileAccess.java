@@ -17,13 +17,13 @@ import javax.swing.JPanel;
  * @author Ylva
  *
  */
-public class Opener {
-	String fileName = "./InputImages/plate02.jpg";
+public class FileAccess {
+	static String fileName = "./InputImages/plate02.jpg";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
 	 */
-	public Opener(){
+	public FileAccess(){
 		
 	}
 	
@@ -31,15 +31,15 @@ public class Opener {
 	 * Constructor with a file name in it.
 	 * @param fileName
 	 */
-	public Opener(String fileName){
-		this.fileName = fileName;
+	public FileAccess(String fileName){
+		FileAccess.fileName = fileName;
 	}
 	
 	/**
 	 * Constructor with the JPanel for the image in it
 	 * @param imagePanel
 	 */
-	public Opener(JPanel imagePanel){
+	public FileAccess(JPanel imagePanel){
 		editorPanel = imagePanel;
 	}
 	
@@ -58,7 +58,7 @@ public class Opener {
 	 * This method is to return only a buffered image
 	 * @return A buffered image
 	 */
-	public BufferedImage getImage(){
+	public static BufferedImage getImage(){
 		BufferedImage image = null;
 		try
 		{
@@ -76,7 +76,7 @@ public class Opener {
 	 * Writes an imageFile in the OutputImages folder called test
 	 * @param buffer the bufferImage to be written to
 	 */
-	public void writeImage(BufferedImage buffer){
+	public static void writeImage(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
 		File f = new File("./OutputImages/test.png");

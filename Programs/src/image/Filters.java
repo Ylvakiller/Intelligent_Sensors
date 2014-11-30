@@ -43,7 +43,7 @@ public class Filters {
 			    Thread.currentThread().interrupt();
 			}*/
 			try {
-				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
+				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -160,7 +160,7 @@ public class Filters {
 			    Thread.currentThread().interrupt();
 			}*/
 			try {
-				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
+				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
