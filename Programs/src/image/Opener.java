@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  *
  */
 public class Opener {
-	String fileName = "./InputImages/plate24.jpg";
+	String fileName = "./InputImages/plate02.jpg";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
@@ -72,6 +72,10 @@ public class Opener {
 		return image;
 	}
 	
+	/**
+	 * Writes an imageFile in the OutputImages folder called test
+	 * @param buffer the bufferImage to be written to
+	 */
 	public void writeImage(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -80,14 +84,12 @@ public class Opener {
 		try {
 			ios = ImageIO.createImageOutputStream(f);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		writer.setOutput(ios);
 		try {
 			writer.write(buffer);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
