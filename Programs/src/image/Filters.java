@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import main.Runner;
 
 /**
- * This class is ment to do all the filtering of the image
+ * This class is meant to do all the filtering of the image
  * @author Ylva
  *
  */
@@ -30,18 +30,18 @@ public class Filters {
 				int red = C.getRed();
 				int green = C.getGreen();
 				int blue = C.getBlue();
-				if (red>190&&green<200&&green>140&&blue<100){
+				if (red>160&&(green>198||(green<160&&green>140)||(green<105&&green>80))&&blue<190){
 					buffer.setRGB(x, y, Color.white.getRGB());
 				}else{
 					buffer.setRGB(x, y, Color.black.getRGB());
 				}
 				y++;
-			}
+			}/*
 			try {
-			    Thread.sleep(30);                 //1000 milliseconds is one second.
+			    Thread.sleep(5);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
-			}
+			}*/
 			try {
 				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -150,21 +150,15 @@ public class Filters {
 		while (x<M){
 			while(y<N){
 				Color C = new Color(buffer.getRGB(x, y));
-				int red = C.getRed();
-				int green = C.getGreen();
-				int blue = C.getBlue();
-				red = redCDF[red];
-				green  = greenCDF[green];
-				blue = blueCDF[blue];
-				Color c2 = new Color(red, green, blue);
+				Color c2 = new Color(redCDF[C.getRed()], greenCDF[C.getGreen()], blueCDF[C.getBlue()]);
 				buffer.setRGB(x, y, c2.getRGB());
 				y++;
 			}
-			try {
-			    Thread.sleep(30);                 //1000 milliseconds is one second.
+			/*try {
+			    Thread.sleep(5);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
-			}
+			}*/
 			try {
 				Runner.picLabel.setIcon(Opener.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -174,6 +168,7 @@ public class Filters {
 			y=0;
 		}
 		//formula: round(((CDF(v)-CDFmin)/((M*N)-CDFmin))*(L-1))
+		
 		
 	}
 }

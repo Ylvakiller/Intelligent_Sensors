@@ -64,9 +64,10 @@ public class Runner {
 
 		jf.setVisible(true);
 		
-		//Filters.ColorFilter(buffer);
-		Filters.histogramEqualisation(buffer);
 		
+		Filters.histogramEqualisation(buffer);
+		test.writeImage(buffer);
+		Filters.ColorFilter(buffer);
 		menuOutput.append("End");
 	}
 	
