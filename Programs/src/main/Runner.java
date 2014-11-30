@@ -21,6 +21,10 @@ public class Runner {
 	 * This is the label that the picture is rendered upon
 	 */
 	public static JLabel picLabel;
+	
+	/**
+	 * This is where the program can communicate to the user, by using menuOutput.append(string) you can send a string to the user
+	 */
 	public static JTextArea menuOutput;
 	
 	/**

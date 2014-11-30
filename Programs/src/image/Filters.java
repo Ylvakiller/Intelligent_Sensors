@@ -57,6 +57,7 @@ public class Filters {
 	 * @param buffer the image to process
 	 */
 	public static void histogramEqualisation(BufferedImage buffer){
+		Runner.menuOutput.append("Starting Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
 		int CDFminGreen;
@@ -86,12 +87,8 @@ public class Filters {
 			y=0;
 			x++;
 		}
-		System.out.println("Gotten all data from image, printing values for red:");
-		x=0;
-		while (x<256){
-			System.out.println("X: " + x + " value: " + redCDF[x] );
-			x++;
-		}
+
+		Runner.menuOutput.append("Counted all instances, calculating CDF");
 		
 	}
 }
