@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import image.Filters;
+import image.Processing;
 import image.FileAccess;
 
 import javax.swing.JTextArea;
@@ -64,9 +64,9 @@ public class Runner {
 		jf.setVisible(true);
 		
 		
-		Filters.histogramEqualisation(buffer);
+		Processing.histogramEqualisation(buffer);
 		//FileAccess.writeImage(buffer);
-		Filters.ColorFilter(buffer);
+		Processing.ColorFilter(buffer);
 		menuOutput.append("End");
 	}
 	

@@ -10,7 +10,7 @@ import main.Runner;
  * @author Ylva
  *
  */
-public class Filters {
+public class Processing {
 	
 	/**
 	 * This method does the color filtering
