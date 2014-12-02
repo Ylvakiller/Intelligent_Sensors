@@ -166,9 +166,57 @@ public class Processing {
 			}
 			x++;
 			y=0;
+		}	
+	}
+	
+	/**
+	 * This method will detect and render blobs
+	 * @param buffer the image to process
+	 */
+	public static void blobDetection(BufferedImage buffer){
+		int x, xMax, y, yMax;
+		x=0;
+		y=0;
+		xMax = buffer.getWidth();
+		yMax = buffer.getHeight();
+		Runner.menuOutput.append("Starting blobDetection");
+		int[][] blobArray = new int[xMax][yMax];
+		int[] connectedBlobs = new int[(xMax*yMax)/4];
+		while (x<xMax){
+			while (y<yMax){
+				if (x==0){	//left border
+					if (y==0){	//top left corner
+						
+					}else{
+						//check only directely above
+					}
+				}else {	
+					if (y==0){//top row
+						
+					}else if (y==yMax-1){	//bottom row
+						
+					}else{	//any middle place
+						
+					}
+				}
+				y++;
+			}
+			y=0;
+			x++;
 		}
-		//formula: round(((CDF(v)-CDFmin)/((M*N)-CDFmin))*(L-1))
-		
-		
+	}
+	
+	/**
+	 * This will check if a certain place is white
+	 * @param x the X coordinate to check
+	 * @param y the Y coordinate to check
+	 * @return true if the value of the coordinates to be checked is 255
+	 */
+	private static boolean checkPos(int x, int y, BufferedImage buffer){
+		Color c = new Color(buffer.getRGB(x, y));
+		if (c.getRed()==255&&c.getGreen()==255&&c.getBlue()==255){
+			return true;
+		}
+		return false;
 	}
 }
