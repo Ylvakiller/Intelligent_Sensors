@@ -65,7 +65,7 @@ public class Runner {
 		
 		
 		Filters.histogramEqualisation(buffer);
-		FileAccess.writeImage(buffer);
+		//FileAccess.writeImage(buffer);
 		Filters.ColorFilter(buffer);
 		menuOutput.append("End");
 	}
