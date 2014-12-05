@@ -67,6 +67,7 @@ public class Runner {
 		Processing.histogramEqualisation(buffer);
 		//FileAccess.writeImage(buffer);
 		Processing.ColorFilter(buffer);
+		Processing.blobDetection(buffer);
 		menuOutput.append("End");
 	}
 	
