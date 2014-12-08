@@ -678,6 +678,12 @@ public class Processing {
 
 	}
 
+	/**
+	 * Will make sure that the number for all the connectedBlobs will be the total lowest blobNumber
+	 * Does not work correctely, LOOK AT THE MATH!
+	 * @param connectedBlobs
+	 * @param amountOfBlobs
+	 */
 	private static void findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
 		Runner.menuOutput.append("Calculating connected blobs\n");
 		int i;
