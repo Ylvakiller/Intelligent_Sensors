@@ -674,7 +674,11 @@ public class Processing {
 			y=0;
 			x++;
 		}
-		
+		Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
+
+	}
+
+	private static void findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
 		Runner.menuOutput.append("Calculating connected blobs\n");
 		int i;
 		int j;
@@ -683,7 +687,7 @@ public class Processing {
 			int minLoc = 0;
 			j = 0;
 			while (true){
-				
+
 				if (connectedBlobs[i][j]==0){
 					break;
 				}else{
@@ -701,20 +705,24 @@ public class Processing {
 				break;
 			}
 		}
-		
+
 		//Now the program needs to calculate the largest mass, in order to do that the connectBlobsArray needs to be further refined
 		i=0;
 		j=0;
+		int i2=0;
 		while (i<amountOfBlobs){
-			
+			if (connectedBlobs[i2][0]==i2){//lowest blob number found		
+				while (connectedBlobs[i][j]!=0){	
+				}//find the first empty value
+				//move the value at connectedBlobs[i][0] to the last value and replace it with the lowest recursive blob number
+				
+				
+			}else{
+				i2 = connectedBlobs[i2][0];
+			}
+			i++;
+			i2 = i;
 		}
-		
-		
-
-	}
-	
-	private static void findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
-		
 	}
 
 	/**
@@ -739,11 +747,11 @@ public class Processing {
 	 * @return the updated array
 	 */
 	private static int[][] updateConnectedBlobs(int one, int two, int[][] connected, int nextCount){
-		
+
 		int i = 0;
 		while (i<=nextCount){
 			if (connected[one][i]==two){//blobs have already been marked as connected
-				
+
 				return connected;
 			}else{
 			}
