@@ -37,7 +37,7 @@ public class Runner {
 		System.out.println("Started");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(null);
-		jf.setSize(1100,600);
+		jf.setSize(1600,900);
 		
 		menuOutput = new JTextArea();
 		menuOutput.setBounds(10, 11, 241, 536);
@@ -55,7 +55,7 @@ public class Runner {
 			e.printStackTrace();
 		}
 
-		picLabel.setBounds(258, 11, 816, 536);
+		picLabel.setBounds(258, 11, 1280, 800);
 		
 		
 		jf.getContentPane().add(picLabel);

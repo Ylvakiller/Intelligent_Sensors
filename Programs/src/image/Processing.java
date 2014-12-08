@@ -43,7 +43,7 @@ public class Processing {
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}*/
-			
+
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -162,7 +162,7 @@ public class Processing {
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}*/
-			
+
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -183,35 +183,35 @@ public class Processing {
 		y=0;
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
-		int nextCount = 1;//this is the next int that has not been used to identify a blob
-		Runner.menuOutput.append("Starting blobDetection");
+		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
+		Runner.menuOutput.append("Starting blobDetection\n");
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/4][1000];
 		while (x<xMax){
 			while (y<yMax){
 				if (checkPos(x,y,buffer)){//image is part of a blob
 					if (x==0&&y==0){//top left corner
-						connectedBlobs = updateConnectedBlobs(nextCount,nextCount,connectedBlobs,nextCount);
-						blobArray[x][y] = nextCount;
-						nextCount++;
+						connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
+						blobArray[x][y] = amountOfBlobs;
+						amountOfBlobs++;
 					}else{
 						if (x==0){
 							if (blobArray[x][y-1]==0){	//found previously undetected blob on the left side of the screen
-								connectedBlobs = updateConnectedBlobs(nextCount,nextCount,connectedBlobs,nextCount);
-								blobArray[x][y] = nextCount;
-								nextCount++;
+								connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
+								blobArray[x][y] = amountOfBlobs;
+								amountOfBlobs++;
 							}else{//found blob above
 								blobArray[x][y] = blobArray[x][y-1];
 							}
 						}else{//not on the left side of the screen
-							
+
 							if (y==0){//on the top border
 								if(blobArray[x-1][y]==0){//spot to the left is not part of a blob
 									if (blobArray[x-1][y+1]==0){//spot down and to the left is not part of a blob
 										//no connected blob detected
-										connectedBlobs = updateConnectedBlobs(nextCount,nextCount,connectedBlobs,nextCount);
-										blobArray[x][y] = nextCount;
-										nextCount++;
+										connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
+										blobArray[x][y] = amountOfBlobs;
+										amountOfBlobs++;
 									}else{
 										//blob found to bottom left, not to left
 										blobArray[x][y] = blobArray[x-1][y+1];
@@ -225,7 +225,7 @@ public class Processing {
 											blobArray[x][y] = blobArray[x-1][y];
 										}else{
 											//the 2 blobs are not connected
-											connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y+1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+											connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y+1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 											blobArray[x][y] = blobArray[x-1][y];//getting one of the values, since they are marked as connected it does not matter which
 										}
 									}
@@ -235,9 +235,9 @@ public class Processing {
 									if(blobArray[x-1][y-1]==0){//diagonally left top is no blob
 										if(blobArray[x][y-1]==0){//directely up is no blob
 											//new blob found
-											connectedBlobs = updateConnectedBlobs(nextCount,nextCount,connectedBlobs,nextCount);
-											blobArray[x][y] = nextCount;
-											nextCount++;
+											connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
+											blobArray[x][y] = amountOfBlobs;
+											amountOfBlobs++;
 										}else{
 											//only directely up is a blob
 											blobArray[x][y] = blobArray[x][y-1];
@@ -253,7 +253,7 @@ public class Processing {
 												blobArray[x][y] = blobArray[x-1][y-1];
 											}else{
 												//blobs are not marked as connected
-												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 												blobArray[x][y] = blobArray[x-1][y-1];//getting one of the values, since they are marked as connected it does not matter which
 											}
 										}
@@ -270,7 +270,7 @@ public class Processing {
 												blobArray[x][y] = blobArray[x][y-1];
 											}else{
 												//blobs are not marked as connected
-												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 												blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 											}
 										}
@@ -283,7 +283,7 @@ public class Processing {
 												blobArray[x][y] = blobArray[x][y-1];
 											}else{
 												//blobs are not marked as connected
-												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+												connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 												blobArray[x][y] = blobArray[x-1][y-1];//getting one of the values, since they are marked as connected it does not matter which
 											}
 										}else{
@@ -294,48 +294,48 @@ public class Processing {
 														blobArray[x][y] = blobArray[x-1][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}else{
 														//blobs to the left and diagonal are connected, as are diagonal and top, however left and top are not yet connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}
 												}else{
 													//diagonal and up are not yet connected, left and diagonal are
 													if (checkConnected(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs)){//checking left and up											*
 														//only diagonal and up are not connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,nextCount);//marking the 2 blobs as being connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the 2 blobs as being connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}else{
 														//only diagonal and left are marked connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,nextCount);//marking the diagonal and up as connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,nextCount);//marking the left and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the diagonal and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the left and up as connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}
 												}
 											}else{
 												//left and diagonal are not connected
 												if (checkConnected(blobArray[x-1][y-1],blobArray[x-1][y],connectedBlobs)){//checking diagonal and up										*
-													
+
 													if (checkConnected(blobArray[x][y-1],blobArray[x-1][y],connectedBlobs)){//checking left and up											*
 														//only left and diagonal are not connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x][y-1],blobArray[x-1][y-1],connectedBlobs,nextCount);
+														connectedBlobs = updateConnectedBlobs(blobArray[x][y-1],blobArray[x-1][y-1],connectedBlobs,amountOfBlobs);
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}else{
 														//left and diagonal are not connected, left and up are not connected, diagonal and up are connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,nextCount);//marking the left and diagonal as connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,nextCount);//marking the left and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,amountOfBlobs);//marking the left and diagonal as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the left and up as connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}
 												}else{
 													//left and diagonal are not connected, diagonal and up are also not connected
 													if (checkConnected(blobArray[x][y-1],blobArray[x-1][y],connectedBlobs)){//checking if left and up are connected
 														//only left and up are connected, left and diagonal and diagonal and up are not connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,nextCount);//marking the left and diagonal as connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,nextCount);//marking the diagonal and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,amountOfBlobs);//marking the left and diagonal as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the diagonal and up as connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}else{
 														//none of the 3 blobs are connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,nextCount);//marking the left and diagonal as connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,nextCount);//marking the diagonal and up as connected
-														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,nextCount);//marking the left and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x-1][y-1],connectedBlobs,amountOfBlobs);//marking the left and diagonal as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y-1],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the diagonal and up as connected
+														connectedBlobs = updateConnectedBlobs(blobArray[x-1][y],blobArray[x][y-1],connectedBlobs,amountOfBlobs);//marking the left and up as connected
 														blobArray[x][y] = blobArray[x][y-1];//getting one of the values, since they are marked as connected it does not matter which
 													}
 												}
@@ -348,14 +348,14 @@ public class Processing {
 								int left = blobArray[x-1][y];//the value to the left
 								int up = blobArray[x][y-1];//the value up
 								int dDown = blobArray[x-1][y+1];//the value at the diagonal to the left and down
-								
+
 								if (up==0){//up is no blob
 									if (dUp==0){//dup is no blob
 										if (left==0){//left is no blob
 											if (dDown==0){//no blobs found anywhere
-												connectedBlobs = updateConnectedBlobs(nextCount,nextCount,connectedBlobs,nextCount);
-												blobArray[x][y] = nextCount;
-												nextCount++;
+												connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
+												blobArray[x][y] = amountOfBlobs;
+												amountOfBlobs++;
 											}else{
 												//only to the diagonal down is there a blob
 												blobArray[x][y]=dDown;
@@ -371,7 +371,7 @@ public class Processing {
 													blobArray[x][y]= left;//setting one of the values, since they are connected it does not matter
 												}else{
 													//blobs have not been marked as connected
-													connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);//marking left and dDown as connected
+													connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);//marking left and dDown as connected
 													blobArray[x][y]= left;//setting one of the values, since they are connected it does not matter
 												}
 											}
@@ -389,7 +389,7 @@ public class Processing {
 													blobArray[x][y] = dUp;
 												}else{
 													//blobs are not yet connected
-													connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 													blobArray[x][y] = dUp;
 												}
 											}
@@ -402,7 +402,7 @@ public class Processing {
 													blobArray[x][y] = dUp;
 												}else{
 													//blobs are not yet connected
-													connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 													blobArray[x][y] = dUp;
 												}
 											}else{
@@ -413,18 +413,18 @@ public class Processing {
 															blobArray[x][y] = dUp;
 														}else{
 															//only dDown and left are not yet connected
-															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}
 													}else{
 														//dUp and left are connected, dUp and dDown are not connected
 														if (checkConnected(dDown,left, connectedBlobs)){//only dUp and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}else{
 															//only dUp and left are connected
-															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}
 													}
@@ -434,26 +434,26 @@ public class Processing {
 														//dUp and dDown are connected
 														if (checkConnected(left, dDown,connectedBlobs)){
 															//only dUp and left are not connected, dUp and dDown aswell as left and dDown are connected
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}else{
 															//dUp and left and dDown and left are not connected, dUp and dDown are connected
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}
 													}else{
 														//dUp and left are not connected, dUp and dDown are not connected
 														if (checkConnected(left,dDown,connectedBlobs)){
 															//only left and dDown are connected
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}else{
 															//none of the 3 are connected
-															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dDown,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = dUp;
 														}
 													}
@@ -473,7 +473,7 @@ public class Processing {
 													//blobs are already connected
 													blobArray[x][y] = up;
 												}else{
-													connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 													blobArray[x][y] = up;
 												}
 											}
@@ -482,7 +482,7 @@ public class Processing {
 												if (checkConnected(up,left,connectedBlobs)){//up and left are connected
 													blobArray[x][y] = up;
 												}else{
-													connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
 													blobArray[x][y] = up;
 												}
 											}else{//up left and dDown are blobs
@@ -491,38 +491,38 @@ public class Processing {
 														if (checkConnected(left,dDown,connectedBlobs)){//all are connected
 															blobArray[x][y] = up;
 														}else{//only left and dDown is not connected
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}else{//up and left are connected, up and dDown are not
 														if (checkConnected(left,dDown,connectedBlobs)){//only up and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//both up and dDown and left and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}
 												}else{//up and left are not connected
 													if (checkConnected(up,dDown,connectedBlobs)){//up and left are not connected, up and dDown are
 														if (checkConnected(left,dDown,connectedBlobs)){//only up and left are not connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//up and left aswell as left and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}else{//up and left and up and dDown are not connected
 														if (checkConnected(left,dDown,connectedBlobs)){//only left and dDown are connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//none of the combinations between up left and dDown are connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}
@@ -535,7 +535,7 @@ public class Processing {
 												if (checkConnected(up,dUp,connectedBlobs)){//up and dUp are connected
 													blobArray[x][y] = up;
 												}else{//up and dUp are not connected
-													connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
 													blobArray[x][y] = up;
 												}
 											}else{//up, dUp, dDown are blobs
@@ -544,38 +544,38 @@ public class Processing {
 														if (checkConnected(dUp,dDown,connectedBlobs)){//all are connected
 															blobArray[x][y] = up;
 														}else{//up and dUp aswell as up and dDown are connected, dUp and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}else{//up and dUp are connected, up and dDown are not connected, dUp and dDown is unclear
 														if (checkConnected(dUp,dDown,connectedBlobs)){//up and dUp aswell as dUp and dDown are connected, up and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//up and dUp are connected, dUp and dDown aswell as up and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}
 												}else{//so far only up and dUp are not connected, up and dDown and dUp and dDown still need to be checked
 													if (checkConnected(up,dDown,connectedBlobs)){//up and dUp are not connected, up and dDown are connected, dUp and dDown is not yet checked
 														if (checkConnected(dUp,dDown,connectedBlobs)){//up and dUp is not connected, the rest is connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//up and dUp aswell as dUp and dDown are not connected, up and dDown is connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}else{//up and dUp aswell as up and dDown are not connected, dUp and dDown is not yet checked
 														if (checkConnected(dUp,dDown,connectedBlobs)){//up and dUp aswell as up and dDown are not connected, dUp and dDown is connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//up and dUp aswell as up and dDown aswell as dUp and dDown are not connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}
@@ -592,47 +592,47 @@ public class Processing {
 														if (dUp_left){//all are connected
 															blobArray[x][y] = up;
 														}else{//only dUp_left is not connected
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;															
 														}
 													}else{//up_dUp is connected, up_left is not connected
 														if (dUp_left){//only up_left is not connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;							
 														}else{//both up_left and dUp_left are not connected
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;	
 														}
 													}
 												}else{//up_dUp is not connected
 													if (up_left){//up_dUp is not connected, up_left is connected, dUp_left is not checked yet
 														if (dUp_left){//up_dUp is not connected, the rest is
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//up_dUp and dUp_left are not connected,up_left is connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}else{//up_dUp and up_left are not connected, dUp_left is not checked yet
 														if (dUp_left){//only dUp_left is connected, up_dUp and up_left are not connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}else{//neither up_dUp nor up_left nor dUp_left are connected
-															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
-															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+															connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
+															connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 															blobArray[x][y] = up;
 														}
 													}
 												}
-												
-												
+
+
 											}else{//all are blobs
-												
-												
+
+
 												boolean up_dUp = checkConnected(up,dUp,connectedBlobs);
 												boolean up_left = checkConnected(up,left,connectedBlobs);
 												boolean up_dDown =checkConnected(up,dDown,connectedBlobs);
@@ -641,30 +641,30 @@ public class Processing {
 												boolean left_dDown = checkConnected(left,dDown,connectedBlobs);
 												//wait a second, I don't need to nest these statements...
 												if (!up_dUp){
-													connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,dUp,connectedBlobs,amountOfBlobs);
 												}
 												if (!up_left){
-													connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,left,connectedBlobs,amountOfBlobs);
 												}
 												if (!up_dDown){
-													connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(up,dDown,connectedBlobs,amountOfBlobs);
 												}
 												if (!dUp_left){
-													connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(dUp,left,connectedBlobs,amountOfBlobs);
 												}
 												if (!dUp_dDown){
-													connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(dUp,dDown,connectedBlobs,amountOfBlobs);
 												}
 												if (!left_dDown){
-													connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,nextCount);
+													connectedBlobs = updateConnectedBlobs(left,dDown,connectedBlobs,amountOfBlobs);
 												}
 												blobArray[x][y] = up;
 											}
 										}
 									}
 								}
-								
-								
+
+
 							}
 						}
 					}
@@ -673,9 +673,48 @@ public class Processing {
 			}
 			y=0;
 			x++;
-			System.out.println("x:" + x);
 		}
-		System.out.println("A total of " + nextCount + " blobs where detected");
+		
+		Runner.menuOutput.append("Calculating connected blobs\n");
+		int i;
+		int j;
+		i = 0;
+		while (true){
+			int minLoc = 0;
+			j = 0;
+			while (true){
+				
+				if (connectedBlobs[i][j]==0){
+					break;
+				}else{
+					if (connectedBlobs[i][j]<connectedBlobs[i][minLoc]){
+						minLoc=j;
+					}
+				}
+				j++;
+			}
+			int temp = connectedBlobs[i][0];
+			connectedBlobs[i][0]=connectedBlobs[i][minLoc];	//will make sure that the first value for all blobs in the connectedBlobsArray is the lowest blob number that that blob directely connects to
+			connectedBlobs[i][minLoc] = temp;
+			i++;
+			if (i==amountOfBlobs){//end of the blobs
+				break;
+			}
+		}
+		
+		//Now the program needs to calculate the largest mass, in order to do that the connectBlobsArray needs to be further refined
+		i=0;
+		j=0;
+		while (i<amountOfBlobs){
+			
+		}
+		
+		
+
+	}
+	
+	private static void findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
+		
 	}
 
 	/**
@@ -700,10 +739,13 @@ public class Processing {
 	 * @return the updated array
 	 */
 	private static int[][] updateConnectedBlobs(int one, int two, int[][] connected, int nextCount){
+		
 		int i = 0;
 		while (i<=nextCount){
 			if (connected[one][i]==two){//blobs have already been marked as connected
+				
 				return connected;
+			}else{
 			}
 			if (connected[one][i]==0){//found first empty place in the array 
 				connected[one][i] = two;
