@@ -674,63 +674,87 @@ public class Processing {
 			y=0;
 			x++;
 		}
-		Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
+		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
 
 	}
 
 	/**
-	 * Will make sure that the number for all the connectedBlobs will be the total lowest blobNumber
-	 * Does not work correctely, LOOK AT THE MATH!
-	 * @param connectedBlobs
-	 * @param amountOfBlobs
+	 * Will make sure that the value for any blob in the connectedBlobs Array[][0] is the absolute lowest value that that blob is connected to
+	 * @param connectedBlobs the array to process
+	 * @param amountOfBlobs the total amount of blobs
+	 * @return the updated connectedBlobs array
 	 */
-	private static void findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
+	private static int[][] findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
 		Runner.menuOutput.append("Calculating connected blobs\n");
-		int i;
-		int j;
-		i = 0;
-		while (true){
-			int minLoc = 0;
-			j = 0;
-			while (true){
-
-				if (connectedBlobs[i][j]==0){
-					break;
-				}else{
-					if (connectedBlobs[i][j]<connectedBlobs[i][minLoc]){
-						minLoc=j;
-					}
-				}
-				j++;
-			}
-			int temp = connectedBlobs[i][0];
-			connectedBlobs[i][0]=connectedBlobs[i][minLoc];	//will make sure that the first value for all blobs in the connectedBlobsArray is the lowest blob number that that blob directely connects to
-			connectedBlobs[i][minLoc] = temp;
-			i++;
-			if (i==amountOfBlobs){//end of the blobs
-				break;
-			}
-		}
-
+		int i = 0;
 		//Now the program needs to calculate the largest mass, in order to do that the connectBlobsArray needs to be further refined
-		i=0;
-		j=0;
-		int i2=0;
 		while (i<amountOfBlobs){
-			if (connectedBlobs[i2][0]==i2){//lowest blob number found		
-				while (connectedBlobs[i][j]!=0){	
-				}//find the first empty value
-				//move the value at connectedBlobs[i][0] to the last value and replace it with the lowest recursive blob number
+			if (connectedBlobs[i][0]>=i){//only run if the current blob has not been processed
+				int [] currentBlobArray = new int[amountOfBlobs];//this will contain all the numbers that have been found for a certain blob
+				currentBlobArray[0]=i;
+
+				int j = 0;
+				while (currentBlobArray[j]!=0){
+					currentBlobArray = calculateTempArray(currentBlobArray,currentBlobArray[j],connectedBlobs);
+					j++;
+				}
+				connectedBlobs = processTempArray(connectedBlobs,currentBlobArray,i);
 				
-				
-			}else{
-				i2 = connectedBlobs[i2][0];
 			}
 			i++;
-			i2 = i;
 		}
+		return connectedBlobs;
+		
 	}
 
+	/**
+	 * Will update currentBlobArray with any values that it finds in connectedBlobs[j] that are not yet in currentBlobArray
+	 * @param currentBlobArray the array that holds all the blob numbers that are part of the current blob
+	 * @param j the number in connectedBlobs from which all the connectedBlobs need to be checked
+	 * @param connectedBlobs the array that holds all the values for connectedBlobs
+	 * @return the updated currentBlobArray
+	 */
+	private static int[] calculateTempArray(int[] currentBlobArray, int j, int[][] connectedBlobs){
+		int i1 = 0;
+		while (connectedBlobs[j][i1]!=0){
+			int temp = connectedBlobs[j][i1];//will hold the blobnumber that is next part of the blob
+			int i2 = 0;
+			boolean found = false;
+			while (currentBlobArray[i2]!=0){
+				if (currentBlobArray[i2]==temp){
+					//blob has already been found in the tempArray
+					found = true;
+				}
+				i2++;
+			}
+			if (!found){
+				currentBlobArray[i2] = temp;//place the value in the temp array
+			}
+			i2 = 0;
+			i1++;
+		}
+		return currentBlobArray;
+	}
+
+	/**
+	 * Processes the given array with the given int
+	 * Will make sure that all the blobs that are in currentBlobArray have i as their value in the connectedBlobsarray
+	 * @param connectedBlobs the array to process in
+	 * @param currentBlobArray the array to process
+	 * @param i the number to process
+	 * @return the updated connectedBlobsArray
+	 */
+	private static int[][] processTempArray(int[][] connectedBlobs, int[] currentBlobArray, int i){
+		int count = 0;
+		while (currentBlobArray[count]!=0){
+			int number = currentBlobArray[count];
+			if (connectedBlobs[number][0]>i){
+				connectedBlobs[number][0] = i;
+			}
+			count++;
+		}
+		return connectedBlobs;
+	}
 	/**
 	 * This will check if a certain place is white
 	 * @param x the X coordinate to check
