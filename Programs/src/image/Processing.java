@@ -675,6 +675,11 @@ public class Processing {
 			x++;
 		}
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
+		/**
+		 * TODO:
+		 * Calculate weights of all blobs
+		 * Color the 6 largest blobs in different colors
+		 */
 
 	}
 
