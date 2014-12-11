@@ -39,11 +39,11 @@ public class Processing {
 			}
 			/*
 			try {
-				Thread.sleep(5);                 //1000 milliseconds is one second.
+				Thread.sleep(10);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
-			}*/
-
+			}
+*/
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -158,11 +158,11 @@ public class Processing {
 			}
 			/*
 			try {
-				Thread.sleep(5);                 //1000 milliseconds is one second.
+				Thread.sleep(10);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
-			}*/
-
+			}
+*/
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -663,8 +663,6 @@ public class Processing {
 										}
 									}
 								}
-
-
 							}
 						}
 					}
