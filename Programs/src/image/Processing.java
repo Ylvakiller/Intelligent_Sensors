@@ -770,7 +770,7 @@ public class Processing {
 	 * @param mass the mass array with all the masses of the individual blobs in it
 	 * @return the updated mass array
 	 */
-	private static int[] calCulateConnectedMass(int[][] connectedBlobs,int[] mass){
+	private static int[] calculateConnectedMass(int[][] connectedBlobs,int[] mass){
 		int i =0;
 		while (connectedBlobs[i][0]!=0){//end of blob array
 			if (connectedBlobs[i][0]!=i){//means that the blob is part of a larger blob
