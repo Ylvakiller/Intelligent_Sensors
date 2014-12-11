@@ -43,7 +43,7 @@ public class Processing {
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}
-*/
+			 */
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -162,7 +162,7 @@ public class Processing {
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}
-*/
+			 */
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -194,7 +194,7 @@ public class Processing {
 					if (x==0&&y==0){//top left corner
 						connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
 						blobArray[x][y] = amountOfBlobs;
-						
+
 						amountOfBlobs++;
 					}else{
 						if (x==0){
@@ -676,9 +676,9 @@ public class Processing {
 			x++;
 		}
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
+		mass = calculateConnectedMass(connectedBlobs, mass);
 		/**
 		 * TODO:
-		 * Calculate weights of all blobs
 		 * Color the 6 largest blobs in different colors
 		 */
 
@@ -705,12 +705,12 @@ public class Processing {
 					j++;
 				}
 				connectedBlobs = processTempArray(connectedBlobs,currentBlobArray,i);
-				
+
 			}
 			i++;
 		}
 		return connectedBlobs;
-		
+
 	}
 
 	/**
@@ -741,7 +741,7 @@ public class Processing {
 		}
 		return currentBlobArray;
 	}
-	
+
 	/**
 	 * Processes the given array with the given int
 	 * Will make sure that all the blobs that are in currentBlobArray have i as their value in the connectedBlobsarray
@@ -761,7 +761,7 @@ public class Processing {
 		}
 		return connectedBlobs;
 	}
-	
+
 	/**
 	 * Will calculate the masses of all the connected blobs, setting the mass of the lowest blob number (base blob) to the total mass of all the connected blobs combined
 	 * This will also set the mass of the all the blobs connected to this blob to be 0, i.e. only the base blob will have the mass in it.
@@ -783,7 +783,7 @@ public class Processing {
 		}
 		return mass;
 	}
-	
+
 	/**
 	 * This will check if a certain place is white
 	 * @param x the X coordinate to check
