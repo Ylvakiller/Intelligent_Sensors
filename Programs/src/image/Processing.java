@@ -186,13 +186,15 @@ public class Processing {
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
 		Runner.menuOutput.append("Starting blobDetection\n");
 		int[][] blobArray = new int[xMax][yMax];
-		int[][] connectedBlobs = new int[(xMax*yMax)/4][1000];
+		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
+		int[] mass = new int[(xMax*yMax)/8];
 		while (x<xMax){
 			while (y<yMax){
 				if (checkPos(x,y,buffer)){//image is part of a blob
 					if (x==0&&y==0){//top left corner
 						connectedBlobs = updateConnectedBlobs(amountOfBlobs,amountOfBlobs,connectedBlobs,amountOfBlobs);
 						blobArray[x][y] = amountOfBlobs;
+						
 						amountOfBlobs++;
 					}else{
 						if (x==0){
@@ -667,6 +669,7 @@ public class Processing {
 						}
 					}
 				}
+				mass[blobArray[x][y]]++;//increase the mass of this blob
 				y++;
 			}
 			y=0;
@@ -738,7 +741,7 @@ public class Processing {
 		}
 		return currentBlobArray;
 	}
-
+	
 	/**
 	 * Processes the given array with the given int
 	 * Will make sure that all the blobs that are in currentBlobArray have i as their value in the connectedBlobsarray
@@ -758,6 +761,29 @@ public class Processing {
 		}
 		return connectedBlobs;
 	}
+	
+	/**
+	 * Will calculate the masses of all the connected blobs, setting the mass of the lowest blob number (base blob) to the total mass of all the connected blobs combined
+	 * This will also set the mass of the all the blobs connected to this blob to be 0, i.e. only the base blob will have the mass in it.
+	 * 
+	 * @param connectedBlobs the array with all the connections between blobs in it
+	 * @param mass the mass array with all the masses of the individual blobs in it
+	 * @return the updated mass array
+	 */
+	private static int[] calCulateConnectedMass(int[][] connectedBlobs,int[] mass){
+		int i =0;
+		while (connectedBlobs[i][0]!=0){//end of blob array
+			if (connectedBlobs[i][0]!=i){//means that the blob is part of a larger blob
+				mass[connectedBlobs[i][0]] += mass[i];//add the mass of this blob to the base blob
+				mass[i] = 0;//set the mass of this blob to be 0
+			}else{
+				//means that this is a base blob
+			}
+			i++;
+		}
+		return mass;
+	}
+	
 	/**
 	 * This will check if a certain place is white
 	 * @param x the X coordinate to check
