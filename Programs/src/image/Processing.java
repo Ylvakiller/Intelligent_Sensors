@@ -669,7 +669,9 @@ public class Processing {
 						}
 					}
 				}
+				if (blobArray[x][y]!=0){
 				mass[blobArray[x][y]]++;//increase the mass of this blob
+				}
 				y++;
 			}
 			y=0;
@@ -677,6 +679,47 @@ public class Processing {
 		}
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
 		mass = calculateConnectedMass(connectedBlobs, mass);
+		int[] largestBlobs = findLargestBlobs(mass,amountOfBlobs);
+
+		x = 0;
+		y = 0;
+		System.out.println("LargestBlobs:\n");
+		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
+		while (x<xMax){
+			while (y<yMax){
+				if (checkPos(x,y,buffer)){
+					int baseBlob = connectedBlobs[blobArray[x][y]][0];//get base blob
+					System.out.println("baseBlob:" + baseBlob);
+					if (baseBlob == largestBlobs[0]){//this blob is the largest blob
+						buffer.setRGB(x, y, Color.RED.getRGB());
+					}else if (baseBlob == largestBlobs[1]){//this blob is part of the second largest blob
+						buffer.setRGB(x, y, Color.GREEN.getRGB());
+					}else if (baseBlob == largestBlobs[2]){//this blob is part of the third largest blob
+						buffer.setRGB(x, y, Color.YELLOW.getRGB());
+					}else if (baseBlob == largestBlobs[3]){//this blob is part of the fourth largest blob
+						buffer.setRGB(x, y, Color.MAGENTA.getRGB());
+					}else if (baseBlob == largestBlobs[4]){//this blob is part of the fifth blob
+						buffer.setRGB(x, y, Color.CYAN.getRGB());
+					}else if (baseBlob == largestBlobs[5]){//this blob is part of the sixth blob
+						buffer.setRGB(x, y, Color.ORANGE.getRGB());
+					}
+				}
+				y++;
+			}
+			try {
+				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			x++;
+			y = 0;
+		}
+		System.out.println("LargestBlobs:");
+		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
+		System.out.println("\nMasses:");
+		System.out.println(mass[largestBlobs[0]] + "\t" + mass[largestBlobs[1]] + "\t" + mass[largestBlobs[2]] + "\t" + mass[largestBlobs[3]] + "\t" + mass[largestBlobs[4]] + "\t" + mass[largestBlobs[5]] + "\t");
+		System.out.println(checkConnected(213,260,connectedBlobs));
+
 		/**
 		 * TODO:
 		 * Color the 6 largest blobs in different colors
@@ -771,17 +814,69 @@ public class Processing {
 	 * @return the updated mass array
 	 */
 	private static int[] calculateConnectedMass(int[][] connectedBlobs,int[] mass){
-		int i =0;
+		int i =1;
 		while (connectedBlobs[i][0]!=0){//end of blob array
 			if (connectedBlobs[i][0]!=i){//means that the blob is part of a larger blob
 				mass[connectedBlobs[i][0]] += mass[i];//add the mass of this blob to the base blob
 				mass[i] = 0;//set the mass of this blob to be 0
+				System.out.println("Setting mass of " + i + " to 0");
 			}else{
 				//means that this is a base blob
 			}
 			i++;
 		}
 		return mass;
+	}
+
+
+	/**
+	 * will calculated an array of length 6 which the 6 largest blobs in them
+	 * @param mass the mass array that holds the masses of all the blobs, should already have been updated in {@link #calculateConnectedMass(int[][], int[]) calculateConnectedMass} method
+	 * @return an array with the 6th largest blobs where the [0] it the largest
+	 */
+	private static int[] findLargestBlobs(int[] mass,int amountOfBlobs){
+		int i=1;
+		int[] largestBlobs = new int[6];
+		while (i<amountOfBlobs){
+			System.out.println("i" + i + "\t mass: "+ mass[i]);
+			if (mass[i]!=0){//means that this is a base blob
+				if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
+					if (mass[i]>mass[largestBlobs[4]]){
+
+						largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
+						if (mass[i]>mass[largestBlobs[3]]){
+
+							largestBlobs[4] =largestBlobs[3];//we can already move this blobnumber to the next place
+							if (mass[i]>mass[largestBlobs[2]]){
+
+								largestBlobs[3] =largestBlobs[2];//we can already move this blobnumber to the next place
+								if (mass[i]>mass[largestBlobs[1]]){
+
+									largestBlobs[2] =largestBlobs[1];//we can already move this blobnumber to the next place
+									if (mass[i]>mass[largestBlobs[0]]){
+										largestBlobs[1] =largestBlobs[0];
+										largestBlobs[0] = i;//save current blob number as the largest blob
+									}else{//means this blob should be at spot 1
+										largestBlobs[1] = i;//save current blob number as the second largest blob
+									}
+								}else{//means this blob should be at spot 2
+									largestBlobs[2] = i;//save current blob number as the third largest blob
+								}
+							}else{//means this blob should be at spot 3
+								largestBlobs[3] = i;//save current blob number as the fourth largest blob
+							}
+						}else{//means this blob should be at spot 4
+							largestBlobs[4] = i;//save current blob number as the fifth largest blob
+						}
+					}else{//means this blob should be at spot 5
+						largestBlobs[5] = i;
+					}
+				}
+			}
+			i++;
+		}
+		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
+		return largestBlobs;
 	}
 
 	/**
