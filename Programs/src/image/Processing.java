@@ -63,7 +63,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 */
 	public static void histogramEqualisation(BufferedImage buffer){
-		Runner.menuOutput.append("Starting Histogram Equalisation\n");
+		Runner.menuOutput.append("\nStarting Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
 		int CDFminGreen;
@@ -93,7 +93,6 @@ public class Processing {
 			y=0;
 			x++;
 		}
-		Runner.menuOutput.append("Counted all instances, calculating CDF\n");
 		x=1;
 		while (x<256){
 			redCDF[x] = redCDF[x]+redCDF[x-1];
@@ -101,8 +100,6 @@ public class Processing {
 			blueCDF[x] = blueCDF[x]+blueCDF[x-1];
 			x++;
 		}
-		Runner.menuOutput.append("Calculated CDF (unscaled)\n");
-		Runner.menuOutput.append("Calcualting values for formula to scale CDF\n");
 		int CDFMinRed;
 		int CDFMinGreen;
 		int CDFMinBlue;
@@ -134,7 +131,6 @@ public class Processing {
 		}
 		CDFMinBlue = blueCDF[i];
 
-		Runner.menuOutput.append("Calculated minimum values for CDF\n");
 		i =0;
 		while (i<256){
 			if (redCDF[i]!=0){
@@ -148,9 +144,7 @@ public class Processing {
 			}
 			i++;
 		}
-		Runner.menuOutput.append("Scaled cdf, processing image\n");
-
-
+		Runner.menuOutput.append("Calculated Histogram information\nProcessing date to image\n");
 		x=0;
 		y=0;
 		while (x<M){
@@ -190,7 +184,7 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		Runner.menuOutput.append("Starting blobDetection\n");
+		Runner.menuOutput.append("\nStarting Blob Detection\n");
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -686,7 +680,7 @@ public class Processing {
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
 		mass = calculateConnectedMass(connectedBlobs, mass);
 		int[] largestBlobs = findLargestBlobs(mass,amountOfBlobs);
-
+		Runner.menuOutput.append("Processing blob information to screen:\n");
 		x = 0;
 		y = 0;
 		while (x<xMax){
@@ -741,7 +735,6 @@ public class Processing {
 	 * @return the updated connectedBlobs array
 	 */
 	private static int[][] findLowestBlobRecursive(int [][] connectedBlobs, int amountOfBlobs){
-		Runner.menuOutput.append("Calculating connected blobs\n");
 		int i = 0;
 		//Now the program needs to calculate the largest mass, in order to do that the connectBlobsArray needs to be further refined
 		while (i<amountOfBlobs){
@@ -946,4 +939,7 @@ public class Processing {
 		}
 		return false;
 	}
+	
+	
+	
 }
