@@ -13,6 +13,11 @@ import main.Runner;
 public class Processing {
 
 	/**
+	 * This determines if there will be a delay or not (this delay can help visualize what is happening)
+	 * Also this delay just looks freaking awesome :)
+	 */
+	public static boolean delay = false;
+	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
 	 */
@@ -21,7 +26,6 @@ public class Processing {
 
 		int xMax = buffer.getWidth();
 		int yMax = buffer.getHeight();
-		System.out.println("xmax " + xMax);
 		Color C;
 
 		while (x<xMax){
@@ -37,13 +41,13 @@ public class Processing {
 				}
 				y++;
 			}
-			/*
-			try {
-				Thread.sleep(10);                 //1000 milliseconds is one second.
-			} catch(InterruptedException ex) {
-				Thread.currentThread().interrupt();
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
 			}
-			 */
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -156,13 +160,15 @@ public class Processing {
 				buffer.setRGB(x, y, c2.getRGB());
 				y++;
 			}
-			/*
-			try {
-				Thread.sleep(10);                 //1000 milliseconds is one second.
-			} catch(InterruptedException ex) {
-				Thread.currentThread().interrupt();
+
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
 			}
-			 */
+
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -670,7 +676,7 @@ public class Processing {
 					}
 				}
 				if (blobArray[x][y]!=0){
-				mass[blobArray[x][y]]++;//increase the mass of this blob
+					mass[blobArray[x][y]]++;//increase the mass of this blob
 				}
 				y++;
 			}
@@ -683,13 +689,10 @@ public class Processing {
 
 		x = 0;
 		y = 0;
-		System.out.println("LargestBlobs:\n");
-		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
 		while (x<xMax){
 			while (y<yMax){
 				if (checkPos(x,y,buffer)){
 					int baseBlob = connectedBlobs[blobArray[x][y]][0];//get base blob
-					System.out.println("baseBlob:" + baseBlob);
 					if (baseBlob == largestBlobs[0]){//this blob is the largest blob
 						buffer.setRGB(x, y, Color.RED.getRGB());
 					}else if (baseBlob == largestBlobs[1]){//this blob is part of the second largest blob
@@ -706,6 +709,15 @@ public class Processing {
 				}
 				y++;
 			}
+			
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			
 			try {
 				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
@@ -714,11 +726,6 @@ public class Processing {
 			x++;
 			y = 0;
 		}
-		System.out.println("LargestBlobs:");
-		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
-		System.out.println("\nMasses:");
-		System.out.println(mass[largestBlobs[0]] + "\t" + mass[largestBlobs[1]] + "\t" + mass[largestBlobs[2]] + "\t" + mass[largestBlobs[3]] + "\t" + mass[largestBlobs[4]] + "\t" + mass[largestBlobs[5]] + "\t");
-		System.out.println(checkConnected(213,260,connectedBlobs));
 
 		/**
 		 * TODO:
@@ -819,7 +826,6 @@ public class Processing {
 			if (connectedBlobs[i][0]!=i){//means that the blob is part of a larger blob
 				mass[connectedBlobs[i][0]] += mass[i];//add the mass of this blob to the base blob
 				mass[i] = 0;//set the mass of this blob to be 0
-				System.out.println("Setting mass of " + i + " to 0");
 			}else{
 				//means that this is a base blob
 			}
@@ -838,7 +844,6 @@ public class Processing {
 		int i=1;
 		int[] largestBlobs = new int[6];
 		while (i<amountOfBlobs){
-			System.out.println("i" + i + "\t mass: "+ mass[i]);
 			if (mass[i]!=0){//means that this is a base blob
 				if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
 					if (mass[i]>mass[largestBlobs[4]]){
@@ -875,7 +880,6 @@ public class Processing {
 			}
 			i++;
 		}
-		System.out.println(largestBlobs[0] + "\t" + largestBlobs[1] + "\t"+ largestBlobs[2] + "\t"+ largestBlobs[3] + "\t"+ largestBlobs[4] + "\t"+ largestBlobs[5] + "\t");
 		return largestBlobs;
 	}
 

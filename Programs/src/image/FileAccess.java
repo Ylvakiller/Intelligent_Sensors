@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  *
  */
 public class FileAccess {
-	static String fileName = "./InputImages/plate23.jpg";
+	static String fileName = "./InputImages/plate05.jpg";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
