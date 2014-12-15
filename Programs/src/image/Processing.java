@@ -941,5 +941,9 @@ public class Processing {
 	}
 	
 	
+	private static void findMinMaxOfBlob(){
+		
+	}
+	
 	
 }
