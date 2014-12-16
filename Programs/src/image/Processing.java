@@ -17,13 +17,13 @@ public class Processing {
 	 * This determines if there will be a delay or not (this delay can help visualize what is happening)
 	 * Also this delay just looks freaking awesome :)
 	 */
-	public static boolean delay = false;
+	private static boolean delay = false;
 	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
 	 * @return the image after color filtering it
 	 */
-	public static BufferedImage ColorFilter(BufferedImage buffer){
+	private static BufferedImage ColorFilter(BufferedImage buffer){
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -66,7 +66,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after histogram equalization is applied
 	 */
-	public static BufferedImage histogramEqualisation(BufferedImage buffer){
+	private static BufferedImage histogramEqualisation(BufferedImage buffer){
 		Runner.menuOutput.append("\nStarting Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
@@ -185,7 +185,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after blobdetection has been applied, this image will have the 6 largest blobs marked in different colors
 	 */
-	public static BufferedImage blobDetection(BufferedImage buffer){
+	private static BufferedImage blobDetection(BufferedImage buffer){
 		int x, xMax, y, yMax;
 		x=0;
 		y=0;
@@ -1035,7 +1035,7 @@ public class Processing {
 	 * @param source the image to copy
 	 * @return a new bufferedImage which is the same as the source
 	 */
-	public static BufferedImage copyImage(BufferedImage source){
+	private static BufferedImage copyImage(BufferedImage source){
 	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 	    Graphics g = b.getGraphics();
 	    g.drawImage(source, 0, 0, null);
