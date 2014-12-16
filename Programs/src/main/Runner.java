@@ -63,11 +63,11 @@ public class Runner {
 
 		jf.setVisible(true);
 		
-		
-		Processing.histogramEqualisation(buffer);
+		Processing.findNumberPlate(buffer);
+		//Processing.histogramEqualisation(buffer);
 		//FileAccess.writeImage(buffer);
-		Processing.ColorFilter(buffer);
-		Processing.blobDetection(buffer);
+		//Processing.ColorFilter(buffer);
+		//Processing.blobDetection(buffer);
 		menuOutput.append("End");
 	}
 	

@@ -1,6 +1,7 @@
 package image;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import main.Runner;
@@ -20,8 +21,9 @@ public class Processing {
 	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
+	 * @return the image after color filtering it
 	 */
-	public static void ColorFilter(BufferedImage buffer){
+	public static BufferedImage ColorFilter(BufferedImage buffer){
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -56,13 +58,15 @@ public class Processing {
 			x++;
 			y=0;
 		}
+		return buffer;
 	}
 
 	/**
 	 * This method will do all the histogram equalization
 	 * @param buffer the image to process
+	 * @return the image after histogram equalization is applied
 	 */
-	public static void histogramEqualisation(BufferedImage buffer){
+	public static BufferedImage histogramEqualisation(BufferedImage buffer){
 		Runner.menuOutput.append("\nStarting Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
@@ -170,14 +174,18 @@ public class Processing {
 			}
 			x++;
 			y=0;
-		}	
+		}
+		return buffer;
 	}
 
 	/**
-	 * This method will detect and render blobs
+	 * This method will detect and render blobs.
+	 * The largest blobs are colored in the following order:
+	 * red, green, yellow, magenta, cyan and orange
 	 * @param buffer the image to process
+	 * @return the image after blobdetection has been applied, this image will have the 6 largest blobs marked in different colors
 	 */
-	public static void blobDetection(BufferedImage buffer){
+	public static BufferedImage blobDetection(BufferedImage buffer){
 		int x, xMax, y, yMax;
 		x=0;
 		y=0;
@@ -720,11 +728,7 @@ public class Processing {
 			x++;
 			y = 0;
 		}
-
-		/**
-		 * TODO:
-		 * Color the 6 largest blobs in different colors
-		 */
+		return buffer;
 
 	}
 
@@ -958,10 +962,10 @@ public class Processing {
 						xMax = x;
 					}
 					
-					if (y<xMin){
+					if (y<yMin){
 						yMin = y;
 					}
-					if (y>xMax){
+					if (y>yMax){
 						yMax = y;
 					}
 				}
@@ -978,5 +982,60 @@ public class Processing {
 		return returnArray;
 	}
 	
+	/**
+	 * Method designed to find the numberplate and return only that portion of the original picture
+	 * This method will do the steps from histogram equalization, through color filter and onto blobdetection and then use those results to return an image with only the numberplate in it
+	 * @param original the image to process 
+	 */
+	public static void findNumberPlate(BufferedImage original){
+		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
+		buffer = Processing.histogramEqualisation(buffer);
+		buffer = Processing.ColorFilter(buffer);
+		buffer = Processing.blobDetection(buffer);
+		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
+		int x = 0, y = 0;
+		System.out.println("xmin\t" + coords[0]);
+		System.out.println("ymin\t" + coords[1]);
+		System.out.println("xmax\t" + coords[2]);
+		System.out.println("ymax\t" + coords[3]);
+		try {
+			Runner.picLabel.setIcon(FileAccess.getImageIcon(original));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		while (x<buffer.getWidth()){
+			while (y<buffer.getHeight()){
+				if (x>coords[0]&&y>coords[1]&&x<coords[2]&&y<coords[3]){
+					//do nothing
+				}else{
+					original.setRGB(x, y, 0);
+				}
+				y++;
+			}
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			try {
+				Runner.picLabel.setIcon(FileAccess.getImageIcon(original));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			y=0;
+			x++;
+		}
+	}
+	
+	
+	public static BufferedImage copyImage(BufferedImage source){
+	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+	    Graphics g = b.getGraphics();
+	    g.drawImage(source, 0, 0, null);
+	    g.dispose();
+	    return b;
+	}
 	
 }
