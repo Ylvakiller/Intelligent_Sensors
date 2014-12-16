@@ -1029,7 +1029,12 @@ public class Processing {
 		}
 	}
 	
-	
+	/**
+	 * This method is in order to get a second bufferedImage, this because just making a new bufferedImage and doing new = old then the new one will actually just point to the old one instead of making a complete new object.
+	 * This method will first make a new BuferredImage type with the same settings as the old image and will then paint the old image on it (bassically)
+	 * @param source the image to copy
+	 * @return a new bufferedImage which is the same as the source
+	 */
 	public static BufferedImage copyImage(BufferedImage source){
 	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 	    Graphics g = b.getGraphics();
