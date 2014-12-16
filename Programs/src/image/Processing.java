@@ -940,9 +940,42 @@ public class Processing {
 		return false;
 	}
 	
-	
-	private static void findMinMaxOfBlob(){
-		
+	/**
+	 * Will find the minimum and maximum coordinates of the blob that has the color specified
+	 * @param buffer the image to check in
+	 * @param color the color for which to return the minimum coordinates
+	 * @return an integer array with the following things in it: xMin, yMin, xMax, yMax
+	 */
+	private static int[] findMinMaxOfBlob(BufferedImage buffer, Color color){
+		int x = 0, xMin = buffer.getWidth(), xMax = 0, y = 0, yMin = buffer.getHeight(), yMax = 0;
+		while (x<buffer.getWidth()){
+			while (y<buffer.getHeight()){
+				if (buffer.getRGB(x, y)==color.getRGB()){
+					if (x<xMin){
+						xMin = x;
+					}
+					if (x>xMax){
+						xMax = x;
+					}
+					
+					if (y<xMin){
+						yMin = y;
+					}
+					if (y>xMax){
+						yMax = y;
+					}
+				}
+				y++;
+			}
+			y=0;
+			x++;
+		}
+		int[] returnArray = new int[4];
+		returnArray[0] =xMin;
+		returnArray[1] =yMin;
+		returnArray[2] =xMax;
+		returnArray[3] =yMax;
+		return returnArray;
 	}
 	
 	
