@@ -130,7 +130,6 @@ public class Runner {
 			System.out.println(stringNumber);
 			FileAccess.fileNumber = stringNumber;
 			BufferedImage buffer = FileAccess.getImage();
-			BufferedImage test  = Processing.findNumberPlate(buffer);
-			FileAccess.writeImage(test);
+			Processing.findNumberPlate(buffer);
 		}
 	}

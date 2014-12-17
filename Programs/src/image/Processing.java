@@ -987,13 +987,15 @@ public class Processing {
 	 * Method designed to find the numberplate and return only that portion of the original picture
 	 * This method will do the steps from histogram equalization, through color filter and onto blobdetection and then use those results to return an image with only the numberplate in it
 	 * @param original the image to process 
-	 * @return 
 	 */
-	public static BufferedImage findNumberPlate(BufferedImage original){
+	public static void findNumberPlate(BufferedImage original){
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
+		FileAccess.writeAfterHistogram(buffer);
 		buffer = Processing.ColorFilter(buffer);
+		FileAccess.writeFirstColorFilter(buffer);
 		buffer = Processing.blobDetection(buffer);
+		FileAccess.writeBlobDetection(buffer);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		int x = 0, y = 0;
 		System.out.println("xmin\t" + coords[0]);
@@ -1031,7 +1033,7 @@ public class Processing {
 			y=0;
 			x++;
 		}
-		return buffer;
+		FileAccess.writeNumberPlateLocation(original);
 	}
 	
 	/**
