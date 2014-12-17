@@ -76,7 +76,7 @@ public class FileAccess {
 	}
 	
 	/**
-	 * Writes an imageFile in the OutputImages folder called test
+	 * Writes an imageFile in the OutputImages folder called plate01.png where 01 is the platenumber
 	 * @param buffer the bufferImage to be written to
 	 */
 	public static void writeImage(BufferedImage buffer){
@@ -103,7 +103,12 @@ public class FileAccess {
 		}
 	}
 	
-	
+	/**
+	 * Will write an image in the folder ./OutputImages/AfterHistogram/
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
 	public static void writeAfterHistogram(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -128,6 +133,12 @@ public class FileAccess {
 		}
 	}
 	
+	/**
+	 * Will write an image in the folder ./OutputImages/FirstColorFilter/
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
 	public static void writeFirstColorFilter(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -176,7 +187,12 @@ public class FileAccess {
 		}
 	}
 	
-	
+	/**
+	 * Will write an image in the folder ./OutputImages/NumberPlateLocation/
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
 	public static void writeNumberPlateLocation(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();

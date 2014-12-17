@@ -41,13 +41,15 @@ public class Runner {
 	 */
 	public static JTextArea menuOutput;
 
+	/**
+	 * A boolean that keeps track on whether or not the button is pressed
+	 */
 	public static boolean buttonPressed  = true;;
 	/**
 	 * Main method, runs the whole program
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		JFrame  jf = new JFrame("NumberPlate Recogniser");
 		System.out.println("Started");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,7 +98,7 @@ public class Runner {
 		});
 		while (true){
 			try {
-				Thread.sleep(1);                 //1000 milliseconds is one second.
+				Thread.sleep(1);                 //Apparently, not having this delay screws the whole program up...
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}
