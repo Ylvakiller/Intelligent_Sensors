@@ -24,6 +24,7 @@ public class Processing {
 	 * @return the image after color filtering it
 	 */
 	private static BufferedImage ColorFilter(BufferedImage buffer){
+		Runner.menuOutput.append("Applying color filter\n");
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -67,7 +68,7 @@ public class Processing {
 	 * @return the image after histogram equalization is applied
 	 */
 	private static BufferedImage histogramEqualisation(BufferedImage buffer){
-		Runner.menuOutput.append("\nStarting Histogram Equalisation\n");
+		Runner.menuOutput.append("Applying Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
 		int CDFminGreen;
@@ -148,7 +149,7 @@ public class Processing {
 			}
 			i++;
 		}
-		Runner.menuOutput.append("Calculated Histogram information\nProcessing date to image\n");
+		System.out.println("Calculated Histogram information\nProcessing date to image\n");
 		x=0;
 		y=0;
 		while (x<M){
@@ -192,7 +193,7 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		Runner.menuOutput.append("\nStarting Blob Detection\n");
+		Runner.menuOutput.append("Running Blob Detection\n");
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -1000,7 +1001,7 @@ public class Processing {
 		System.out.println("xmax\t" + coords[2]);
 		System.out.println("ymax\t" + coords[3]);
 		
-		/*
+		
 		try {
 			Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
 		} catch (Exception e) {
@@ -1029,7 +1030,7 @@ public class Processing {
 			}
 			y=0;
 			x++;
-		}*/
+		}
 		return buffer;
 	}
 	
