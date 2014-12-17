@@ -18,7 +18,9 @@ import javax.swing.JPanel;
  *
  */
 public class FileAccess {
-	static String fileName = "./InputImages/plate02.jpg";
+	private static String fileNameInput = "./InputImages/plate";
+	private static String fileNameOutput = "./OutputImages/plate";
+	public static String fileNumber = "01";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
@@ -32,7 +34,7 @@ public class FileAccess {
 	 * @param fileName
 	 */
 	public FileAccess(String fileName){
-		FileAccess.fileName = fileName;
+		FileAccess.fileNameInput = fileName;
 	}
 	
 	/**
@@ -62,7 +64,8 @@ public class FileAccess {
 		BufferedImage image = null;
 		try
 		{
-			image = ImageIO.read(new File(fileName));
+			String temp = fileNameInput + fileNumber + ".jpg";
+			image = ImageIO.read(new File(temp));
 		}
 		catch (Exception e)
 		{
@@ -79,7 +82,8 @@ public class FileAccess {
 	public static void writeImage(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		File f = new File("./OutputImages/test.png");
+		String temp = fileNameOutput + fileNumber + ".png";
+		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
 			ios = ImageIO.createImageOutputStream(f);

@@ -51,7 +51,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -168,7 +168,7 @@ public class Processing {
 			}
 
 			try {
-				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -721,7 +721,7 @@ public class Processing {
 			}
 			
 			try {
-				Runner.picLabel.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -986,8 +986,9 @@ public class Processing {
 	 * Method designed to find the numberplate and return only that portion of the original picture
 	 * This method will do the steps from histogram equalization, through color filter and onto blobdetection and then use those results to return an image with only the numberplate in it
 	 * @param original the image to process 
+	 * @return 
 	 */
-	public static void findNumberPlate(BufferedImage original){
+	public static BufferedImage findNumberPlate(BufferedImage original){
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
 		buffer = Processing.ColorFilter(buffer);
@@ -998,8 +999,10 @@ public class Processing {
 		System.out.println("ymin\t" + coords[1]);
 		System.out.println("xmax\t" + coords[2]);
 		System.out.println("ymax\t" + coords[3]);
+		
+		/*
 		try {
-			Runner.picLabel.setIcon(FileAccess.getImageIcon(original));
+			Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1020,13 +1023,14 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel.setIcon(FileAccess.getImageIcon(original));
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			y=0;
 			x++;
-		}
+		}*/
+		return buffer;
 	}
 	
 	/**
