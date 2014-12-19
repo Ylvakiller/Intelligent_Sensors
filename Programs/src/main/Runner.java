@@ -50,6 +50,9 @@ public class Runner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		count =2;
+		
+		
 		JFrame  jf = new JFrame("NumberPlate Recogniser");
 		System.out.println("Started");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +78,7 @@ public class Runner {
 		picLabel_1.setBounds(261, 0, 1313, 851);
 		jf.getContentPane().add(picLabel_1);
 
-		count =1;
+		
 		JButton btnNextImage = new JButton("Next Image");
 		btnNextImage.setBounds(20, 559, 89, 23);
 		jf.getContentPane().add(btnNextImage);
@@ -104,7 +107,7 @@ public class Runner {
 			}
 			if (buttonPressed){
 				
-				if (count>23){
+				if (count>26){
 					menuOutput.append("Done processing all images");
 				}else{
 					menuOutput.append("\nNow processing image number " + count + "\n");
