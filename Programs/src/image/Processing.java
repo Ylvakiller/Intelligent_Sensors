@@ -1002,38 +1002,14 @@ public class Processing {
 		System.out.println("ymin\t" + coords[1]);
 		System.out.println("xmax\t" + coords[2]);
 		System.out.println("ymax\t" + coords[3]);
-		
-		
+		original = Processing.cutimage(original, coords[0], coords[1], (coords[2]-coords[0]), (coords[3]-coords[1]));
 		try {
 			Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		while (x<buffer.getWidth()){
-			while (y<buffer.getHeight()){
-				if (x>coords[0]&&y>coords[1]&&x<coords[2]&&y<coords[3]){
-					//do nothing
-				}else{
-					original.setRGB(x, y, 0);
-				}
-				y++;
-			}
-			if (delay){
-				try {
-					Thread.sleep(10);                 //1000 milliseconds is one second.
-				} catch(InterruptedException ex) {
-					Thread.currentThread().interrupt();
-				}
-			}
-			try {
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			y=0;
-			x++;
-		}
-		FileAccess.writeNumberPlateLocation(original);
+		FileAccess.writeOnlyPlate(original);
+		
 	}
 	
 	/**
@@ -1048,6 +1024,12 @@ public class Processing {
 	    g.drawImage(source, 0, 0, null);
 	    g.dispose();
 	    return b;
+	}
+	
+	
+	public static BufferedImage cutimage(BufferedImage source, int x, int y, int width, int height){
+		BufferedImage b = source.getSubimage(x, y, width, height);
+		return b;
 	}
 	
 }

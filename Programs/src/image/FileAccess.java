@@ -193,10 +193,10 @@ public class FileAccess {
 	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
 	 * @param buffer the image to write
 	 */
-	public static void writeNumberPlateLocation(BufferedImage buffer){
+	public static void writeOnlyPlate(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/NumberPlateLocation/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/OnlyPlate/plate" + fileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
