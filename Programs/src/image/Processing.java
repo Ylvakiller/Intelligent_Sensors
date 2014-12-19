@@ -1026,7 +1026,15 @@ public class Processing {
 	    return b;
 	}
 	
-	
+	/**
+	 * Cuts an image out of the original image and returns that
+	 * @param source the original image from which to cut (segment)
+	 * @param x the X coordinate to start
+	 * @param y the Y coordinate to start
+	 * @param width the width of the image to cut from the original
+	 * @param height the height of the image to cut from the original
+	 * @return a new image which has bee cut from the old image
+	 */
 	public static BufferedImage cutimage(BufferedImage source, int x, int y, int width, int height){
 		BufferedImage b = source.getSubimage(x, y, width, height);
 		return b;
