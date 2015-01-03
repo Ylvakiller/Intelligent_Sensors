@@ -23,7 +23,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after color filtering it
 	 */
-	private static BufferedImage ColorFilter(BufferedImage buffer){
+	private static BufferedImage colorFilter(BufferedImage buffer){
 		Runner.menuOutput.append("Applying color filter\n");
 		int x = 0, y = 0;
 
@@ -62,6 +62,46 @@ public class Processing {
 		return buffer;
 	}
 
+	
+	private static BufferedImage blackFilter(BufferedImage buffer){
+		Runner.menuOutput.append("Applying black filter\n");
+		int x = 0, y = 0;
+
+		int xMax = buffer.getWidth();
+		int yMax = buffer.getHeight();
+		Color C;
+
+		while (x<xMax){
+			while(y<yMax){
+				C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				if (red<115&&green<100&&blue<110){
+					buffer.setRGB(x, y, Color.white.getRGB());
+				}else{
+					buffer.setRGB(x, y, Color.black.getRGB());
+				}
+				y++;
+			}
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			try {
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			x++;
+			y=0;
+		}
+		return buffer;
+	}
+	
 	/**
 	 * This method will do all the histogram equalization
 	 * @param buffer the image to process
@@ -992,7 +1032,7 @@ public class Processing {
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
 		FileAccess.writeAfterHistogram(buffer);
-		buffer = Processing.ColorFilter(buffer);
+		buffer = Processing.colorFilter(buffer);
 		FileAccess.writeFirstColorFilter(buffer);
 		buffer = Processing.blobDetection(buffer);
 		FileAccess.writeBlobDetection(buffer);
@@ -1009,6 +1049,9 @@ public class Processing {
 			e.printStackTrace();
 		}
 		FileAccess.writeOnlyPlate(original);
+		buffer = Processing.blackFilter(original);
+		FileAccess.writeBlackColorFilter(buffer);
+		buffer = Processing.blobDetection(buffer);
 		
 	}
 	

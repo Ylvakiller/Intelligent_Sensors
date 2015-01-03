@@ -1,5 +1,6 @@
 package main;
 
+
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
@@ -56,13 +58,13 @@ public class Runner {
 		JFrame  jf = new JFrame("NumberPlate Recogniser");
 		System.out.println("Started");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jf.getContentPane().setLayout(null);
 		jf.setSize(1600,900);
+		jf.getContentPane().setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 241, 537);
 		scrollPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(10, 11, 241, 536);
 		jf.getContentPane().add(scrollPane);
 
 		menuOutput = new JTextArea();
@@ -72,10 +74,10 @@ public class Runner {
 		BufferedImage buffer = FileAccess.getImage();
 		try {
 			picLabel_1 = new JLabel(FileAccess.getImageIcon(buffer));
+			picLabel_1.setBounds(261, 0, 1313, 851);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		picLabel_1.setBounds(261, 0, 1313, 851);
 		jf.getContentPane().add(picLabel_1);
 
 		
@@ -88,8 +90,8 @@ public class Runner {
 		jf.getContentPane().add(lblImageNumber);
 
 		label = new JLabel("0");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setBounds(212, 563, 27, 14);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		jf.getContentPane().add(label);
 		picLabel_1.setVisible(true);
 		label.setText(""+count);
@@ -99,6 +101,7 @@ public class Runner {
 				buttonPressed = true;
 			}
 		});
+		scrollPane.setAutoscrolls(true);
 		while (true){
 			try {
 				Thread.sleep(1);                 //Apparently, not having this delay screws the whole program up...
@@ -108,7 +111,7 @@ public class Runner {
 			if (buttonPressed){
 				
 				if (count>26){
-					menuOutput.append("Done processing all images");
+					menuOutput.append("Done processing all images\n");
 				}else{
 					menuOutput.append("\nNow processing image number " + count + "\n");
 					label.setText(""+count);

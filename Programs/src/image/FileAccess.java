@@ -163,6 +163,29 @@ public class FileAccess {
 		}
 	}
 	
+	public static void writeBlackColorFilter(BufferedImage buffer){
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+		ImageWriter writer = (ImageWriter)writers.next();
+		String temp = "./OutputImages/BlackColorFilter/plate" + fileNumber + ".png";
+		File f = new File(temp);
+		ImageOutputStream ios = null;
+		try {
+			ios = ImageIO.createImageOutputStream(f);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		writer.setOutput(ios);
+		try {
+			writer.write(buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			ios.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public static void writeBlobDetection(BufferedImage buffer){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
