@@ -52,7 +52,7 @@ public class Runner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		count =2;
+		count =1;
 		
 		
 		JFrame  jf = new JFrame("NumberPlate Recogniser");
@@ -139,6 +139,11 @@ public class Runner {
 			FileAccess.fileNumber = stringNumber;
 			BufferedImage buffer = FileAccess.getImage();
 			//BufferedImage temp = Processing.cutimage(buffer);
-			Processing.findNumberPlate(buffer);
+			try {
+				Processing.findNumberPlate(buffer);
+			} catch (PlateNotFoundException e) {
+				menuOutput.append("No number plate found\nNeed alternative method to find the numberplate\n");
+				e.printStackTrace();
+			}
 		}
 	}

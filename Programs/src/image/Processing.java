@@ -2,8 +2,14 @@ package image;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
+
+import main.PlateNotFoundException;
 import main.Runner;
 
 /**
@@ -62,6 +68,64 @@ public class Processing {
 		return buffer;
 	}
 
+	/**
+	 * This method will compare the difference in values from the rgb values, this in order to get to a better result than a direct filter would do
+	 * @param buffer
+	 * @return
+	 */
+	private static BufferedImage comparativeFilter(BufferedImage buffer){
+		Runner.menuOutput.append("Calculating and applying the comparitive color filter");
+		int x = 0, y = 0;
+
+		int xMax = buffer.getWidth();
+		int yMax = buffer.getHeight();
+		Color C;
+		while (x<xMax){
+			while (y<yMax){
+				C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				int total = red+blue+green;
+				if (total>550){	//Overlighted spots
+					if (blue<150){
+						buffer.setRGB(x, y, Color.white.getRGB());
+					}else{
+						buffer.setRGB(x, y, Color.black.getRGB());
+					}
+				}else if(total<200){
+					buffer.setRGB(x, y, Color.black.getRGB());
+				}else{
+					if (red==0)red=1;
+					if (green==0)green=1;
+					if (blue==0)blue=1;
+					float ratioRG = (float)red/(float)green;
+					float ratioRB = (float)red/(float)blue;
+					if (ratioRG>1&&ratioRG<2.32&&ratioRB>3){
+						buffer.setRGB(x, y, Color.white.getRGB());
+					}else{
+						buffer.setRGB(x, y, Color.black.getRGB());
+					}
+				}
+				y++;
+			}
+			if (delay){
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			try {
+				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			x++;
+			y = 0;
+		}
+		return buffer;
+	}
 	
 	private static BufferedImage blackFilter(BufferedImage buffer){
 		Runner.menuOutput.append("Applying black filter\n");
@@ -77,7 +141,14 @@ public class Processing {
 				int red = C.getRed();
 				int green = C.getGreen();
 				int blue = C.getBlue();
-				if (red<115&&green<100&&blue<110){
+				float ratioRG = (float)red/(float)green;
+				float ratioRB = (float)red/(float)blue;
+				boolean ratios = false;
+				if (ratioRG<1.1&&ratioRG>0.9&&ratioRB<1.1&&ratioRB>0.9){
+					ratios=true;
+				}
+				int total = red+green+blue;
+				if ((red<115&&green<100&&blue<110&&total<250)||(red<155&&green<150&&blue<150&&ratios)){
 					buffer.setRGB(x, y, Color.white.getRGB());
 				}else{
 					buffer.setRGB(x, y, Color.black.getRGB());
@@ -92,7 +163,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -769,6 +840,7 @@ public class Processing {
 			x++;
 			y = 0;
 		}
+		
 		return buffer;
 
 	}
@@ -1027,8 +1099,9 @@ public class Processing {
 	 * Method designed to find the numberplate and return only that portion of the original picture
 	 * This method will do the steps from histogram equalization, through color filter and onto blobdetection and then use those results to return an image with only the numberplate in it
 	 * @param original the image to process 
+	 * @throws PlateNotFoundException this exception wil be thrown when the numberplate is not found and alternative measures are needed to continue
 	 */
-	public static void findNumberPlate(BufferedImage original){
+	public static void findNumberPlate(BufferedImage original) throws PlateNotFoundException{
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
 		FileAccess.writeAfterHistogram(buffer);
@@ -1044,14 +1117,19 @@ public class Processing {
 		System.out.println("ymax\t" + coords[3]);
 		original = Processing.cutimage(original, coords[0], coords[1], (coords[2]-coords[0]), (coords[3]-coords[1]));
 		try {
-			Runner.picLabel_1.setIcon(FileAccess.getImageIcon(original));
+			Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(original));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if ((float)original.getWidth()/(float)original.getHeight()<3.5){
+			throw new PlateNotFoundException();
+		}else{
 		FileAccess.writeOnlyPlate(original);
 		buffer = Processing.blackFilter(original);
 		FileAccess.writeBlackColorFilter(buffer);
 		buffer = Processing.blobDetection(buffer);
+		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
+		}
 		
 	}
 	
@@ -1082,5 +1160,22 @@ public class Processing {
 		BufferedImage b = source.getSubimage(x, y, width, height);
 		return b;
 	}
-	
+
+	private static ImageIcon ScaledImageIcon(BufferedImage source){
+		
+		double scalefactor = (double)500/(double)source.getWidth();
+		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
+		int newHeight = new Double(source.getHeight() * scalefactor).intValue();
+		BufferedImage resized =new BufferedImage(newWidth, newHeight, source.getType());
+	    Graphics2D g = resized.createGraphics();
+	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g.drawImage(source, 0, 0, newWidth, newHeight, 0, 0, source.getWidth(), source.getHeight(), null);
+	    g.dispose();
+	    try {
+			return FileAccess.getImageIcon(resized);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
