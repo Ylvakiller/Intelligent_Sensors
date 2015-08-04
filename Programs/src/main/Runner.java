@@ -47,11 +47,17 @@ public class Runner {
 	 * A boolean that keeps track on whether or not the button is pressed
 	 */
 	public static boolean buttonPressed  = true;;
+	
+	/**
+	 * This will decide which interface to use, either the normal one or the experimental multitreaded version.
+	 */
+	public static boolean altInterFace = true;
 	/**
 	 * Main method, runs the whole program
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		count =1;
 		
 		
