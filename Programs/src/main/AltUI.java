@@ -1,5 +1,7 @@
 package main;
 
+import image.ThreadedProcessing;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -77,8 +79,22 @@ public class AltUI {
 			}
 		}
 		topContainer.setVisible(true);
+		startProcessing();
 		while (true){
 
 		}
+	}
+	/**
+	 * Calling this method will start processing on the different images, in the final program this should get 4 numbers for the 4 plates to process
+	 */
+	public void startProcessing(){
+		ThreadedProcessing proc1 = new ThreadedProcessing("1");
+		ThreadedProcessing proc2 = new ThreadedProcessing("2");
+		ThreadedProcessing proc3 = new ThreadedProcessing("3");
+		ThreadedProcessing proc4 = new ThreadedProcessing("4");
+		proc1.start();
+		proc2.start();
+		proc3.start();
+		proc4.start();
 	}
 }
