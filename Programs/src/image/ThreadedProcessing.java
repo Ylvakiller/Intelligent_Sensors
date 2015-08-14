@@ -51,7 +51,7 @@ public class ThreadedProcessing extends Thread {
 			System.out.println("Thread " + this.getName() +" is at " + i);
 			i++;
 			try {
-				this.sleep(10);
+				ThreadedProcessing.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

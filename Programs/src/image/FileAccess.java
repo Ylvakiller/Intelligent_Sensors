@@ -21,6 +21,7 @@ public class FileAccess {
 	private static String fileNameInput = "./InputImages/plate";
 	private static String fileNameOutput = "./OutputImages/plate";
 	public static String fileNumber = "01";
+	public  int threadFileNumber = 0;
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
@@ -44,7 +45,16 @@ public class FileAccess {
 	public FileAccess(JPanel imagePanel){
 		editorPanel = imagePanel;
 	}
-	
+	/**
+	 * This constructor will be for processing multiple images at the same time
+	 * All the other statics methods will check if the thisFileNumber is not 0, and will otherwise use the fileNumber value,
+	 * this to allow backwards compatability between the treaded and untreaded versions of this program
+	 * @param number the fileNumber to process
+	 */
+	public FileAccess(int number){
+		
+		threadFileNumber = number;
+	}
 	/**
 	 * Returns the loaded imageIcon for a image file to be used in a JPanel
 	 * @return	the imageIcon for the fileName specified in the constructor
@@ -60,11 +70,11 @@ public class FileAccess {
 	 * This method is to return only a buffered image
 	 * @return A buffered image
 	 */
-	public static BufferedImage getImage(){
+	public static BufferedImage getImage(String FileNumber){
 		BufferedImage image = null;
 		try
 		{
-			String temp = fileNameInput + fileNumber + ".jpg";
+			String temp = fileNameInput + FileNumber + ".jpg";
 			image = ImageIO.read(new File(temp));
 		}
 		catch (Exception e)
@@ -79,10 +89,10 @@ public class FileAccess {
 	 * Writes an imageFile in the OutputImages folder called plate01.png where 01 is the platenumber
 	 * @param buffer the bufferImage to be written to
 	 */
-	public static void writeImage(BufferedImage buffer){
+	public static void writeImage(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = fileNameOutput + fileNumber + ".png";
+		String temp = fileNameOutput + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -109,10 +119,10 @@ public class FileAccess {
 	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
 	 * @param buffer the image to write
 	 */
-	public static void writeAfterHistogram(BufferedImage buffer){
+	public static void writeAfterHistogram(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/AfterHistogram/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/AfterHistogram/plate" + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -139,10 +149,10 @@ public class FileAccess {
 	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
 	 * @param buffer the image to write
 	 */
-	public static void writeFirstColorFilter(BufferedImage buffer){
+	public static void writeFirstColorFilter(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/FirstColorFilter/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/FirstColorFilter/plate" + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -163,10 +173,10 @@ public class FileAccess {
 		}
 	}
 	
-	public static void writeBlackColorFilter(BufferedImage buffer){
+	public static void writeBlackColorFilter(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/BlackColorFilter/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/BlackColorFilter/plate" + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -186,10 +196,10 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	public static void writeBlobDetection(BufferedImage buffer){
+	public static void writeBlobDetection(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/BlobDetection/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/BlobDetection/plate" + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -216,10 +226,10 @@ public class FileAccess {
 	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
 	 * @param buffer the image to write
 	 */
-	public static void writeOnlyPlate(BufferedImage buffer){
+	public static void writeOnlyPlate(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
-		String temp = "./OutputImages/OnlyPlate/plate" + fileNumber + ".png";
+		String temp = "./OutputImages/OnlyPlate/plate" + FileNumber + ".png";
 		File f = new File(temp);
 		ImageOutputStream ios = null;
 		try {
@@ -239,4 +249,16 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String getFileNumber(){
+		return fileNumber;
+	}
 }
+
+
+
+
+
+
+
+

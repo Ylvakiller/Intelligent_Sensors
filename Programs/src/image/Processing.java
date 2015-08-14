@@ -3,7 +3,6 @@ package image;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
@@ -1104,11 +1103,11 @@ public class Processing {
 	public static void findNumberPlate(BufferedImage original) throws PlateNotFoundException{
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
-		FileAccess.writeAfterHistogram(buffer);
+		FileAccess.writeAfterHistogram(buffer,FileAccess.getFileNumber());
 		buffer = Processing.colorFilter(buffer);
-		FileAccess.writeFirstColorFilter(buffer);
+		FileAccess.writeFirstColorFilter(buffer,FileAccess.getFileNumber());
 		buffer = Processing.blobDetection(buffer);
-		FileAccess.writeBlobDetection(buffer);
+		FileAccess.writeBlobDetection(buffer,FileAccess.getFileNumber());
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		int x = 0, y = 0;
 		System.out.println("xmin\t" + coords[0]);
@@ -1124,9 +1123,9 @@ public class Processing {
 		if ((float)original.getWidth()/(float)original.getHeight()<3.5){
 			throw new PlateNotFoundException();
 		}else{
-		FileAccess.writeOnlyPlate(original);
+		FileAccess.writeOnlyPlate(original,FileAccess.getFileNumber());
 		buffer = Processing.blackFilter(original);
-		FileAccess.writeBlackColorFilter(buffer);
+		FileAccess.writeBlackColorFilter(buffer,FileAccess.getFileNumber());
 		buffer = Processing.blobDetection(buffer);
 		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 		}

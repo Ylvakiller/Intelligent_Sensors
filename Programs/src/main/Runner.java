@@ -1,21 +1,18 @@
 package main;
 
 
+import image.FileAccess;
+import image.Processing;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import image.Processing;
-import image.FileAccess;
-
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
@@ -79,7 +76,7 @@ public class Runner {
 			scrollPane.setViewportView(menuOutput);
 			menuOutput.setLineWrap(true);
 			jf.setLocationRelativeTo(null);
-			BufferedImage buffer = FileAccess.getImage();
+			BufferedImage buffer = FileAccess.getImage(FileAccess.getFileNumber());
 			try {
 				picLabel_1 = new JLabel(FileAccess.getImageIcon(buffer));
 				picLabel_1.setBounds(261, 0, 1313, 851);
@@ -146,7 +143,7 @@ public class Runner {
 		}
 		System.out.println(stringNumber);
 		FileAccess.fileNumber = stringNumber;
-		BufferedImage buffer = FileAccess.getImage();
+		BufferedImage buffer = FileAccess.getImage(FileAccess.getFileNumber());
 		//BufferedImage temp = Processing.cutimage(buffer);
 		try {
 			Processing.findNumberPlate(buffer);
