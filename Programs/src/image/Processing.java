@@ -1095,12 +1095,14 @@ public class Processing {
 	}
 	
 	/**
-	 * Method designed to find the numberplate and return only that portion of the original picture
+	 * This method only works for non threaded programs
+	 * Method designed to find the numberplate
 	 * This method will do the steps from histogram equalization, through color filter and onto blobdetection and then use those results to return an image with only the numberplate in it
 	 * @param original the image to process 
 	 * @throws PlateNotFoundException this exception wil be thrown when the numberplate is not found and alternative measures are needed to continue
 	 */
 	public static void findNumberPlate(BufferedImage original) throws PlateNotFoundException{
+		
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
 		FileAccess.writeAfterHistogram(buffer,FileAccess.getFileNumber());

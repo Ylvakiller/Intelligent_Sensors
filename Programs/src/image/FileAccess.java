@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class FileAccess {
 	private static String fileNameInput = "./InputImages/plate";
 	private static String fileNameOutput = "./OutputImages/plate";
-	public static String fileNumber = "01";
+	public static String fileNumber = "00";
 	public  int threadFileNumber = 0;
 	JPanel editorPanel;
 	/**
