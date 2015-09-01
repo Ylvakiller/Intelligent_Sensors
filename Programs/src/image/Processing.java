@@ -69,8 +69,8 @@ public class Processing {
 
 	/**
 	 * This method will compare the difference in values from the rgb values, this in order to get to a better result than a direct filter would do
-	 * @param buffer
-	 * @return
+	 * @param buffer the picture to process
+	 * @return the orinial picture with the filter applied
 	 */
 	private static BufferedImage comparativeFilter(BufferedImage buffer){
 		Runner.menuOutput.append("Calculating and applying the comparitive color filter");
@@ -1105,11 +1105,11 @@ public class Processing {
 		
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
-		FileAccess.writeAfterHistogram(buffer,FileAccess.getFileNumber());
+		FileAccess.writeAfterHistogram(buffer);
 		buffer = Processing.colorFilter(buffer);
-		FileAccess.writeFirstColorFilter(buffer,FileAccess.getFileNumber());
+		FileAccess.writeFirstColorFilter(buffer);
 		buffer = Processing.blobDetection(buffer);
-		FileAccess.writeBlobDetection(buffer,FileAccess.getFileNumber());
+		FileAccess.writeBlobDetection(buffer);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		int x = 0, y = 0;
 		System.out.println("xmin\t" + coords[0]);
@@ -1125,9 +1125,9 @@ public class Processing {
 		if ((float)original.getWidth()/(float)original.getHeight()<3.5){
 			throw new PlateNotFoundException();
 		}else{
-		FileAccess.writeOnlyPlate(original,FileAccess.getFileNumber());
+		FileAccess.writeOnlyPlate(original);
 		buffer = Processing.blackFilter(original);
-		FileAccess.writeBlackColorFilter(buffer,FileAccess.getFileNumber());
+		FileAccess.writeBlackColorFilter(buffer);
 		buffer = Processing.blobDetection(buffer);
 		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 		}
@@ -1171,6 +1171,24 @@ public class Processing {
 	    Graphics2D g = resized.createGraphics();
 	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 	    g.drawImage(source, 0, 0, newWidth, newHeight, 0, 0, source.getWidth(), source.getHeight(), null);
+	    g.dispose();
+	    try {
+			return FileAccess.getImageIcon(resized);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static ImageIcon ScaleThreadIcon(BufferedImage source){
+		
+		/**double scalefactor = (double)500/(double)source.getWidth();
+		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
+		int newHeight = new Double(source.getHeight() * scalefactor).intValue();**/
+		BufferedImage resized =new BufferedImage(800, 475, source.getType());
+	    Graphics2D g = resized.createGraphics();
+	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g.drawImage(source, 0, 0, 800, 475, 0, 0, source.getWidth(), source.getHeight(), null);
 	    g.dispose();
 	    try {
 			return FileAccess.getImageIcon(resized);

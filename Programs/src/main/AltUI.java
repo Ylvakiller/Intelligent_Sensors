@@ -2,7 +2,9 @@ package main;
 
 import image.ThreadedProcessing;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -16,6 +18,11 @@ public class AltUI {
 	 * This constructor will start and manage the complete interface
 	 */
 	public static JTextArea menuOutput;
+	
+	private static JLabel picLabel_1;
+	private static JLabel picLabel_2;
+	private static JLabel picLabel_3;
+	private static JLabel picLabel_4;
 	
 	public AltUI() {
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
@@ -55,34 +62,64 @@ public class AltUI {
 			plateContainer.setBounds(290, 50, 1610, 960);
 			topContainer.getContentPane().add(plateContainer);
 			plateContainer.setLayout(null);
+			
 			{
 				//These are all seperate plates
 				JPanel plate1 = new JPanel();
 				plate1.setBounds(0, 0, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
-				plate1.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
+				//plate1.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
 				plateContainer.add(plate1);
+				plate1.setVisible(true);				
 
 				JPanel plate2 = new JPanel();
 				plate2.setBounds((plateContainer.getWidth()-10)/2+10, 0, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
 				plate2.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
 				plateContainer.add(plate2);
+				plate2.setVisible(true);
 
 				JPanel plate3 = new JPanel();
 				plate3.setBounds(0, (plateContainer.getHeight()-10)/2+10, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
 				plate3.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
 				plateContainer.add(plate3);
+				plate3.setVisible(true);
 
 				JPanel plate4 = new JPanel();
 				plate4.setBounds((plateContainer.getWidth()-10)/2+10, (plateContainer.getHeight()-10)/2+10, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
 				plate4.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
 				plateContainer.add(plate4);
+				plate4.setVisible(true);
+				
+				
+				
+				try {
+					picLabel_1 = new JLabel();
+					picLabel_1.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
+					plate1.add(picLabel_1);
+					picLabel_1.setVisible(true);
+					
+					picLabel_2 = new JLabel();
+					picLabel_2.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
+					plate2.add(picLabel_2);
+					picLabel_2.setVisible(true);
+					
+					picLabel_3 = new JLabel();
+					picLabel_3.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
+					plate3.add(picLabel_3);
+					picLabel_3.setVisible(true);
+					
+					picLabel_4 = new JLabel();
+					picLabel_4.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
+					plate4.add(picLabel_4);
+					picLabel_4.setVisible(true);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			plateContainer.setVisible(true);
 		}
 		topContainer.setVisible(true);
 		startProcessing();
-		while (true){
-
-		}
 	}
 	/**
 	 * Calling this method will start processing on the different images, in the final program this should get 4 numbers for the 4 plates to process
@@ -96,5 +133,23 @@ public class AltUI {
 		proc2.start();
 		proc3.start();
 		proc4.start();
+	}
+	
+	public static void updateScreen(int section, ImageIcon buffer){
+		System.out.println(section);
+		switch (section){
+		case 1:
+			picLabel_1.setIcon(buffer);
+			break;
+		case 2:
+			picLabel_2.setIcon(buffer);
+			break;
+		case 3:
+			picLabel_3.setIcon(buffer);
+			break;
+		case 4:
+			picLabel_4.setIcon(buffer);
+			break;
+		}
 	}
 }

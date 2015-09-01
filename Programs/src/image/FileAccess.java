@@ -21,15 +21,14 @@ public class FileAccess {
 	private static String fileNameInput = "./InputImages/plate";
 	private static String fileNameOutput = "./OutputImages/plate";
 	public static String fileNumber = "00";
-	public  int threadFileNumber = 0;
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
 	 */
 	public FileAccess(){
-		
+
 	}
-	
+
 	/**
 	 * Constructor with a file name in it.
 	 * @param fileName
@@ -37,7 +36,7 @@ public class FileAccess {
 	public FileAccess(String fileName){
 		FileAccess.fileNameInput = fileName;
 	}
-	
+
 	/**
 	 * Constructor with the JPanel for the image in it
 	 * @param imagePanel
@@ -52,8 +51,7 @@ public class FileAccess {
 	 * @param number the fileNumber to process
 	 */
 	public FileAccess(int number){
-		
-		threadFileNumber = number;
+		FileAccess.setFileNumber(number);
 	}
 	/**
 	 * Returns the loaded imageIcon for a image file to be used in a JPanel
@@ -65,7 +63,7 @@ public class FileAccess {
 		ImageIcon imageIcon = new ImageIcon(image);
 		return imageIcon;
 	}
-	
+
 	/**
 	 * This method is to return only a buffered image
 	 * @return A buffered image
@@ -84,7 +82,7 @@ public class FileAccess {
 		}
 		return image;
 	}
-	
+
 	/**
 	 * Writes an imageFile in the OutputImages folder called plate01.png where 01 is the platenumber
 	 * @param buffer the bufferImage to be written to
@@ -112,7 +110,7 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Will write an image in the folder ./OutputImages/AfterHistogram/
 	 * The image will be named "plate01.png" for the first plate
@@ -142,7 +140,7 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Will write an image in the folder ./OutputImages/FirstColorFilter/
 	 * The image will be named "plate01.png" for the first plate
@@ -172,7 +170,7 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void writeBlackColorFilter(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -219,7 +217,7 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Will write an image in the folder ./OutputImages/NumberPlateLocation/
 	 * The image will be named "plate01.png" for the first plate
@@ -249,9 +247,23 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
-	
-	public static String getFileNumber(){
-		return fileNumber;
+
+	public static String getFileNumber(int number){
+		String temp;
+		if (number<10){
+			temp = "0"  + String.valueOf(number);
+		}else{
+			temp = String.valueOf(number);
+		}
+		return temp;
+	}
+
+	public static void setFileNumber(int number){
+		if (number<10){
+			fileNumber = "0"  + String.valueOf(number);
+		}else{
+			fileNumber = String.valueOf(number);
+		}
 	}
 }
 

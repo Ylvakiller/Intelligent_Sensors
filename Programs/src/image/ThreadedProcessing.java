@@ -1,5 +1,9 @@
 package image;
 
+import java.awt.image.BufferedImage;
+
+import main.AltUI;
+
 public class ThreadedProcessing extends Thread {
 
 	public ThreadedProcessing() {
@@ -46,7 +50,15 @@ public class ThreadedProcessing extends Thread {
 	 * This method should hold the code that needs to be runned in this tread
 	 */
 	public void run(){
-		int i = 0;
+		FileAccess files = new FileAccess(Integer.parseInt(Thread.currentThread().getName()));
+		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+		try {
+			AltUI.updateScreen(Integer.parseInt(Thread.currentThread().getName()), Processing.ScaleThreadIcon(currentBuffer));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("Currentely showing the first image...");
+		/*int i = 0;
 		while (i<10){
 			System.out.println("Thread " + this.getName() +" is at " + i);
 			i++;
@@ -56,6 +68,6 @@ public class ThreadedProcessing extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 }
