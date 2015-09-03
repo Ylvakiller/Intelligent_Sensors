@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -143,6 +144,15 @@ public class Runner {
 		} catch (PlateNotFoundException e) {
 			menuOutput.append("No number plate found\nNeed alternative method to find the numberplate\n");
 			e.printStackTrace();
+		}
+	}
+	
+	
+	public static void updateScreen(ImageIcon icon, int number){
+		if (altUI){
+			AltUI.updateScreen(number, icon);
+		}else{
+			Runner.picLabel_1.setIcon(icon);
 		}
 	}
 }

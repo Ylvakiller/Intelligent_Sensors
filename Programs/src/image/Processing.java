@@ -28,7 +28,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after color filtering it
 	 */
-	private static BufferedImage colorFilter(BufferedImage buffer){
+	private static BufferedImage colorFilter(BufferedImage buffer, String number){
 		Runner.menuOutput.append("Applying color filter\n");
 		int x = 0, y = 0;
 
@@ -57,7 +57,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -72,7 +72,7 @@ public class Processing {
 	 * @param buffer the picture to process
 	 * @return the orinial picture with the filter applied
 	 */
-	private static BufferedImage comparativeFilter(BufferedImage buffer){
+	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
 		Runner.menuOutput.append("Calculating and applying the comparitive color filter");
 		int x = 0, y = 0;
 
@@ -116,7 +116,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -126,7 +126,7 @@ public class Processing {
 		return buffer;
 	}
 	
-	private static BufferedImage blackFilter(BufferedImage buffer){
+	private static BufferedImage blackFilter(BufferedImage buffer, String number){
 		Runner.menuOutput.append("Applying black filter\n");
 		int x = 0, y = 0;
 
@@ -162,7 +162,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
+				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -177,7 +177,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after histogram equalization is applied
 	 */
-	private static BufferedImage histogramEqualisation(BufferedImage buffer){
+	private static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
 		Runner.menuOutput.append("Applying Histogram Equalisation\n");
 		int CDFminRed;
 		int CDFminBlue;
@@ -279,6 +279,7 @@ public class Processing {
 			}
 
 			try {
+				Runner.updateScreen(FileAccess.getImageIcon(buffer), Integer.getInteger(number));
 				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -296,7 +297,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after blobdetection has been applied, this image will have the 6 largest blobs marked in different colors
 	 */
-	private static BufferedImage blobDetection(BufferedImage buffer){
+	private static BufferedImage blobDetection(BufferedImage buffer, String number){
 		int x, xMax, y, yMax;
 		x=0;
 		y=0;
@@ -832,6 +833,7 @@ public class Processing {
 			}
 			
 			try {
+				Runner.updateScreen(FileAccess.getImageIcon(buffer), Integer.getInteger(number));
 				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1104,11 +1106,11 @@ public class Processing {
 	public static void findNumberPlate(BufferedImage original, String number) throws PlateNotFoundException{
 		
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
-		buffer = Processing.histogramEqualisation(buffer);
+		buffer = Processing.histogramEqualisation(buffer, number);
 		FileAccess.writeAfterHistogram(buffer, number);
-		buffer = Processing.colorFilter(buffer);
+		buffer = Processing.colorFilter(buffer, number);
 		FileAccess.writeFirstColorFilter(buffer, number);
-		buffer = Processing.blobDetection(buffer);
+		buffer = Processing.blobDetection(buffer, number);
 		FileAccess.writeBlobDetection(buffer, number);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		int x = 0, y = 0;
@@ -1126,9 +1128,9 @@ public class Processing {
 			throw new PlateNotFoundException();
 		}else{
 		FileAccess.writeOnlyPlate(original, number);
-		buffer = Processing.blackFilter(original);
+		buffer = Processing.blackFilter(original, number);
 		FileAccess.writeBlackColorFilter(buffer, number);
-		buffer = Processing.blobDetection(buffer);
+		buffer = Processing.blobDetection(buffer, number);
 		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 		}
 		

@@ -57,6 +57,8 @@ public class ThreadedProcessing extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
 		//System.out.println("Currentely showing the first image...");
 		/*int i = 0;
 		while (i<10){
