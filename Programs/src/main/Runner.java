@@ -49,13 +49,14 @@ public class Runner {
 	/**
 	 * This will decide which interface to use, either the normal one or the experimental multitreaded version.
 	 */
-	public static boolean altUI = true;
+	public static boolean altUI = false;
 	/**
 	 * Main method, runs the whole program
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		if (altUI){
+			@SuppressWarnings("unused")
 			AltUI userInterface = new AltUI();
 		}else{
 			count =1;

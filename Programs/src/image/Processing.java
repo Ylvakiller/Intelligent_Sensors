@@ -22,7 +22,7 @@ public class Processing {
 	 * This determines if there will be a delay or not (this delay can help visualize what is happening)
 	 * Also this delay just looks freaking awesome :)
 	 */
-	private static boolean delay = false;
+	private static boolean delay = true;
 	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
@@ -72,6 +72,7 @@ public class Processing {
 	 * @param buffer the picture to process
 	 * @return the orinial picture with the filter applied
 	 */
+	@SuppressWarnings("unused")
 	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
 		Runner.menuOutput.append("Calculating and applying the comparitive color filter");
 		int x = 0, y = 0;
@@ -177,14 +178,17 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after histogram equalization is applied
 	 */
-	private static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
+	protected static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
+		System.out.println(number);
+		System.out.println(Integer.getInteger(number));
+		//System.exit(0);
 		Runner.menuOutput.append("Applying Histogram Equalisation\n");
-		int CDFminRed;
-		int CDFminBlue;
-		int CDFminGreen;
+		//int CDFminRed;
+		//int CDFminBlue;
+		//int CDFminGreen;
 		int M = buffer.getWidth();
 		int N = buffer.getHeight();
-		int L = 256;
+		//int L = 256;
 
 		/*
 		 *The next arrays will first hold counts of the amount a certain value is found, then the CDF and then a scaled CDF
@@ -279,8 +283,9 @@ public class Processing {
 			}
 
 			try {
+				System.out.println(Integer.getInteger(number));
 				Runner.updateScreen(FileAccess.getImageIcon(buffer), Integer.getInteger(number));
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
+				//Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1113,7 +1118,7 @@ public class Processing {
 		buffer = Processing.blobDetection(buffer, number);
 		FileAccess.writeBlobDetection(buffer, number);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
-		int x = 0, y = 0;
+		//int x = 0, y = 0;
 		System.out.println("xmin\t" + coords[0]);
 		System.out.println("ymin\t" + coords[1]);
 		System.out.println("xmax\t" + coords[2]);
@@ -1142,7 +1147,7 @@ public class Processing {
 	 * @param source the image to copy
 	 * @return a new bufferedImage which is the same as the source
 	 */
-	private static BufferedImage copyImage(BufferedImage source){
+	protected static BufferedImage copyImage(BufferedImage source){
 	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 	    Graphics g = b.getGraphics();
 	    g.drawImage(source, 0, 0, null);
