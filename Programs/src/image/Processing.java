@@ -1101,15 +1101,15 @@ public class Processing {
 	 * @param original the image to process 
 	 * @throws PlateNotFoundException this exception wil be thrown when the numberplate is not found and alternative measures are needed to continue
 	 */
-	public static void findNumberPlate(BufferedImage original) throws PlateNotFoundException{
+	public static void findNumberPlate(BufferedImage original, String number) throws PlateNotFoundException{
 		
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer);
-		FileAccess.writeAfterHistogram(buffer);
+		FileAccess.writeAfterHistogram(buffer, number);
 		buffer = Processing.colorFilter(buffer);
-		FileAccess.writeFirstColorFilter(buffer);
+		FileAccess.writeFirstColorFilter(buffer, number);
 		buffer = Processing.blobDetection(buffer);
-		FileAccess.writeBlobDetection(buffer);
+		FileAccess.writeBlobDetection(buffer, number);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		int x = 0, y = 0;
 		System.out.println("xmin\t" + coords[0]);
@@ -1125,9 +1125,9 @@ public class Processing {
 		if ((float)original.getWidth()/(float)original.getHeight()<3.5){
 			throw new PlateNotFoundException();
 		}else{
-		FileAccess.writeOnlyPlate(original);
+		FileAccess.writeOnlyPlate(original, number);
 		buffer = Processing.blackFilter(original);
-		FileAccess.writeBlackColorFilter(buffer);
+		FileAccess.writeBlackColorFilter(buffer, number);
 		buffer = Processing.blobDetection(buffer);
 		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 		}

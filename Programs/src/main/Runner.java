@@ -76,7 +76,7 @@ public class Runner {
 			scrollPane.setViewportView(menuOutput);
 			menuOutput.setLineWrap(true);
 			jf.setLocationRelativeTo(null);
-			BufferedImage buffer = FileAccess.getImage();
+			BufferedImage buffer = FileAccess.getImage("01");
 			try {
 				picLabel_1 = new JLabel(FileAccess.getImageIcon(buffer));
 				picLabel_1.setBounds(261, 0, 1313, 851);
@@ -136,10 +136,10 @@ public class Runner {
 	 */
 	private static void processImageNumber(int number){
 		FileAccess.setFileNumber(number);
-		BufferedImage buffer = FileAccess.getImage();
+		BufferedImage buffer = FileAccess.getImage(FileAccess.getFileNumber(number));
 		//BufferedImage temp = Processing.cutimage(buffer);
 		try {
-			Processing.findNumberPlate(buffer);
+			Processing.findNumberPlate(buffer, FileAccess.getFileNumber(number));
 		} catch (PlateNotFoundException e) {
 			menuOutput.append("No number plate found\nNeed alternative method to find the numberplate\n");
 			e.printStackTrace();
