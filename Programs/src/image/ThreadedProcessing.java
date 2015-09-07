@@ -59,6 +59,15 @@ public class ThreadedProcessing extends Thread {
 		}
 		BufferedImage procesBuffer = Processing.copyImage(currentBuffer);
 		procesBuffer = Processing.histogramEqualisation(procesBuffer, Thread.currentThread().getName());
+		while (!AltUI.continue1){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		procesBuffer = Processing.colorFilter(procesBuffer, Thread.currentThread().getName());
 		//System.out.println("Currentely showing the first image...");
 		/*int i = 0;
 		while (i<10){

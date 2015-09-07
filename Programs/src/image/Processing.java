@@ -28,7 +28,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after color filtering it
 	 */
-	private static BufferedImage colorFilter(BufferedImage buffer, String number){
+	protected static BufferedImage colorFilter(BufferedImage buffer, String number){
 		if (!Runner.altUI){Runner.menuOutput.append("Applying color filter\n");}
 		int x = 0, y = 0;
 

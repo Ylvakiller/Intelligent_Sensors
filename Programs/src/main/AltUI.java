@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import java.awt.Button;
 
 /*
  * This class will hold my attempt at making a multi treaded interface for the program, showing to start 4 numberplate at the same time.
@@ -23,6 +28,7 @@ public class AltUI {
 	private static JLabel picLabel_2;
 	private static JLabel picLabel_3;
 	private static JLabel picLabel_4;
+	public static boolean continue1 = false;
 	
 	public AltUI() {
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
@@ -41,6 +47,37 @@ public class AltUI {
 				buttonPanel.setBounds(0, 0, sidePanel.getWidth(), 275);
 				buttonPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,null));
 				sidePanel.add(buttonPanel);
+				buttonPanel.setLayout(null);
+				
+				Button btnNextUpLeft = new Button("Next step top left");
+				btnNextUpLeft.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						continue1 =true;
+					}
+				});
+				btnNextUpLeft.setBounds(5, 5, (buttonPanel.getWidth()-15)/2, 25);
+				buttonPanel.add(btnNextUpLeft);
+				
+				Button btnNextUpRight = new Button("Next step top right");
+				
+				btnNextUpRight.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+					}
+				});
+				btnNextUpRight.setBounds((buttonPanel.getWidth()-15)/2+10, 5, (buttonPanel.getWidth()-15)/2, 25);
+				buttonPanel.add(btnNextUpRight);
+				
+				Button btnNextDownLeft = new Button("Next step lower left");
+				btnNextDownLeft.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				btnNextDownLeft.setBounds(5, 35, (buttonPanel.getWidth()-15)/2, 25);
+				buttonPanel.add(btnNextDownLeft);
+				
+				Button btnNextdownRight = new Button("Next step lower right");
+				btnNextdownRight.setBounds((buttonPanel.getWidth()-15)/2+10, 35, (buttonPanel.getWidth()-15)/2, 25);
+				buttonPanel.add(btnNextdownRight);
 
 				JPanel textPanel = new JPanel();
 				textPanel.setBounds(0, buttonPanel.getHeight(), sidePanel.getWidth(), sidePanel.getHeight()-buttonPanel.getHeight());
@@ -73,19 +110,19 @@ public class AltUI {
 
 				JPanel plate2 = new JPanel();
 				plate2.setBounds((plateContainer.getWidth()-10)/2+10, 0, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
-				plate2.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
+				plate2.setBorder(null);
 				plateContainer.add(plate2);
 				plate2.setVisible(true);
 
 				JPanel plate3 = new JPanel();
 				plate3.setBounds(0, (plateContainer.getHeight()-10)/2+10, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
-				plate3.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
+				plate3.setBorder(null);
 				plateContainer.add(plate3);
 				plate3.setVisible(true);
 
 				JPanel plate4 = new JPanel();
 				plate4.setBounds((plateContainer.getWidth()-10)/2+10, (plateContainer.getHeight()-10)/2+10, (plateContainer.getWidth()-10)/2, (plateContainer.getHeight()-10)/2);
-				plate4.setBorder(new EtchedBorder(EtchedBorder.RAISED, null,null));
+				plate4.setBorder(null);
 				plateContainer.add(plate4);
 				plate4.setVisible(true);
 				
@@ -118,6 +155,9 @@ public class AltUI {
 			}
 			plateContainer.setVisible(true);
 		}
+		
+		
+		
 		topContainer.setVisible(true);
 		startProcessing();
 	}
