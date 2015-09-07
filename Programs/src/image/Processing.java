@@ -22,14 +22,14 @@ public class Processing {
 	 * This determines if there will be a delay or not (this delay can help visualize what is happening)
 	 * Also this delay just looks freaking awesome :)
 	 */
-	private static boolean delay = true;
+	private static boolean delay = false;
 	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
 	 * @return the image after color filtering it
 	 */
 	private static BufferedImage colorFilter(BufferedImage buffer, String number){
-		Runner.menuOutput.append("Applying color filter\n");
+		if (!Runner.altUI){Runner.menuOutput.append("Applying color filter\n");}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -57,7 +57,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -74,7 +74,7 @@ public class Processing {
 	 */
 	@SuppressWarnings("unused")
 	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
-		Runner.menuOutput.append("Calculating and applying the comparitive color filter");
+		if (!Runner.altUI){Runner.menuOutput.append("Calculating and applying the comparitive color filter");}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -117,7 +117,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -128,7 +128,7 @@ public class Processing {
 	}
 	
 	private static BufferedImage blackFilter(BufferedImage buffer, String number){
-		Runner.menuOutput.append("Applying black filter\n");
+		if (!Runner.altUI){Runner.menuOutput.append("Applying black filter\n");}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -163,7 +163,7 @@ public class Processing {
 				}
 			}
 			try {
-				Runner.updateScreen(FileAccess.getImageIcon(buffer),Integer.getInteger(number));
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -179,10 +179,7 @@ public class Processing {
 	 * @return the image after histogram equalization is applied
 	 */
 	protected static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
-		System.out.println(number);
-		System.out.println(Integer.getInteger(number));
-		//System.exit(0);
-		Runner.menuOutput.append("Applying Histogram Equalisation\n");
+		if (!Runner.altUI){Runner.menuOutput.append("Applying Histogram Equalisation\n");}
 		//int CDFminRed;
 		//int CDFminBlue;
 		//int CDFminGreen;
@@ -283,8 +280,7 @@ public class Processing {
 			}
 
 			try {
-				System.out.println(Integer.getInteger(number));
-				Runner.updateScreen(FileAccess.getImageIcon(buffer), Integer.getInteger(number));
+				Runner.updateScreen(buffer, Integer.parseInt(number));
 				//Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -309,7 +305,7 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		Runner.menuOutput.append("Running Blob Detection\n");
+		if (!Runner.altUI){Runner.menuOutput.append("Running Blob Detection\n");}
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -805,7 +801,7 @@ public class Processing {
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
 		mass = calculateConnectedMass(connectedBlobs, mass);
 		int[] largestBlobs = findLargestBlobs(mass,amountOfBlobs);
-		Runner.menuOutput.append("Processing blob information to screen:\n");
+		if (!Runner.altUI){Runner.menuOutput.append("Processing blob information to screen:\n");}
 		x = 0;
 		y = 0;
 		while (x<xMax){
@@ -838,7 +834,7 @@ public class Processing {
 			}
 			
 			try {
-				Runner.updateScreen(FileAccess.getImageIcon(buffer), Integer.getInteger(number));
+				Runner.updateScreen(buffer, Integer.parseInt(number));
 				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1169,7 +1165,7 @@ public class Processing {
 		return b;
 	}
 
-	private static ImageIcon ScaledImageIcon(BufferedImage source){
+	public static ImageIcon ScaledImageIcon(BufferedImage source){
 		
 		double scalefactor = (double)500/(double)source.getWidth();
 		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
@@ -1195,7 +1191,7 @@ public class Processing {
 		BufferedImage resized =new BufferedImage(800, 475, source.getType());
 	    Graphics2D g = resized.createGraphics();
 	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g.drawImage(source, 0, 0, 800, 475, 0, 0, source.getWidth(), source.getHeight(), null);
+	    g.drawImage(source, 0, 0, 800, 475, null);
 	    g.dispose();
 	    try {
 			return FileAccess.getImageIcon(resized);

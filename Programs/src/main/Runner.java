@@ -49,7 +49,7 @@ public class Runner {
 	/**
 	 * This will decide which interface to use, either the normal one or the experimental multitreaded version.
 	 */
-	public static boolean altUI = false;
+	public static boolean altUI = true;
 	/**
 	 * Main method, runs the whole program
 	 * @param args
@@ -149,11 +149,15 @@ public class Runner {
 	}
 	
 	
-	public static void updateScreen(ImageIcon icon, int number){
+	public static void updateScreen(BufferedImage icon, int number){
 		if (altUI){
-			AltUI.updateScreen(number, icon);
+			AltUI.updateScreen(number, Processing.ScaleThreadIcon(icon));
 		}else{
-			Runner.picLabel_1.setIcon(icon);
+			Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(icon));
 		}
+	}
+	
+	protected void setMenuOutput(){
+		
 	}
 }

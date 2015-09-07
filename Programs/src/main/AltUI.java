@@ -136,7 +136,7 @@ public class AltUI {
 	}
 	
 	public static void updateScreen(int section, ImageIcon buffer){
-		System.out.println(section);
+		//System.out.println(section);
 		switch (section){
 		case 1:
 			picLabel_1.setIcon(buffer);
