@@ -1,6 +1,9 @@
 package main;
 
-import image.ThreadedProcessing;
+import java.awt.Button;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -9,11 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import java.awt.Button;
+
+import image.ThreadedProcessing;
 
 /*
  * This class will hold my attempt at making a multi treaded interface for the program, showing to start 4 numberplate at the same time.
@@ -28,7 +28,13 @@ public class AltUI {
 	private static JLabel picLabel_2;
 	private static JLabel picLabel_3;
 	private static JLabel picLabel_4;
+	public static int[] numbers= {0,0,0,0};
 	public static boolean continue1 = false;
+	public static ThreadedProcessing proc1;
+	public static ThreadedProcessing proc2;
+	public static ThreadedProcessing proc3;
+	public static ThreadedProcessing proc4;
+	public static ThreadedProcessing[] threadArray = new ThreadedProcessing[4];
 	
 	public AltUI() {
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
@@ -52,7 +58,9 @@ public class AltUI {
 				Button btnNextUpLeft = new Button("Next step top left");
 				btnNextUpLeft.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						continue1 =true;
+						synchronized (AltUI.proc1) {
+							AltUI.proc1.notify();
+						}
 					}
 				});
 				btnNextUpLeft.setBounds(5, 5, (buttonPanel.getWidth()-15)/2, 25);
@@ -165,10 +173,11 @@ public class AltUI {
 	 * Calling this method will start processing on the different images, in the final program this should get 4 numbers for the 4 plates to process
 	 */
 	public void startProcessing(){
-		ThreadedProcessing proc1 = new ThreadedProcessing("1");
-		ThreadedProcessing proc2 = new ThreadedProcessing("2");
-		ThreadedProcessing proc3 = new ThreadedProcessing("3");
-		ThreadedProcessing proc4 = new ThreadedProcessing("4");
+		//ThreadedProcessing.count = new AtomicInteger(0);
+		 proc1 = new ThreadedProcessing("8");
+		 proc2 = new ThreadedProcessing("8");
+		 proc3 = new ThreadedProcessing("8");
+		 proc4 = new ThreadedProcessing("8");
 		proc1.start();
 		proc2.start();
 		proc3.start();

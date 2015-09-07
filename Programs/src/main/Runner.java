@@ -1,14 +1,10 @@
 package main;
 
 
-import image.FileAccess;
-import image.Processing;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+
+import image.FileAccess;
+import image.Processing;
 
 /**
  * This is the class that will start the program, uses for it are debugging and in the end.
