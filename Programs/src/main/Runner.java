@@ -58,7 +58,7 @@ public class Runner {
 			@SuppressWarnings("unused")
 			AltUI userInterface = new AltUI();
 		}else{
-			count =1;
+			count =2;
 			FileAccess.setFileNumber(count);
 
 			JFrame  jf = new JFrame("NumberPlate Recogniser");

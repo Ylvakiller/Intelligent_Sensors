@@ -3,7 +3,6 @@ package main;
 import java.awt.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
 import image.ThreadedProcessing;
+import javax.swing.JToggleButton;
 
 /*
  * This class will hold my attempt at making a multi treaded interface for the program, showing to start 4 numberplate at the same time.
@@ -35,6 +35,7 @@ public class AltUI {
 	public static ThreadedProcessing proc3;
 	public static ThreadedProcessing proc4;
 	public static ThreadedProcessing[] threadArray = new ThreadedProcessing[4];
+	public static boolean notWait = false;
 	
 	public AltUI() {
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
@@ -70,6 +71,9 @@ public class AltUI {
 				
 				btnNextUpRight.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						synchronized (AltUI.proc2) {
+							AltUI.proc2.notify();
+						}
 					}
 				});
 				btnNextUpRight.setBounds((buttonPanel.getWidth()-15)/2+10, 5, (buttonPanel.getWidth()-15)/2, 25);
@@ -78,14 +82,54 @@ public class AltUI {
 				Button btnNextDownLeft = new Button("Next step lower left");
 				btnNextDownLeft.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						synchronized (AltUI.proc3) {
+							AltUI.proc3.notify();
+						}
 					}
 				});
 				btnNextDownLeft.setBounds(5, 35, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextDownLeft);
 				
 				Button btnNextdownRight = new Button("Next step lower right");
+				btnNextdownRight.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						synchronized (AltUI.proc4) {
+							AltUI.proc4.notify();
+						}
+					}
+				});
 				btnNextdownRight.setBounds((buttonPanel.getWidth()-15)/2+10, 35, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextdownRight);
+				
+				Button btnNextAll = new Button("Next step all");
+				btnNextAll.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						synchronized(AltUI.proc1){
+							AltUI.proc1.notify();
+						}
+						synchronized(AltUI.proc2){
+							AltUI.proc2.notify();
+						}
+						synchronized(AltUI.proc3){
+							AltUI.proc3.notify();
+						}
+						synchronized(AltUI.proc4){
+							AltUI.proc4.notify();
+						}
+					}
+				});
+				btnNextAll.setActionCommand("NextStepAll");
+				btnNextAll.setBounds(5, 66, 130, 25);
+				buttonPanel.add(btnNextAll);
+				
+				JToggleButton tglbtnKeepGoingAll = new JToggleButton("Keep Going All");
+				tglbtnKeepGoingAll.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						notWait= !notWait;
+					}
+				});
+				tglbtnKeepGoingAll.setBounds(140, 68, 130, 23);
+				buttonPanel.add(tglbtnKeepGoingAll);
 
 				JPanel textPanel = new JPanel();
 				textPanel.setBounds(0, buttonPanel.getHeight(), sidePanel.getWidth(), sidePanel.getHeight()-buttonPanel.getHeight());
@@ -174,10 +218,10 @@ public class AltUI {
 	 */
 	public void startProcessing(){
 		//ThreadedProcessing.count = new AtomicInteger(0);
-		 proc1 = new ThreadedProcessing("8");
-		 proc2 = new ThreadedProcessing("8");
-		 proc3 = new ThreadedProcessing("8");
-		 proc4 = new ThreadedProcessing("8");
+		 proc1 = new ThreadedProcessing("2");
+		 proc2 = new ThreadedProcessing("16");
+		 proc3 = new ThreadedProcessing("4");
+		 proc4 = new ThreadedProcessing("25");
 		proc1.start();
 		proc2.start();
 		proc3.start();

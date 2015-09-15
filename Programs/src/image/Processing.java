@@ -50,20 +50,22 @@ public class Processing {
 				y++;
 			}
 			if (delay){
+				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
-			}
-			try {
 				Runner.updateScreen(buffer,Integer.parseInt(number));
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+			
+			if(x%10==0){
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			}
 			x++;
 			y=0;
 		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
 
@@ -110,24 +112,25 @@ public class Processing {
 				y++;
 			}
 			if (delay){
+				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
 			}
-			try {
+
+			if(x%10==0){
 				Runner.updateScreen(buffer,Integer.parseInt(number));
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 			x++;
 			y = 0;
 		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
 	
-	private static BufferedImage blackFilter(BufferedImage buffer, String number){
+	public static BufferedImage blackFilter(BufferedImage buffer, String number){
 		if (!Runner.altUI){Runner.menuOutput.append("Applying black filter\n");}
 		int x = 0, y = 0;
 
@@ -156,20 +159,21 @@ public class Processing {
 				y++;
 			}
 			if (delay){
+				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
 			}
-			try {
+
+			if(x%10==0){
 				Runner.updateScreen(buffer,Integer.parseInt(number));
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 			x++;
 			y=0;
 		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
 	
@@ -272,6 +276,7 @@ public class Processing {
 			}
 
 			if (delay){
+				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
@@ -279,15 +284,14 @@ public class Processing {
 				}
 			}
 
-			try {
-				Runner.updateScreen(buffer, Integer.parseInt(number));
-				//Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
-			} catch (Exception e) {
-				e.printStackTrace();
+
+			if(x%10==0){
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			}
 			x++;
 			y=0;
 		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
 
@@ -298,7 +302,7 @@ public class Processing {
 	 * @param buffer the image to process
 	 * @return the image after blobdetection has been applied, this image will have the 6 largest blobs marked in different colors
 	 */
-	private static BufferedImage blobDetection(BufferedImage buffer, String number){
+	protected static BufferedImage blobDetection(BufferedImage buffer, String number){
 		int x, xMax, y, yMax;
 		x=0;
 		y=0;
@@ -826,6 +830,7 @@ public class Processing {
 			}
 			
 			if (delay){
+				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
@@ -833,16 +838,14 @@ public class Processing {
 				}
 			}
 			
-			try {
-				Runner.updateScreen(buffer, Integer.parseInt(number));
-				Runner.picLabel_1.setIcon(FileAccess.getImageIcon(buffer));
-			} catch (Exception e) {
-				e.printStackTrace();
+
+			if(x%10==0){
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			}
 			x++;
 			y = 0;
 		}
-		
+		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 
 	}
@@ -1065,7 +1068,7 @@ public class Processing {
 	 * @param color the color for which to return the minimum coordinates
 	 * @return an integer array with the following things in it: xMin, yMin, xMax, yMax
 	 */
-	private static int[] findMinMaxOfBlob(BufferedImage buffer, Color color){
+	protected static int[] findMinMaxOfBlob(BufferedImage buffer, Color color){
 		int x = 0, xMin = buffer.getWidth(), xMax = 0, y = 0, yMin = buffer.getHeight(), yMax = 0;
 		while (x<buffer.getWidth()){
 			while (y<buffer.getHeight()){
@@ -1115,10 +1118,6 @@ public class Processing {
 		FileAccess.writeBlobDetection(buffer, number);
 		int[] coords = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		//int x = 0, y = 0;
-		System.out.println("xmin\t" + coords[0]);
-		System.out.println("ymin\t" + coords[1]);
-		System.out.println("xmax\t" + coords[2]);
-		System.out.println("ymax\t" + coords[3]);
 		original = Processing.cutimage(original, coords[0], coords[1], (coords[2]-coords[0]), (coords[3]-coords[1]));
 		try {
 			Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(original));
@@ -1199,5 +1198,29 @@ public class Processing {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * Needs to take a processed image that has the colors on the blobs, should return an array of buffered images with the 6 blobs from left to right
+	 * @param buffer the image to process
+	 */
+	public static void segMent(BufferedImage buffer){
+		BufferedImage one = Processing.copyImage(buffer);
+		BufferedImage two = Processing.copyImage(buffer);
+		BufferedImage three = Processing.copyImage(buffer);
+		BufferedImage four = Processing.copyImage(buffer);
+		BufferedImage five = Processing.copyImage(buffer);
+		BufferedImage six = Processing.copyImage(buffer);
+		int[] first = Processing.findMinMaxOfBlob(buffer, Color.RED);
+		int[] second = Processing.findMinMaxOfBlob(buffer, Color.GREEN);
+		int[] third = Processing.findMinMaxOfBlob(buffer, Color.YELLOW);
+		int[] fourth = Processing.findMinMaxOfBlob(buffer, Color.MAGENTA);
+		int[] fifth = Processing.findMinMaxOfBlob(buffer, Color.CYAN);
+		int[] sixth = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
+		int[][] order = new int[6][4];
+		order[0]=first;
+		System.out.println("first [1] " + first[1]);
+		System.out.println("order [0][1] " + order[0][1]);
+		
 	}
 }
