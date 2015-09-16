@@ -58,10 +58,12 @@ public class Processing {
 				}
 				Runner.updateScreen(buffer,Integer.parseInt(number));
 			}
-			
-			if(x%10==0){
-				Runner.updateScreen(buffer,Integer.parseInt(number));
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
 			}
+
 			x++;
 			y=0;
 		}
@@ -120,8 +122,10 @@ public class Processing {
 				}
 			}
 
-			if(x%10==0){
-				Runner.updateScreen(buffer,Integer.parseInt(number));
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
 			}
 			x++;
 			y = 0;
@@ -129,7 +133,7 @@ public class Processing {
 		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
-	
+
 	public static BufferedImage blackFilter(BufferedImage buffer, String number){
 		if (!Runner.altUI){Runner.menuOutput.append("Applying black filter\n");}
 		int x = 0, y = 0;
@@ -167,8 +171,10 @@ public class Processing {
 				}
 			}
 
-			if(x%10==0){
-				Runner.updateScreen(buffer,Integer.parseInt(number));
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
 			}
 			x++;
 			y=0;
@@ -176,7 +182,7 @@ public class Processing {
 		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
-	
+
 	/**
 	 * This method will do all the histogram equalization
 	 * @param buffer the image to process
@@ -285,8 +291,10 @@ public class Processing {
 			}
 
 
-			if(x%10==0){
-				Runner.updateScreen(buffer,Integer.parseInt(number));
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
 			}
 			x++;
 			y=0;
@@ -828,7 +836,7 @@ public class Processing {
 				}
 				y++;
 			}
-			
+
 			if (delay){
 				System.err.println("delay");
 				try {
@@ -837,10 +845,12 @@ public class Processing {
 					Thread.currentThread().interrupt();
 				}
 			}
-			
 
-			if(x%10==0){
-				Runner.updateScreen(buffer,Integer.parseInt(number));
+
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
 			}
 			x++;
 			y = 0;
@@ -957,39 +967,45 @@ public class Processing {
 	 */
 	private static int[] findLargestBlobs(int[] mass,int amountOfBlobs){
 		int i=1;
-		int[] largestBlobs = new int[6];
+		int[] largestBlobs = new int[7];
 		while (i<amountOfBlobs){
 			if (mass[i]!=0){//means that this is a base blob
-				if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
-					if (mass[i]>mass[largestBlobs[4]]){
+				if(mass[i]>mass[largestBlobs[6]]){
 
-						largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
-						if (mass[i]>mass[largestBlobs[3]]){
 
-							largestBlobs[4] =largestBlobs[3];//we can already move this blobnumber to the next place
-							if (mass[i]>mass[largestBlobs[2]]){
+					if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
+						if (mass[i]>mass[largestBlobs[4]]){
 
-								largestBlobs[3] =largestBlobs[2];//we can already move this blobnumber to the next place
-								if (mass[i]>mass[largestBlobs[1]]){
+							largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
+							if (mass[i]>mass[largestBlobs[3]]){
 
-									largestBlobs[2] =largestBlobs[1];//we can already move this blobnumber to the next place
-									if (mass[i]>mass[largestBlobs[0]]){
-										largestBlobs[1] =largestBlobs[0];
-										largestBlobs[0] = i;//save current blob number as the largest blob
-									}else{//means this blob should be at spot 1
-										largestBlobs[1] = i;//save current blob number as the second largest blob
+								largestBlobs[4] =largestBlobs[3];//we can already move this blobnumber to the next place
+								if (mass[i]>mass[largestBlobs[2]]){
+
+									largestBlobs[3] =largestBlobs[2];//we can already move this blobnumber to the next place
+									if (mass[i]>mass[largestBlobs[1]]){
+
+										largestBlobs[2] =largestBlobs[1];//we can already move this blobnumber to the next place
+										if (mass[i]>mass[largestBlobs[0]]){
+											largestBlobs[1] =largestBlobs[0];
+											largestBlobs[0] = i;//save current blob number as the largest blob
+										}else{//means this blob should be at spot 1
+											largestBlobs[1] = i;//save current blob number as the second largest blob
+										}
+									}else{//means this blob should be at spot 2
+										largestBlobs[2] = i;//save current blob number as the third largest blob
 									}
-								}else{//means this blob should be at spot 2
-									largestBlobs[2] = i;//save current blob number as the third largest blob
+								}else{//means this blob should be at spot 3
+									largestBlobs[3] = i;//save current blob number as the fourth largest blob
 								}
-							}else{//means this blob should be at spot 3
-								largestBlobs[3] = i;//save current blob number as the fourth largest blob
+							}else{//means this blob should be at spot 4
+								largestBlobs[4] = i;//save current blob number as the fifth largest blob
 							}
-						}else{//means this blob should be at spot 4
-							largestBlobs[4] = i;//save current blob number as the fifth largest blob
+						}else{//means this blob should be at spot 5
+							largestBlobs[5] = i;
 						}
-					}else{//means this blob should be at spot 5
-						largestBlobs[5] = i;
+					}else{//means that this spot should be at spot 6
+						largestBlobs[6] = i;
 					}
 				}
 			}
@@ -1061,7 +1077,7 @@ public class Processing {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Will find the minimum and maximum coordinates of the blob that has the color specified
 	 * @param buffer the image to check in
@@ -1079,7 +1095,7 @@ public class Processing {
 					if (x>xMax){
 						xMax = x;
 					}
-					
+
 					if (y<yMin){
 						yMin = y;
 					}
@@ -1099,7 +1115,7 @@ public class Processing {
 		returnArray[3] =yMax;
 		return returnArray;
 	}
-	
+
 	/**
 	 * This method only works for non threaded programs
 	 * Method designed to find the numberplate
@@ -1108,7 +1124,7 @@ public class Processing {
 	 * @throws PlateNotFoundException this exception wil be thrown when the numberplate is not found and alternative measures are needed to continue
 	 */
 	public static void findNumberPlate(BufferedImage original, String number) throws PlateNotFoundException{
-		
+
 		BufferedImage buffer = Processing.copyImage(original);//get the image twice in order to be able to process it and then use the results in the original image
 		buffer = Processing.histogramEqualisation(buffer, number);
 		FileAccess.writeAfterHistogram(buffer, number);
@@ -1127,15 +1143,15 @@ public class Processing {
 		if ((float)original.getWidth()/(float)original.getHeight()<3.5){
 			throw new PlateNotFoundException();
 		}else{
-		FileAccess.writeOnlyPlate(original, number);
-		buffer = Processing.blackFilter(original, number);
-		FileAccess.writeBlackColorFilter(buffer, number);
-		buffer = Processing.blobDetection(buffer, number);
-		Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
+			FileAccess.writeOnlyPlate(original, number);
+			buffer = Processing.blackFilter(original, number);
+			FileAccess.writeBlackColorFilter(buffer, number);
+			buffer = Processing.blobDetection(buffer, number);
+			Runner.picLabel_1.setIcon(Processing.ScaledImageIcon(buffer));
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method is in order to get a second bufferedImage, this because just making a new bufferedImage and doing new = old then the new one will actually just point to the old one instead of making a complete new object.
 	 * This method will first make a new BuferredImage type with the same settings as the old image and will then paint the old image on it (bassically)
@@ -1143,13 +1159,13 @@ public class Processing {
 	 * @return a new bufferedImage which is the same as the source
 	 */
 	protected static BufferedImage copyImage(BufferedImage source){
-	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
-	    Graphics g = b.getGraphics();
-	    g.drawImage(source, 0, 0, null);
-	    g.dispose();
-	    return b;
+		BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+		Graphics g = b.getGraphics();
+		g.drawImage(source, 0, 0, null);
+		g.dispose();
+		return b;
 	}
-	
+
 	/**
 	 * Cuts an image out of the original image and returns that
 	 * @param source the original image from which to cut (segment)
@@ -1165,41 +1181,41 @@ public class Processing {
 	}
 
 	public static ImageIcon ScaledImageIcon(BufferedImage source){
-		
+
 		double scalefactor = (double)500/(double)source.getWidth();
 		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
 		int newHeight = new Double(source.getHeight() * scalefactor).intValue();
 		BufferedImage resized =new BufferedImage(newWidth, newHeight, source.getType());
-	    Graphics2D g = resized.createGraphics();
-	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g.drawImage(source, 0, 0, newWidth, newHeight, 0, 0, source.getWidth(), source.getHeight(), null);
-	    g.dispose();
-	    try {
+		Graphics2D g = resized.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(source, 0, 0, newWidth, newHeight, 0, 0, source.getWidth(), source.getHeight(), null);
+		g.dispose();
+		try {
 			return FileAccess.getImageIcon(resized);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public static ImageIcon ScaleThreadIcon(BufferedImage source){
-		
+
 		/**double scalefactor = (double)500/(double)source.getWidth();
 		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
 		int newHeight = new Double(source.getHeight() * scalefactor).intValue();**/
 		BufferedImage resized =new BufferedImage(800, 475, source.getType());
-	    Graphics2D g = resized.createGraphics();
-	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g.drawImage(source, 0, 0, 800, 475, null);
-	    g.dispose();
-	    try {
+		Graphics2D g = resized.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(source, 0, 0, 800, 475, null);
+		g.dispose();
+		try {
 			return FileAccess.getImageIcon(resized);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Needs to take a processed image that has the colors on the blobs, should return an array of buffered images with the 6 blobs from left to right
 	 * @param buffer the image to process
@@ -1221,6 +1237,6 @@ public class Processing {
 		order[0]=first;
 		System.out.println("first [1] " + first[1]);
 		System.out.println("order [0][1] " + order[0][1]);
-		
+
 	}
 }

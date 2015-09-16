@@ -48,13 +48,26 @@ public class ThreadedProcessing extends Thread {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub
 	}
-
 	/**
 	 * This method should hold the code that needs to be runned in this tread
 	 */
+	public static ThreadLocal<Boolean> realTime = new ThreadLocal<Boolean>() {
+
+	    @Override
+	    protected Boolean initialValue() {
+	        return Boolean.FALSE;
+	    }
+
+	};
 	public void run(){
+		
 		int location = this.increment();
 		System.out.println(location);
+		
+		/*if(location%2==0){
+		ThreadedProcessing.realTime.set(true);
+		}*/
+		ThreadedProcessing.realTime.set(true);
 		//AltUI.numbers[location] = Integer.parseInt(Thread.currentThread().getName());
 		//FileAccess files = new FileAccess(Integer.parseInt(Thread.currentThread().getName()));
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
