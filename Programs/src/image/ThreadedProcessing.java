@@ -67,7 +67,7 @@ public class ThreadedProcessing extends Thread {
 		/*if(location%2==0){
 		ThreadedProcessing.realTime.set(true);
 		}*/
-		ThreadedProcessing.realTime.set(true);
+		ThreadedProcessing.realTime.set(false);
 		//AltUI.numbers[location] = Integer.parseInt(Thread.currentThread().getName());
 		//FileAccess files = new FileAccess(Integer.parseInt(Thread.currentThread().getName()));
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));

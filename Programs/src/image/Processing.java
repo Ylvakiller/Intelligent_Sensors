@@ -832,6 +832,8 @@ public class Processing {
 						buffer.setRGB(x, y, Color.CYAN.getRGB());
 					}else if (baseBlob == largestBlobs[5]){//this blob is part of the sixth blob
 						buffer.setRGB(x, y, Color.ORANGE.getRGB());
+					}else if (baseBlob == largestBlobs[6]){//this blob is part of the sixth blob
+						buffer.setRGB(x, y, Color.PINK.getRGB());
 					}
 				}
 				y++;
@@ -971,9 +973,8 @@ public class Processing {
 		while (i<amountOfBlobs){
 			if (mass[i]!=0){//means that this is a base blob
 				if(mass[i]>mass[largestBlobs[6]]){
-
-
 					if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
+						largestBlobs[6] = largestBlobs[5];
 						if (mass[i]>mass[largestBlobs[4]]){
 
 							largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
@@ -1010,6 +1011,17 @@ public class Processing {
 				}
 			}
 			i++;
+		}
+		
+		int x = 0;
+		while(x<amountOfBlobs){
+			System.out.println("Blob nr:" + x + "/t Mass: " + mass[x]);
+			x++;
+		}
+		x=0;
+		while(x<7){
+			System.out.println("Biggest blob 0" + x + " = " +largestBlobs[x]);
+			x++;
 		}
 		return largestBlobs;
 	}
@@ -1238,5 +1250,9 @@ public class Processing {
 		System.out.println("first [1] " + first[1]);
 		System.out.println("order [0][1] " + order[0][1]);
 
+	}
+	
+	private static void filterBlobs(int[] largestBlobs){
+		
 	}
 }

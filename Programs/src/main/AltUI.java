@@ -222,9 +222,9 @@ public class AltUI {
 		 proc2 = new ThreadedProcessing("16");
 		 proc3 = new ThreadedProcessing("4");
 		 proc4 = new ThreadedProcessing("25");
-		proc1.start();
-		proc2.start();
-		proc3.start();
+		//proc1.start();
+		//proc2.start();
+		//proc3.start();
 		proc4.start();
 	}
 	
