@@ -55,7 +55,6 @@ public class Runner {
 	 */
 	public static void main(String[] args) {
 		if (altUI){
-			@SuppressWarnings("unused")
 			AltUI userInterface = new AltUI();
 		}else{
 			count =2;

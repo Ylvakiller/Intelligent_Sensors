@@ -76,7 +76,6 @@ public class Processing {
 	 * @param buffer the picture to process
 	 * @return the orinial picture with the filter applied
 	 */
-	@SuppressWarnings("unused")
 	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
 		if (!Runner.altUI){Runner.menuOutput.append("Calculating and applying the comparitive color filter");}
 		int x = 0, y = 0;
@@ -1013,16 +1012,6 @@ public class Processing {
 			i++;
 		}
 		
-		int x = 0;
-		while(x<amountOfBlobs){
-			System.out.println("Blob nr:" + x + "/t Mass: " + mass[x]);
-			x++;
-		}
-		x=0;
-		while(x<7){
-			System.out.println("Biggest blob 0" + x + " = " +largestBlobs[x]);
-			x++;
-		}
 		return largestBlobs;
 	}
 
@@ -1247,8 +1236,8 @@ public class Processing {
 		int[] sixth = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
 		int[][] order = new int[6][4];
 		order[0]=first;
-		System.out.println("first [1] " + first[1]);
-		System.out.println("order [0][1] " + order[0][1]);
+		//System.out.println("first [1] " + first[1]);
+		//System.out.println("order [0][1] " + order[0][1]);
 
 	}
 	

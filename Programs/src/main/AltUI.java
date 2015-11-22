@@ -3,6 +3,9 @@ package main;
 import java.awt.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
 import image.ThreadedProcessing;
+
 import javax.swing.JToggleButton;
 
 /*
@@ -22,8 +26,7 @@ public class AltUI {
 	/**
 	 * This constructor will start and manage the complete interface
 	 */
-	public static JTextArea menuOutput;
-	
+
 	private static JLabel picLabel_1;
 	private static JLabel picLabel_2;
 	private static JLabel picLabel_3;
@@ -36,7 +39,7 @@ public class AltUI {
 	public static ThreadedProcessing proc4;
 	public static ThreadedProcessing[] threadArray = new ThreadedProcessing[4];
 	public static boolean notWait = false;
-	
+
 	public AltUI() {
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
 		JFrame topContainer = new JFrame("Experimental interface for the numberplate recogniser");
@@ -55,7 +58,7 @@ public class AltUI {
 				buttonPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,null));
 				sidePanel.add(buttonPanel);
 				buttonPanel.setLayout(null);
-				
+
 				Button btnNextUpLeft = new Button("Next step top left");
 				btnNextUpLeft.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -66,9 +69,9 @@ public class AltUI {
 				});
 				btnNextUpLeft.setBounds(5, 5, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextUpLeft);
-				
+
 				Button btnNextUpRight = new Button("Next step top right");
-				
+
 				btnNextUpRight.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						synchronized (AltUI.proc2) {
@@ -78,7 +81,7 @@ public class AltUI {
 				});
 				btnNextUpRight.setBounds((buttonPanel.getWidth()-15)/2+10, 5, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextUpRight);
-				
+
 				Button btnNextDownLeft = new Button("Next step lower left");
 				btnNextDownLeft.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -89,7 +92,7 @@ public class AltUI {
 				});
 				btnNextDownLeft.setBounds(5, 35, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextDownLeft);
-				
+
 				Button btnNextdownRight = new Button("Next step lower right");
 				btnNextdownRight.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -100,7 +103,7 @@ public class AltUI {
 				});
 				btnNextdownRight.setBounds((buttonPanel.getWidth()-15)/2+10, 35, (buttonPanel.getWidth()-15)/2, 25);
 				buttonPanel.add(btnNextdownRight);
-				
+
 				Button btnNextAll = new Button("Next step all");
 				btnNextAll.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -121,7 +124,7 @@ public class AltUI {
 				btnNextAll.setActionCommand("NextStepAll");
 				btnNextAll.setBounds(5, 66, 130, 25);
 				buttonPanel.add(btnNextAll);
-				
+
 				JToggleButton tglbtnKeepGoingAll = new JToggleButton("Keep Going All");
 				tglbtnKeepGoingAll.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
@@ -135,14 +138,39 @@ public class AltUI {
 				textPanel.setBounds(0, buttonPanel.getHeight(), sidePanel.getWidth(), sidePanel.getHeight()-buttonPanel.getHeight());
 				textPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,null));
 				sidePanel.add(textPanel);
+				textPanel.setLayout(null);
+
+				JScrollPane scrollPane_1 = new JScrollPane();
+				scrollPane_1.setBounds(3, 3, 269, 749);
+				textPanel.add(scrollPane_1);
+
+				final JTextArea textArea = new JTextArea();
+				scrollPane_1.setViewportView(textArea);
 				{
 					JScrollPane scrollPane = new JScrollPane();
 					scrollPane.setBounds(0, 0, textPanel.getWidth(), textPanel.getHeight());
 					scrollPane.setAutoscrolls(true);
-					menuOutput = new JTextArea();
-					scrollPane.setViewportView(menuOutput);
-					menuOutput.setLineWrap(true);
-					
+
+					OutputStream out = new OutputStream() {
+						@Override
+						public void write(final int b) throws IOException {
+							textArea.append((String.valueOf((char) b)));
+						}
+
+						@Override
+						public void write(byte[] b, int off, int len) throws IOException {
+							textArea.append((new String(b, off, len)));
+						}
+
+						@Override
+						public void write(byte[] b) throws IOException {
+							textArea.append(new String(b, 0, b.length));
+						}
+					};
+
+					System.setOut(new PrintStream(out, true));
+					System.setErr(new PrintStream(out, true));
+
 				}
 			}
 
@@ -151,7 +179,7 @@ public class AltUI {
 			plateContainer.setBounds(290, 50, 1610, 960);
 			topContainer.getContentPane().add(plateContainer);
 			plateContainer.setLayout(null);
-			
+
 			{
 				//These are all seperate plates
 				JPanel plate1 = new JPanel();
@@ -177,39 +205,39 @@ public class AltUI {
 				plate4.setBorder(null);
 				plateContainer.add(plate4);
 				plate4.setVisible(true);
-				
-				
-				
+
+
+
 				try {
 					picLabel_1 = new JLabel();
 					picLabel_1.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
 					plate1.add(picLabel_1);
 					picLabel_1.setVisible(true);
-					
+
 					picLabel_2 = new JLabel();
 					picLabel_2.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
 					plate2.add(picLabel_2);
 					picLabel_2.setVisible(true);
-					
+
 					picLabel_3 = new JLabel();
 					picLabel_3.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
 					plate3.add(picLabel_3);
 					picLabel_3.setVisible(true);
-					
+
 					picLabel_4 = new JLabel();
 					picLabel_4.setBounds(0, 0, plate1.getWidth(), plate1.getHeight());
 					plate4.add(picLabel_4);
 					picLabel_4.setVisible(true);
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			plateContainer.setVisible(true);
 		}
-		
-		
-		
+
+
+
 		topContainer.setVisible(true);
 		startProcessing();
 	}
@@ -218,16 +246,24 @@ public class AltUI {
 	 */
 	public void startProcessing(){
 		//ThreadedProcessing.count = new AtomicInteger(0);
-		 proc1 = new ThreadedProcessing("2");
-		 proc2 = new ThreadedProcessing("16");
-		 proc3 = new ThreadedProcessing("4");
-		 proc4 = new ThreadedProcessing("25");
-		//proc1.start();
-		//proc2.start();
-		//proc3.start();
-		proc4.start();
+		try {
+			proc1 = new ThreadedProcessing("2");
+			proc2 = new ThreadedProcessing("16");
+			proc3 = new ThreadedProcessing("4");
+			proc4 = new ThreadedProcessing("25");
+			proc1.start();
+			Thread.sleep(1);//these 1 millisecond delay are there to remove a bug that would happen once every 100 runs or so
+			proc2.start();//This bug would cause multiple thread to have the same location identifier, this should not happen due to the way the syncronised atomicInteger is implemented
+			Thread.sleep(1);//However the bug still occurred, therefore I have added these 1 millisecond delays which do not really impact the performance (it gives the total program an extra run time of 3 milliseconds)
+			proc3.start();//Due to the size of this program and the fact that there are plenty of other parts which ones optimized would have a far greater impact on runtime I intend to keep it like it is for now
+			Thread.sleep(1);
+			proc4.start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static void updateScreen(int section, ImageIcon buffer){
 		//System.out.println(section);
 		switch (section){
