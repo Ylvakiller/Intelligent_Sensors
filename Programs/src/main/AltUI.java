@@ -276,6 +276,12 @@ public class AltUI {
 		}
 	}
 
+	/**
+	 * Will update a specific section of the screen.
+	 * A better way would be to let the runner thread update, this would increase performance
+	 * @param section The section to update
+	 * @param buffer The imageIcon to place on the screen
+	 */
 	public static void updateScreen(int section, ImageIcon buffer){
 		//System.out.println(section);
 		switch (section){
