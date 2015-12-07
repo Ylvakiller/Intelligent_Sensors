@@ -265,6 +265,33 @@ public class FileAccess {
 			fileNumber = String.valueOf(number);
 		}
 	}
+	
+	public static void writeSegmented(BufferedImage[] buffer, String FileNumber){
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+		ImageWriter writer = (ImageWriter)writers.next();
+		for(int i = 0; i < buffer.length; i++){
+			String temp = "./OutputImages/Segmented/plate" + FileNumber +"-" + i +  ".png";
+			File f = new File(temp);
+			ImageOutputStream ios = null;
+			try {
+				ios = ImageIO.createImageOutputStream(f);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			writer.setOutput(ios);
+			try {
+				writer.write(buffer[i]);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				ios.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }
 
 

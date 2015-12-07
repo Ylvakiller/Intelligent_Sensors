@@ -94,7 +94,8 @@ public class ThreadedProcessing extends Thread {
 
 		currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
 		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
-		Processing.segMent(currentBuffer);
+		BufferedImage[] segmented= Processing.segMent(currentBuffer);
+		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 	}
 
 	public synchronized int increment() {
