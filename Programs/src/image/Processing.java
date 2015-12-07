@@ -77,7 +77,7 @@ public class Processing {
 	 * @return the orinial picture with the filter applied
 	 */
 	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
-		if (!Runner.altUI){Runner.menuOutput.append("Calculating and applying the comparitive color filter");}
+		System.out.println("Calculating and applying the comparitive color filter");
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -134,7 +134,7 @@ public class Processing {
 	}
 
 	public static BufferedImage blackFilter(BufferedImage buffer, String number){
-		if (!Runner.altUI){Runner.menuOutput.append("Applying black filter\n");}
+		System.out.println("Applying black filter\n");
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -188,14 +188,10 @@ public class Processing {
 	 * @return the image after histogram equalization is applied
 	 */
 	protected static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
-		if (!Runner.altUI){Runner.menuOutput.append("Applying Histogram Equalisation\n");}
-		//int CDFminRed;
-		//int CDFminBlue;
-		//int CDFminGreen;
+		System.out.println("Applying Histogram Equalisation\n");
 		int M = buffer.getWidth();
 		int N = buffer.getHeight();
-		//int L = 256;
-
+		
 		/*
 		 *The next arrays will first hold counts of the amount a certain value is found, then the CDF and then a scaled CDF
 		 */
@@ -316,7 +312,7 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		if (!Runner.altUI){Runner.menuOutput.append("Running Blob Detection\n");}
+		System.out.println("Running Blob Detection\n");
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -839,7 +835,6 @@ public class Processing {
 			}
 
 			if (delay){
-				System.err.println("delay");
 				try {
 					Thread.sleep(10);                 //1000 milliseconds is one second.
 				} catch(InterruptedException ex) {
@@ -1219,23 +1214,37 @@ public class Processing {
 
 	/**
 	 * Needs to take a processed image that has the colors on the blobs, should return an array of buffered images with the 6 blobs from left to right
+	 * Due to the way this program is currently setup this method is not effecient.
+	 * It will go through the entire image 6 times in order to find the min max values of blobs
 	 * @param buffer the image to process
+	 * @return Array with the 6 largest images
 	 */
-	public static void segMent(BufferedImage buffer){
-		BufferedImage one = Processing.copyImage(buffer);
-		BufferedImage two = Processing.copyImage(buffer);
-		BufferedImage three = Processing.copyImage(buffer);
-		BufferedImage four = Processing.copyImage(buffer);
-		BufferedImage five = Processing.copyImage(buffer);
-		BufferedImage six = Processing.copyImage(buffer);
-		int[] first = Processing.findMinMaxOfBlob(buffer, Color.RED);
-		int[] second = Processing.findMinMaxOfBlob(buffer, Color.GREEN);
-		int[] third = Processing.findMinMaxOfBlob(buffer, Color.YELLOW);
-		int[] fourth = Processing.findMinMaxOfBlob(buffer, Color.MAGENTA);
-		int[] fifth = Processing.findMinMaxOfBlob(buffer, Color.CYAN);
-		int[] sixth = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
-		int[][] order = new int[6][4];
-		order[0]=first;
+	public static BufferedImage[] segMent(BufferedImage buffer){
+		int[][] data = new int[6][];
+		data[0] = Processing.findMinMaxOfBlob(buffer, Color.RED);
+		data[1] = Processing.findMinMaxOfBlob(buffer, Color.GREEN);
+		data[2] = Processing.findMinMaxOfBlob(buffer, Color.YELLOW);
+		data[3] = Processing.findMinMaxOfBlob(buffer, Color.MAGENTA);
+		data[4] = Processing.findMinMaxOfBlob(buffer, Color.CYAN);
+		data[5] = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
+		for (int i =0; i <5;){
+			if (data[i][0]>data[i+1][0]){//the next blob is further to the left as the current blob, switching them around
+				int[] temp = data[i];
+				data[i] = data[i+1];
+				data[i+1] = temp;
+				i=0;
+			}else{
+				i++;
+			}
+		}
+		BufferedImage segmented[] = new BufferedImage[6];
+		segmented[0] = Processing.cutimage(buffer, data[0][0], data[0][1], data[0][2] - data[0][0], data[0][3] - data[0][1]);
+		segmented[1] = Processing.cutimage(buffer, data[1][0], data[1][1], data[1][2] - data[1][0], data[1][3] - data[1][1]);
+		segmented[2] = Processing.cutimage(buffer, data[2][0], data[2][1], data[2][2] - data[2][0], data[2][3] - data[2][1]);
+		segmented[3] = Processing.cutimage(buffer, data[3][0], data[3][1], data[3][2] - data[3][0], data[3][3] - data[3][1]);
+		segmented[4] = Processing.cutimage(buffer, data[4][0], data[4][1], data[4][2] - data[4][0], data[4][3] - data[4][1]);
+		segmented[5] = Processing.cutimage(buffer, data[5][0], data[5][1], data[5][2] - data[5][0], data[5][3] - data[5][1]);
+		return segmented;
 		//System.out.println("first [1] " + first[1]);
 		//System.out.println("order [0][1] " + order[0][1]);
 

@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Button;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -237,8 +239,18 @@ public class AltUI {
 		}
 
 
+		OutputStream out = new OutputStream() {
 
+			@Override
+			public void write(int arg0) throws IOException {
+				Runner.menuOutput.append(String.valueOf(arg0));
+				
+			}
+			
+		};
+		System.out.println("Testing menuoutput");
 		topContainer.setVisible(true);
+		AltUI.showOnScreen(2, topContainer); //Use this for multi monitor setups to chang eon which screen the program starts
 		startProcessing();
 	}
 	/**
@@ -279,6 +291,24 @@ public class AltUI {
 		case 4:
 			picLabel_4.setIcon(buffer);
 			break;
+		}
+	}
+	
+	/**
+	 * This method is usefull in multi monitor displays, it allows the program to start on a different screen, handy for debugging and testing
+	 * @param screen the number of the screen to display on. (0 is primary, starts counting up from there)
+	 * If the screen param is not found it will instead go to the default monitor
+	 * @param frame The frame to place at the correct screen
+	 */
+	public static void showOnScreen(int screen, JFrame frame){
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] gd = ge.getScreenDevices();
+		if (screen>-1&&screen<gd.length){
+			frame.setLocation(gd[screen].getDefaultConfiguration().getBounds().x,gd[screen].getDefaultConfiguration().getBounds().y);
+		}else if (gd.length>0){
+			frame.setLocation(gd[0].getDefaultConfiguration().getBounds().x,gd[0].getDefaultConfiguration().getBounds().y);
+		}else{
+			throw new RuntimeException("No Screens Found!");
 		}
 	}
 }

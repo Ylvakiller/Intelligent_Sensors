@@ -8,6 +8,7 @@ import main.AltUI;
 
 public class ThreadedProcessing extends Thread {
 	public static AtomicInteger count;
+	private static Object waiter = new Object();
 
 	public ThreadedProcessing() {
 		// TODO Auto-generated constructor stub
@@ -53,23 +54,17 @@ public class ThreadedProcessing extends Thread {
 	 */
 	public static ThreadLocal<Boolean> realTime = new ThreadLocal<Boolean>() {
 
-	    @Override
-	    protected Boolean initialValue() {
-	        return Boolean.FALSE;
-	    }
+		@Override
+		protected Boolean initialValue() {
+			return Boolean.FALSE;
+		}
 
 	};
 	public void run(){
-		
+
 		int location = this.increment();
 		System.out.println(location);
-		
-		/*if(location%2==0){
-		ThreadedProcessing.realTime.set(true);
-		}*/
 		ThreadedProcessing.realTime.set(false);
-		//AltUI.numbers[location] = Integer.parseInt(Thread.currentThread().getName());
-		//FileAccess files = new FileAccess(Integer.parseInt(Thread.currentThread().getName()));
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		try {
 			AltUI.updateScreen(location, Processing.ScaleThreadIcon(currentBuffer));
@@ -79,24 +74,16 @@ public class ThreadedProcessing extends Thread {
 		BufferedImage procesBuffer = Processing.copyImage(currentBuffer);
 		procesBuffer = Processing.histogramEqualisation(procesBuffer, String.valueOf(location));
 		if(!AltUI.notWait){
-		ThreadedProcessing.wait(location);
+			ThreadedProcessing.wait(location);
 		}
-		/*while (!AltUI.continue1){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
 		procesBuffer = Processing.colorFilter(procesBuffer, String.valueOf(location));
 		if(!AltUI.notWait){
 			ThreadedProcessing.wait(location);
-			}
+		}
 		procesBuffer = Processing.blobDetection(procesBuffer, String.valueOf(location));
 		if(!AltUI.notWait){
 			ThreadedProcessing.wait(location);
-			}
+		}
 		int[] coords = Processing.findMinMaxOfBlob(procesBuffer, Color.RED);
 		currentBuffer = Processing.cutimage(currentBuffer, coords[0], coords[1], (coords[2]-coords[0]), (coords[3]-coords[1]));
 		try {
@@ -104,22 +91,10 @@ public class ThreadedProcessing extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
 		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
 		Processing.segMent(currentBuffer);
-		//System.out.println("Currentely showing the first image...");
-		/*int i = 0;
-		while (i<10){
-			System.out.println("Thread " + this.getName() +" is at " + i);
-			i++;
-			try {
-				ThreadedProcessing.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
 	}
 
 	public synchronized int increment() {
