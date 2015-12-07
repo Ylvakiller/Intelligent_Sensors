@@ -1268,10 +1268,31 @@ public class Processing {
 				}
 			}else if(segment.getHeight()<templates[i].getHeight()){
 				tempSegment = Processing.scaleImage(segment, segment.getWidth(), templates[i].getHeight());
+			}else{
+				tempSegment = segment;
 			}
+			//At this point we are sure that tempSegment is in no direction smaller than the current template
+			BufferedImage tempTemp;
+			if(tempSegment.getWidth()>templates[i].getWidth()){
+				tempTemp = Processing.scaleImage(templates[i], tempSegment.getWidth(), templates[i].getHeight());
+				if(tempTemp.getHeight()>tempSegment.getHeight()){
+					tempTemp = Processing.scaleImage(tempTemp, tempTemp.getWidth(), tempSegment.getHeight());
+				}
+			}else if(tempSegment.getHeight()>templates[i].getHeight()){
+				tempTemp = Processing.scaleImage(templates[i], templates[i].getWidth(), tempSegment.getHeight());
+			}else{
+				tempTemp = tempSegment;
+			}
+			//By now the 2 temp images are exactely the same size
 		}
 	}
-	
+	/**
+	 * Will scale the given source to the given dimensions
+	 * @param source The source to scale
+	 * @param x The width to scale to
+	 * @param y The height to scale to
+	 * @return The scaled image
+	 */
 	private static BufferedImage scaleImage(BufferedImage source, int x, int y){
 		/**double scalefactor = (double)500/(double)source.getWidth();
 		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
