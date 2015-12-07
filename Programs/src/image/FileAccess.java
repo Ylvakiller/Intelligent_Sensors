@@ -265,7 +265,11 @@ public class FileAccess {
 			fileNumber = String.valueOf(number);
 		}
 	}
-	
+	/**
+	 * Will write the output of the 6 segments to files
+	 * @param buffer An array holding the segments
+	 * @param FileNumber The number of the plate that the segments come from
+	 */
 	public static void writeSegmented(BufferedImage[] buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();

@@ -1216,6 +1216,7 @@ public class Processing {
 	 * Needs to take a processed image that has the colors on the blobs, should return an array of buffered images with the 6 blobs from left to right
 	 * Due to the way this program is currently setup this method is not effecient.
 	 * It will go through the entire image 6 times in order to find the min max values of blobs
+	 * If time allows this method will be used to filter out the largest blob if it is an invalid sign
 	 * @param buffer the image to process
 	 * @return Array with the 6 largest images
 	 */
@@ -1250,7 +1251,4 @@ public class Processing {
 
 	}
 	
-	private static void filterBlobs(int[] largestBlobs){
-		
-	}
 }
