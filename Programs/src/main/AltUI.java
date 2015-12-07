@@ -248,7 +248,6 @@ public class AltUI {
 			}
 			
 		};
-		System.out.println("Testing menuoutput");
 		topContainer.setVisible(true);
 		AltUI.showOnScreen(2, topContainer); //Use this for multi monitor setups to chang eon which screen the program starts
 		startProcessing();
@@ -315,6 +314,24 @@ public class AltUI {
 			frame.setLocation(gd[0].getDefaultConfiguration().getBounds().x,gd[0].getDefaultConfiguration().getBounds().y);
 		}else{
 			throw new RuntimeException("No Screens Found!");
+		}
+	}
+	
+	
+	public static void setToolTop(int section, String text){
+		switch (section){
+		case 1:
+			picLabel_1.setToolTipText(text);
+			break;
+		case 2:
+			picLabel_2.setToolTipText(text);
+			break;
+		case 3:
+			picLabel_3.setToolTipText(text);
+			break;
+		case 4:
+			picLabel_4.setToolTipText(text);
+			break;
 		}
 	}
 }

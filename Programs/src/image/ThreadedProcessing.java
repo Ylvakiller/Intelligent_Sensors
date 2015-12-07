@@ -63,11 +63,11 @@ public class ThreadedProcessing extends Thread {
 	public void run(){
 
 		int location = this.increment();
-		System.out.println(location);
 		ThreadedProcessing.realTime.set(false);
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		try {
 			AltUI.updateScreen(location, Processing.ScaleThreadIcon(currentBuffer));
+			AltUI.setToolTop(location, ("Plate number " + Thread.currentThread().getName()));//Allows the user to easily see what that plate it
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,6 +96,8 @@ public class ThreadedProcessing extends Thread {
 		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
 		BufferedImage[] segmented= Processing.segMent(currentBuffer);
 		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+		BufferedImage[] templates = FileAccess.getTemplates();
+		System.out.println("Gotten all the templates");
 	}
 
 	public synchronized int increment() {

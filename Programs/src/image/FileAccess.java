@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 public class FileAccess {
 	private static String fileNameInput = "./InputImages/plate";
 	private static String fileNameOutput = "./OutputImages/plate";
+	private static String folderNameTemplates = "./Templates/";
 	public static String fileNumber = "00";
 	JPanel editorPanel;
 	/**
@@ -295,6 +296,41 @@ public class FileAccess {
 			}
 		}
 		
+	}
+	
+	/**
+	 * This method should return an array with all bufferedImages of the templates
+	 * @return An array with all the templates in it
+	 */
+	public static BufferedImage[] getTemplates(){
+		BufferedImage[] templates = new BufferedImage[36];
+		int i =0;
+		while (i<36){
+			if(i<10){
+				try
+				{
+					String temp = folderNameTemplates + (char)(i+48) + ".png";
+					templates[i] = ImageIO.read(new File(temp));
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}else{
+				try
+				{
+					String temp = folderNameTemplates + (char)(i+55) + ".png";
+					
+					templates[i] = ImageIO.read(new File(temp));
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			i++;
+		}
+		return templates;
 	}
 }
 

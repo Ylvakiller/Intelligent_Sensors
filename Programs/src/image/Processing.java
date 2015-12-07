@@ -134,7 +134,7 @@ public class Processing {
 	}
 
 	public static BufferedImage blackFilter(BufferedImage buffer, String number){
-		System.out.println("Applying black filter\n");
+		System.out.println("Applying black filter");
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -188,7 +188,7 @@ public class Processing {
 	 * @return the image after histogram equalization is applied
 	 */
 	protected static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
-		System.out.println("Applying Histogram Equalisation\n");
+		System.out.println("Applying Histogram Equalisation");
 		int M = buffer.getWidth();
 		int N = buffer.getHeight();
 		
@@ -265,7 +265,7 @@ public class Processing {
 			}
 			i++;
 		}
-		System.out.println("Calculated Histogram information\nProcessing date to image\n");
+		System.out.println("Calculated Histogram information\nProcessing date to image");
 		x=0;
 		y=0;
 		while (x<M){
@@ -312,7 +312,7 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		System.out.println("Running Blob Detection\n");
+		System.out.println("Running Blob Detection");
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -1249,6 +1249,39 @@ public class Processing {
 		//System.out.println("first [1] " + first[1]);
 		//System.out.println("order [0][1] " + order[0][1]);
 
+	}
+	
+	/**
+	 * Will calculate which character is most likely to be the character on the screen
+	 * @param segment
+	 * @param templates
+	 */
+	public static void getChar(BufferedImage segment, BufferedImage[] templates){
+		int best = 0;
+		int i=0;
+		while (i<36){
+			BufferedImage tempSegment;
+			if(segment.getWidth()<templates[i].getWidth()){
+				tempSegment = Processing.scaleImage(segment, templates[i].getWidth(), segment.getHeight());
+				if(segment.getHeight()<templates[i].getHeight()){
+					tempSegment = Processing.scaleImage(tempSegment, tempSegment.getWidth(), templates[i].getHeight());
+				}
+			}else if(segment.getHeight()<templates[i].getHeight()){
+				tempSegment = Processing.scaleImage(segment, segment.getWidth(), templates[i].getHeight());
+			}
+		}
+	}
+	
+	private static BufferedImage scaleImage(BufferedImage source, int x, int y){
+		/**double scalefactor = (double)500/(double)source.getWidth();
+		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
+		int newHeight = new Double(source.getHeight() * scalefactor).intValue();**/
+		BufferedImage resized =new BufferedImage(x, y, source.getType());
+		Graphics2D g = resized.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(source, 0, 0, x, y, null);
+		g.dispose();
+		return resized;
 	}
 	
 }
