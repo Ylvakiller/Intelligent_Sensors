@@ -1305,4 +1305,19 @@ public class Processing {
 		return resized;
 	}
 	
+	public static BufferedImage getMono(BufferedImage source){
+		int x = 0;
+		while (x<source.getWidth()){
+			int y = 0;
+			while(y<source.getHeight()){
+				if (source.getRGB(x, y)!=Color.BLACK.getRGB()){
+					source.setRGB(x, y, Color.WHITE.getRGB());
+				}
+				y++;
+			}
+			x++;
+		}
+		return source;
+	}
+	
 }

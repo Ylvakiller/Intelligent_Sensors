@@ -95,6 +95,12 @@ public class ThreadedProcessing extends Thread {
 		currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
 		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
 		BufferedImage[] segmented= Processing.segMent(currentBuffer);
+		
+		int i = 0;
+		while (i<segmented.length){
+			segmented[i] = Processing.getMono(segmented[i]);
+			i++;
+		}
 		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		BufferedImage[] templates = FileAccess.getTemplates();
 	}
