@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 
 import main.PlateNotFoundException;
 import main.Runner;
+import main.SegmentSizeException;
 
 /**
  * This class is meant to do all the filtering of the image
@@ -27,6 +28,8 @@ public class Processing {
 	 * Also this delay just looks freaking awesome :)
 	 */
 	private static boolean delay = false;
+
+	public static boolean debug = false;
 	/**
 	 * This method does the color filtering
 	 * @param buffer the image to process
@@ -76,47 +79,32 @@ public class Processing {
 		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
-
-	/**
-	 * This method will compare the difference in values from the rgb values, this in order to get to a better result than a direct filter would do
-	 * @param buffer the picture to process
-	 * @return the orinial picture with the filter applied
-	 */
-	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
+	protected static BufferedImage secondColorFilter(BufferedImage buffer, String number){
 		if (Runner.progressMessages){
-			System.out.println("Calculating and applying the comparitive color filter");
+			System.out.println("Applying alternative color filter");
 		}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
 		int yMax = buffer.getHeight();
 		Color C;
+
 		while (x<xMax){
-			while (y<yMax){
+			while(y<yMax){
 				C = new Color(buffer.getRGB(x, y));
 				int red = C.getRed();
 				int green = C.getGreen();
 				int blue = C.getBlue();
-				int total = red+blue+green;
-				if (total>550){	//Overlighted spots
-					if (blue<150){
-						buffer.setRGB(x, y, Color.white.getRGB());
-					}else{
-						buffer.setRGB(x, y, Color.black.getRGB());
-					}
-				}else if(total<200){
-					buffer.setRGB(x, y, Color.black.getRGB());
+				if (blue==0){
+					blue=1;
+				}
+				double ratioRG = (float)red/(float) green;
+
+				double ratioRB = (float)red/(float) blue;
+				if (ratioRG>0.9&&ratioRG<1.12&&ratioRB>2&&red>50||red>200&&ratioRB>1.5||blue<20&&red>150){
+					buffer.setRGB(x, y, Color.white.getRGB());
 				}else{
-					if (red==0)red=1;
-					if (green==0)green=1;
-					if (blue==0)blue=1;
-					float ratioRG = (float)red/(float)green;
-					float ratioRB = (float)red/(float)blue;
-					if (ratioRG>1&&ratioRG<2.32&&ratioRB>3){
-						buffer.setRGB(x, y, Color.white.getRGB());
-					}else{
-						buffer.setRGB(x, y, Color.black.getRGB());
-					}
+					buffer.setRGB(x, y, Color.black.getRGB());
 				}
 				y++;
 			}
@@ -127,19 +115,21 @@ public class Processing {
 				} catch(InterruptedException ex) {
 					Thread.currentThread().interrupt();
 				}
+				Runner.updateScreen(buffer,Integer.parseInt(number));
 			}
-
 			if (ThreadedProcessing.realTime.get()){
 				if(x%10==0){
 					Runner.updateScreen(buffer,Integer.parseInt(number));
 				}
 			}
+
 			x++;
-			y = 0;
+			y=0;
 		}
 		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
+	
 
 	/**
 	 * Will filter the black parts out of the numberplate
@@ -170,7 +160,7 @@ public class Processing {
 					ratios=true;
 				}
 				int total = red+green+blue;
-				if ((red<115&&green<100&&blue<110&&total<250)||(red<155&&green<150&&blue<150&&ratios)){
+				if ((red<115&&green<100&&blue<110&&total<266)||(red<120&&green<100&&blue<110&&total<215)||(red<155&&green<150&&blue<150&&ratios)){
 					buffer.setRGB(x, y, Color.white.getRGB());
 				}else{
 					buffer.setRGB(x, y, Color.black.getRGB());
@@ -197,6 +187,153 @@ public class Processing {
 		Runner.updateScreen(buffer,Integer.parseInt(number));
 		return buffer;
 	}
+	/**
+	 * Will filter the black parts out of the numberplate
+	 * @param buffer The BufferedImage to process
+	 * @param number The Location on the screen
+	 * @return The processed Image
+	 */
+	public static BufferedImage secondBlackFilter(BufferedImage buffer, String number){
+		if (Runner.progressMessages){
+			System.out.println("Applying black filter");
+		}
+		int x = 0, y = 0;
+
+		int xMax = buffer.getWidth();
+		int yMax = buffer.getHeight();
+		Color C;
+
+		while (x<xMax){
+			while(y<yMax){
+				C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				int total = red+green+blue;
+				if ((red<140&&green<110&&blue<130&&total<240)){
+					buffer.setRGB(x, y, Color.white.getRGB());
+				}else{
+					buffer.setRGB(x, y, Color.black.getRGB());
+				}
+				y++;
+			}
+			if (delay){
+				System.err.println("delay");
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
+			}
+			x++;
+			y=0;
+		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
+		return buffer;
+	}
+	
+	public static BufferedImage thirdBlackFilter(BufferedImage buffer, String number){
+		System.out.println("Third in " + Thread.currentThread().getName());
+		if (Runner.progressMessages){
+			System.out.println("Applying black filter");
+		}
+		int x = 0, y = 0;
+
+		int xMax = buffer.getWidth();
+		int yMax = buffer.getHeight();
+		Color C;
+
+		while (x<xMax){
+			while(y<yMax){
+				C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				int total = red+green+blue;
+				float ratioRG = (float) red/(float)green;
+				float ratioRB = (float) red/(float)blue;
+				if (total<90){//||total<200&&ratioRG>0.9&&ratioRG>1.1&&ratioRB>0.9&&ratioRB>1.1
+					buffer.setRGB(x, y, Color.white.getRGB());
+				}else{
+					buffer.setRGB(x, y, Color.black.getRGB());
+				}
+				y++;
+			}
+			if (delay){
+				System.err.println("delay");
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
+			}
+			x++;
+			y=0;
+		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
+		return buffer;
+	}
+	
+	public static BufferedImage fourthBlackFilter(BufferedImage buffer, String number){
+		System.out.println("Third in " + Thread.currentThread().getName());
+		if (Runner.progressMessages){
+			System.out.println("Applying black filter");
+		}
+		int x = 0, y = 0;
+
+		int xMax = buffer.getWidth();
+		int yMax = buffer.getHeight();
+		Color C;
+
+		while (x<xMax){
+			while(y<yMax){
+				C = new Color(buffer.getRGB(x, y));
+				int red = C.getRed();
+				int green = C.getGreen();
+				int blue = C.getBlue();
+				int total = red+green+blue;
+				float ratioRG = (float) red/(float)green;
+				float ratioRB = (float) red/(float)blue;
+				if (total<300){//||total<200&&ratioRG>0.9&&ratioRG>1.1&&ratioRB>0.9&&ratioRB>1.1
+					buffer.setRGB(x, y, Color.white.getRGB());
+				}else{
+					buffer.setRGB(x, y, Color.black.getRGB());
+				}
+				y++;
+			}
+			if (delay){
+				System.err.println("delay");
+				try {
+					Thread.sleep(10);                 //1000 milliseconds is one second.
+				} catch(InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+
+			if (ThreadedProcessing.realTime.get()){
+				if(x%10==0){
+					Runner.updateScreen(buffer,Integer.parseInt(number));
+				}
+			}
+			x++;
+			y=0;
+		}
+		Runner.updateScreen(buffer,Integer.parseInt(number));
+		return buffer;
+	}
+
 
 	/**
 	 * This method will do all the histogram equalization
@@ -1393,11 +1530,22 @@ public class Processing {
 			}
 
 			percentage [i] = same/total;
+			if (i==18){
+
+				//Letter I, check for ratio to determine if it is an I and not just a blurry different letter
+				if (segment.getHeight()/segment.getWidth()<1.9){
+					percentage[i] = percentage[i]*0.5;
+
+				}
+			}
+
 			i++;
 		}
 		i=0;
 		int best = 0;
+
 		while (i<36){
+
 			if (percentage[best]<percentage[i]){
 				best=i;
 			}
@@ -1582,6 +1730,393 @@ public class Processing {
 				y++;
 			}
 			x++;
+		}
+		return source;
+	}
+
+	public static BufferedImage largeAreaSmooth(BufferedImage source) {
+		BufferedImage processed = source;
+		if (source.getWidth()<4){
+			source = null;
+		}else{
+
+
+			int x = 0;
+			int connected = 0;;
+			while (x<source.getWidth()){
+
+				int y = 0;
+				while(y<source.getHeight()){
+					if (source.getRGB(x, y)!=Color.WHITE.getRGB()){
+						if(x<=1&&y<=1||x<=1&&y>=source.getHeight()-2||x>=source.getWidth()-2&&y>=source.getHeight()-2||x>=source.getWidth()-2&&y<=1){
+							//This is to make sure we do not check the corners, this is useless since they cannot have 4 connections around them
+						}else{
+							//Done the corners, now the borders
+							if (x==0|| x==source.getWidth()-1|| y==0||y==source.getHeight()-1){
+								//near the borders there is not enough pixels nearby to get enough for the threshold
+							}else{//Not on border
+								if (x==1&&y==1){//one from top left corner
+
+								}else if (x==1&&y==source.getHeight()-2){//one from bottom left corner
+
+								}else if (x==source.getWidth()-2&&y==source.getHeight()-2){//one from bottom right corner
+
+								}else if (x==source.getWidth()-2&&y==2){//one from top right corner
+
+								}else{
+									//Not near corner
+									if (x==1){//near left side
+										if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+									}else if (y==1){//near top side
+										if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+									}else if (x==source.getWidth()-2){//near left side
+										if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+									}else if (y==source.getHeight()-2){//near bottom side
+										if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+									}else{
+										//Middle of the picture
+										if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x+2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x+2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-1, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+
+										if (source.getRGB(x-2, y)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y+2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-1)==Color.WHITE.getRGB()){
+											connected++;
+										}
+										if (source.getRGB(x-2, y-2)==Color.WHITE.getRGB()){
+											connected++;
+										}
+									}
+								}
+
+							}
+						}
+					}
+					if (connected>=14){
+						processed.setRGB(x, y, Color.WHITE.getRGB());
+					}
+					connected = 0;
+					y++;
+				}
+				x++;
+			}
 		}
 		return source;
 	}
