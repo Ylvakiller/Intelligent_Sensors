@@ -93,7 +93,9 @@ public class ThreadedProcessing extends Thread {
 		}
 
 		currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
+		FileAccess.writePlateBlackColorFilter(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
+		FileAccess.writePlateBlobDetection(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		BufferedImage[] segmented= Processing.segMent(currentBuffer);
 		
 		int i = 0;

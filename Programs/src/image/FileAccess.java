@@ -21,7 +21,6 @@ public class FileAccess {
 	private static String fileNameInput = "./InputImages/plate";
 	private static String fileNameOutput = "./OutputImages/plate";
 	private static String folderNameTemplates = "./Templates/";
-	public static String fileNumber = "00";
 	JPanel editorPanel;
 	/**
 	 * Default Constructor
@@ -45,15 +44,7 @@ public class FileAccess {
 	public FileAccess(JPanel imagePanel){
 		editorPanel = imagePanel;
 	}
-	/**
-	 * This constructor will be for processing multiple images at the same time
-	 * All the other statics methods will check if the thisFileNumber is not 0, and will otherwise use the fileNumber value,
-	 * this to allow backwards compatability between the treaded and untreaded versions of this program
-	 * @param number the fileNumber to process
-	 */
-	public FileAccess(int number){
-		FileAccess.setFileNumber(number);
-	}
+	
 	/**
 	 * Returns the loaded imageIcon for a image file to be used in a JPanel
 	 * @return	the imageIcon for the fileName specified in the constructor
@@ -172,6 +163,12 @@ public class FileAccess {
 		}
 	}
 
+	/**
+	 * Will write an image in the folder ./OutputImages/BlobDetection/plate
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
 	public static void writeBlackColorFilter(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -195,6 +192,13 @@ public class FileAccess {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Will write an image in the folder ./OutputImages/BlobDetection/plate
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
 	public static void writeBlobDetection(BufferedImage buffer, String FileNumber){
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
 		ImageWriter writer = (ImageWriter)writers.next();
@@ -249,6 +253,11 @@ public class FileAccess {
 		}
 	}
 
+	/**
+	 * Will return a correct string equivalent of the given number
+	 * @param number The number to get the String from
+	 * @return The correct String version of this number with a "0" padding if number<10
+	 */
 	public static String getFileNumber(int number){
 		String temp;
 		if (number<10){
@@ -259,13 +268,7 @@ public class FileAccess {
 		return temp;
 	}
 
-	public static void setFileNumber(int number){
-		if (number<10){
-			fileNumber = "0"  + String.valueOf(number);
-		}else{
-			fileNumber = String.valueOf(number);
-		}
-	}
+	
 	/**
 	 * Will write the output of the 6 segments to files
 	 * @param buffer An array holding the segments
@@ -331,6 +334,67 @@ public class FileAccess {
 			i++;
 		}
 		return templates;
+	}
+	
+	
+	/**
+	 * Will write an image in the folder ./OutputImages/PlateBlobDetection/plate
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
+	public static void writePlateBlobDetection(BufferedImage buffer, String FileNumber){
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+		ImageWriter writer = (ImageWriter)writers.next();
+		String temp = "./OutputImages/PlateBlobDetection/plate" + FileNumber + ".png";
+		File f = new File(temp);
+		ImageOutputStream ios = null;
+		try {
+			ios = ImageIO.createImageOutputStream(f);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		writer.setOutput(ios);
+		try {
+			writer.write(buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			ios.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Will write an image in the folder ./OutputImages/PlateBlackFilter/plate
+	 * The image will be named "plate01.png" for the first plate
+	 * the 01 is the platenumber, can be 01 till any number as long as there are input images of that plate number
+	 * @param buffer the image to write
+	 */
+	public static void writePlateBlackColorFilter(BufferedImage buffer, String FileNumber){
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+		ImageWriter writer = (ImageWriter)writers.next();
+		String temp = "./OutputImages/PlateBlackFilter/plate" + FileNumber + ".png";
+		File f = new File(temp);
+		ImageOutputStream ios = null;
+		try {
+			ios = ImageIO.createImageOutputStream(f);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		writer.setOutput(ios);
+		try {
+			writer.write(buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			ios.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

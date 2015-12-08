@@ -317,9 +317,12 @@ public class AltUI {
 		}
 	}
 	
-	
-	public static void setToolTop(int section, String text){
-		switch (section){
+	/**
+	 * Will set the tooltip of a specific section to a specific text
+	 * @param section The section to change the tooltip from
+	 * @param text The text to display
+	 */
+	public static void setToolTop(int section, String text){ switch (section){
 		case 1:
 			picLabel_1.setToolTipText(text);
 			break;

@@ -133,6 +133,12 @@ public class Processing {
 		return buffer;
 	}
 
+	/**
+	 * Will filter the black parts out of the numberplate
+	 * @param buffer The BufferedImage to process
+	 * @param number The Location on the screen
+	 * @return The processed Image
+	 */
 	public static BufferedImage blackFilter(BufferedImage buffer, String number){
 		System.out.println("Applying black filter");
 		int x = 0, y = 0;
@@ -1176,6 +1182,11 @@ public class Processing {
 		return b;
 	}
 
+	/**
+	 * Will scale and convert a BufferedImage by a specified scaleFactor
+	 * @param source The image to scale
+	 * @return A scaled ImageIcon of the source
+	 */
 	public static ImageIcon ScaledImageIcon(BufferedImage source){
 
 		double scalefactor = (double)500/(double)source.getWidth();
@@ -1194,11 +1205,14 @@ public class Processing {
 		}
 	}
 
+	/**
+	 * Will return an imageIcon scaled to 800x475 (size of one panel on the threaded program)
+	 * @param source The image to scale
+	 * @return A scaled ImageIcon of the source
+	 */
 	public static ImageIcon ScaleThreadIcon(BufferedImage source){
 
-		/**double scalefactor = (double)500/(double)source.getWidth();
-		int newWidth = new Double(source.getWidth() * scalefactor).intValue();
-		int newHeight = new Double(source.getHeight() * scalefactor).intValue();**/
+		
 		BufferedImage resized =new BufferedImage(800, 475, source.getType());
 		Graphics2D g = resized.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -1305,6 +1319,11 @@ public class Processing {
 		return resized;
 	}
 	
+	/**
+	 * Will create a black and white image out of the input by changing everything that is not black to white
+	 * @param source The image to process
+	 * @return The processed image
+	 */
 	public static BufferedImage getMono(BufferedImage source){
 		int x = 0;
 		while (x<source.getWidth()){

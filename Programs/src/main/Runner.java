@@ -58,7 +58,6 @@ public class Runner {
 			AltUI userInterface = new AltUI();
 		}else{
 			count =2;
-			FileAccess.setFileNumber(count);
 
 			JFrame  jf = new JFrame("NumberPlate Recogniser");
 			System.out.println("Started");
@@ -135,7 +134,6 @@ public class Runner {
 	 * @param number the image number to process
 	 */
 	private static void processImageNumber(int number){
-		FileAccess.setFileNumber(number);
 		BufferedImage buffer = FileAccess.getImage(FileAccess.getFileNumber(number));
 		//BufferedImage temp = Processing.cutimage(buffer);
 		try {
