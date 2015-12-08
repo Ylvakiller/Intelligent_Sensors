@@ -311,7 +311,7 @@ public class Processing {
 	/**
 	 * This method will detect and render blobs.
 	 * The largest blobs are colored in the following order:
-	 * red, green, yellow, magenta, cyan and orange
+	 * red, green, yellow, magenta, cyan, orange and pink
 	 * @param buffer the image to process
 	 * @return the image after blobdetection has been applied, this image will have the 6 largest blobs marked in different colors
 	 */
@@ -837,7 +837,7 @@ public class Processing {
 						buffer.setRGB(x, y, Color.CYAN.getRGB());
 					}else if (baseBlob == largestBlobs[5]){//this blob is part of the sixth blob
 						buffer.setRGB(x, y, Color.ORANGE.getRGB());
-					}else if (baseBlob == largestBlobs[6]){//this blob is part of the sixth blob
+					}else if (baseBlob == largestBlobs[6]){//this blob is part of the seventh blob
 						buffer.setRGB(x, y, Color.PINK.getRGB());
 					}
 				}
@@ -1239,13 +1239,24 @@ public class Processing {
 	 * @return Array with the 6 largest images
 	 */
 	public static BufferedImage[] segMent(BufferedImage buffer){
-		int[][] data = new int[6][];
+		int[][] data = new int[7][];
 		data[0] = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		data[1] = Processing.findMinMaxOfBlob(buffer, Color.GREEN);
 		data[2] = Processing.findMinMaxOfBlob(buffer, Color.YELLOW);
 		data[3] = Processing.findMinMaxOfBlob(buffer, Color.MAGENTA);
 		data[4] = Processing.findMinMaxOfBlob(buffer, Color.CYAN);
 		data[5] = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
+		data[6] = Processing.findMinMaxOfBlob(buffer, Color.PINK);
+		int invalid =6;
+		for (int i = 0; i<6; i++){
+			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
+				invalid =i;
+			}
+		}
+		while (invalid<6){
+			data[invalid] = data[invalid+1];
+			invalid++;
+		}
 		for (int i =0; i <5;){
 			if (data[i][0]>data[i+1][0]){//the next blob is further to the left as the current blob, switching them around
 				int[] temp = data[i];
@@ -1264,16 +1275,14 @@ public class Processing {
 		segmented[4] = Processing.cutimage(buffer, data[4][0], data[4][1], data[4][2] - data[4][0]+1, data[4][3] - data[4][1]+1);
 		segmented[5] = Processing.cutimage(buffer, data[5][0], data[5][1], data[5][2] - data[5][0]+1, data[5][3] - data[5][1]+1);
 		return segmented;
-		//System.out.println("first [1] " + first[1]);
-		//System.out.println("order [0][1] " + order[0][1]);
 
 	}
 	
 	/**
 	 * Will calculate which character is most likely to be the character on the screen
-	 * @param segment
-	 * @param templates
-	 * @return 
+	 * @param segment The image to compare
+	 * @param templates An array with all the templates
+	 * @return A double arrray where the first double is a character in double value and the second is confidence in this outcome
 	 */
 	public static double[] getChar(BufferedImage segment, BufferedImage[] templates){
 		int i=0;

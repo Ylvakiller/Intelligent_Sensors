@@ -34,7 +34,6 @@ public class AltUI {
 	private static JLabel picLabel_3;
 	private static JLabel picLabel_4;
 	public static int[] numbers= {0,0,0,0};
-	public static boolean continue1 = false;
 	public static ThreadedProcessing proc1;
 	public static ThreadedProcessing proc2;
 	public static ThreadedProcessing proc3;

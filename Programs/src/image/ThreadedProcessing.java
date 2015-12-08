@@ -23,7 +23,11 @@ public class ThreadedProcessing extends Thread {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
-
+	public ThreadedProcessing(String arg0, AtomicInteger count) {
+		super(arg0);
+		count=count;
+		// TODO Auto-generated constructor stub
+	}
 	public ThreadedProcessing(ThreadGroup arg0, Runnable arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
