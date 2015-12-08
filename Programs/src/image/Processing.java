@@ -5,9 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import main.PlateNotFoundException;
@@ -1271,8 +1273,9 @@ public class Processing {
 	 * Will calculate which character is most likely to be the character on the screen
 	 * @param segment
 	 * @param templates
+	 * @return 
 	 */
-	public static void getChar(BufferedImage segment, BufferedImage[] templates){
+	public static double[] getChar(BufferedImage segment, BufferedImage[] templates){
 		int i=0;
 		double [] percentage = new double[36];
 		while (i<36){
@@ -1331,7 +1334,14 @@ public class Processing {
 			}
 			i++;
 		}
-		System.out.println(percentage[best]);
+		double[] temp =  new double[2];
+		if(best<10){
+			temp[0] = (best+48);
+		}else{
+			temp[0] = (best+55);
+		}
+		temp[1] = percentage[best];
+		return temp;
 	}
 	/**
 	 * Will scale the given source to the given dimensions

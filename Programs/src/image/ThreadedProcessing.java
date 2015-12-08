@@ -106,7 +106,15 @@ public class ThreadedProcessing extends Thread {
 		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		BufferedImage[] templates = FileAccess.getTemplates();
 		//It might be worth looking into a connected algorithm if time allows before running the next step
-		Processing.getChar(segmented[0], templates);
+		double[][] chars= new double[6][];
+		double percentage = 1;
+		i=0;
+		while (i<6){
+			chars[i] = Processing.getChar(segmented[i], templates);
+			percentage = percentage*chars[i][1];
+			i++;
+		}
+		System.out.println("I am " + Math.round(percentage*100) + "% confident that number plate " + Thread.currentThread().getName() + " is \t" + (char)chars[0][0]+ (char)chars[1][0]+ (char)chars[2][0]+ (char)chars[3][0]+ (char)chars[4][0]+ (char)chars[5][0]);
 	}
 
 	public synchronized int increment() {

@@ -146,8 +146,8 @@ public class AltUI {
 				scrollPane_1.setBounds(3, 3, 269, 749);
 				textPanel.add(scrollPane_1);
 
-				final JTextArea textArea = new JTextArea();
-				scrollPane_1.setViewportView(textArea);
+				Runner.menuOutput = new JTextArea();
+				scrollPane_1.setViewportView(Runner.menuOutput);
 				{
 					JScrollPane scrollPane = new JScrollPane();
 					scrollPane.setBounds(0, 0, textPanel.getWidth(), textPanel.getHeight());
@@ -156,17 +156,17 @@ public class AltUI {
 					OutputStream out = new OutputStream() {
 						@Override
 						public void write(final int b) throws IOException {
-							textArea.append((String.valueOf((char) b)));
+							Runner.menuOutput.append((String.valueOf((char) b)));
 						}
 
 						@Override
 						public void write(byte[] b, int off, int len) throws IOException {
-							textArea.append((new String(b, off, len)));
+							Runner.menuOutput.append((new String(b, off, len)));
 						}
 
 						@Override
 						public void write(byte[] b) throws IOException {
-							textArea.append(new String(b, 0, b.length));
+							Runner.menuOutput.append(new String(b, 0, b.length));
 						}
 					};
 
@@ -237,18 +237,11 @@ public class AltUI {
 			}
 			plateContainer.setVisible(true);
 		}
+		
 
-
-		OutputStream out = new OutputStream() {
-
-			@Override
-			public void write(int arg0) throws IOException {
-				Runner.menuOutput.append(String.valueOf(arg0));
-				
-			}
-			
-		};
+		
 		topContainer.setVisible(true);
+		Runner.menuOutput.setLineWrap(true);
 		AltUI.showOnScreen(2, topContainer); //Use this for multi monitor setups to chang eon which screen the program starts
 		startProcessing();
 	}
@@ -258,10 +251,10 @@ public class AltUI {
 	public void startProcessing(){
 		//ThreadedProcessing.count = new AtomicInteger(0);
 		try {
-			proc1 = new ThreadedProcessing("2");
-			proc2 = new ThreadedProcessing("16");
-			proc3 = new ThreadedProcessing("4");
-			proc4 = new ThreadedProcessing("25");
+			proc1 = new ThreadedProcessing("8");
+			proc2 = new ThreadedProcessing("14");
+			proc3 = new ThreadedProcessing("17");
+			proc4 = new ThreadedProcessing("21");
 			proc1.start();
 			Thread.sleep(1);//these 1 millisecond delay are there to remove a bug that would happen once every 100 runs or so
 			proc2.start();//This bug would cause multiple thread to have the same location identifier, this should not happen due to the way the syncronised atomicInteger is implemented
