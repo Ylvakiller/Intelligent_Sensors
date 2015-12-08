@@ -239,7 +239,7 @@ public class Processing {
 	}
 	
 	public static BufferedImage thirdBlackFilter(BufferedImage buffer, String number){
-		System.out.println("Third in " + Thread.currentThread().getName());
+		
 		if (Runner.progressMessages){
 			System.out.println("Applying black filter");
 		}
@@ -287,7 +287,7 @@ public class Processing {
 	}
 	
 	public static BufferedImage fourthBlackFilter(BufferedImage buffer, String number){
-		System.out.println("Third in " + Thread.currentThread().getName());
+		
 		if (Runner.progressMessages){
 			System.out.println("Applying black filter");
 		}

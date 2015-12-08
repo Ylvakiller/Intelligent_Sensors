@@ -123,7 +123,9 @@ public class ThreadedProcessing extends Thread {
 			//I have removed my exceptions from the program since it did not allow to me to continue properly
 			extrabuffer = Processing.secondColorFilter(extrabuffer, String.valueOf(location));
 			FileAccess.writeFirstColorFilter(extrabuffer, Thread.currentThread().getName());
-			ThreadedProcessing.wait(location);
+			if(!AltUI.notWait){
+				ThreadedProcessing.wait(location);
+			}
 
 			extrabuffer = Processing.blobDetection(extrabuffer, String.valueOf(location));
 
@@ -146,7 +148,10 @@ public class ThreadedProcessing extends Thread {
 			extrabuffer = Processing.copyImage(currentBuffer);
 			currentBuffer = Processing.thirdBlackFilter(currentBuffer, String.valueOf(location));
 			FileAccess.writePlateBlackColorFilter(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
-			ThreadedProcessing.wait(location);
+			if(!AltUI.notWait){
+				ThreadedProcessing.wait(location);
+			}
+			
 			currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
 		}else{
 			extrabuffer = Processing.copyImage(currentBuffer);
