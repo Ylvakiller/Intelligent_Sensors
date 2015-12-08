@@ -107,11 +107,13 @@ public class ThreadedProcessing extends Thread {
 			try {
 				throw new PlateNotFoundException();
 			} catch (PlateNotFoundException e) {
+				System.out.println("ERROR " +  Thread.currentThread().getName());
 				//If this is the case we need to rerun an alternative colorfilter which I have to setup and run through the first part again until we find the numberplate
 			}
 		}else{
 			currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
 			FileAccess.writePlateBlackColorFilter(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+			currentBuffer = Processing.areaSmooth(currentBuffer);
 			currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
 			FileAccess.writePlateBlobDetection(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 			BufferedImage[] segmented= Processing.segMent(currentBuffer);
@@ -143,6 +145,7 @@ public class ThreadedProcessing extends Thread {
 				
 			}else{
 				System.err.println("-INCORRECT-" + Math.round(percentage*100) + "|" +  Thread.currentThread().getName());
+				//System.out.println("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
 			}
 		}
 		if(!AltUI.notWait){

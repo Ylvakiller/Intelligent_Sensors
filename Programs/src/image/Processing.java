@@ -1279,7 +1279,7 @@ public class Processing {
 		int invalid =6;
 		boolean found = false;
 		for (int i = 0; i<8; i++){
-			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
+			if (data[i][2]-data[i][0]>(buffer.getWidth()/7)){
 				invalid =i;
 				break;
 			}
@@ -1292,7 +1292,7 @@ public class Processing {
 		}
 		data[invalid] = temp;
 		for (int i = 0; i<8; i++){
-			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
+			if (data[i][2]-data[i][0]>(buffer.getWidth()/7)){
 				invalid =i;
 				break;
 			}
@@ -1304,7 +1304,7 @@ public class Processing {
 		}
 		data[invalid] = temp;
 		for (int i = 0; i<8; i++){
-			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
+			if (data[i][2]-data[i][0]>(buffer.getWidth()/7)){
 				invalid =i;
 				break;
 			}
@@ -1315,7 +1315,7 @@ public class Processing {
 			invalid++;
 		}
 		data[invalid] = temp;
-		
+
 
 		for (int i =0; i <5;){
 			if (data[i][0]>data[i+1][0]){//the next blob is further to the left as the current blob, switching them around
@@ -1457,13 +1457,128 @@ public class Processing {
 	 * @return
 	 */
 	public static BufferedImage areaSmooth(BufferedImage source){
+		BufferedImage processed = source;
 		int x = 0;
+		int connected = 0;;
 		while (x<source.getWidth()){
 			int y = 0;
 			while(y<source.getHeight()){
-				if (source.getRGB(x, y)!=Color.BLACK.getRGB()){
-					source.setRGB(x, y, Color.WHITE.getRGB());
+				if (source.getRGB(x, y)!=Color.WHITE.getRGB()){
+					if (x==0&&y==0||x==0&&y==source.getHeight()-1||x==source.getWidth()-1&&y==source.getHeight()-1||x==source.getWidth()-1&&y==0){
+						//This is to make sure we do not check the corners, this is useless since they cannot have 4 connections around them
+					}else{
+						//Done the corners, now the borders
+						if (x==0){//Left border
+							if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+						}else if (x==source.getWidth()-1){//right border
+							if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+						}else if (y==0){//top border
+							if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+						}else if (y==source.getHeight()-1){//bottom border
+							if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+						}else{//middle of picture
+							if (source.getRGB(x, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x-1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y+1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+							if (source.getRGB(x+1, y-1)==Color.WHITE.getRGB()){
+								connected++;
+							}
+						}
+					}
 				}
+				if (connected>=5){
+					processed.setRGB(x, y, Color.WHITE.getRGB());
+				}
+				connected = 0;
 				y++;
 			}
 			x++;
