@@ -1257,12 +1257,12 @@ public class Processing {
 			}
 		}
 		BufferedImage segmented[] = new BufferedImage[6];
-		segmented[0] = Processing.cutimage(buffer, data[0][0], data[0][1], data[0][2] - data[0][0], data[0][3] - data[0][1]);
-		segmented[1] = Processing.cutimage(buffer, data[1][0], data[1][1], data[1][2] - data[1][0], data[1][3] - data[1][1]);
-		segmented[2] = Processing.cutimage(buffer, data[2][0], data[2][1], data[2][2] - data[2][0], data[2][3] - data[2][1]);
-		segmented[3] = Processing.cutimage(buffer, data[3][0], data[3][1], data[3][2] - data[3][0], data[3][3] - data[3][1]);
-		segmented[4] = Processing.cutimage(buffer, data[4][0], data[4][1], data[4][2] - data[4][0], data[4][3] - data[4][1]);
-		segmented[5] = Processing.cutimage(buffer, data[5][0], data[5][1], data[5][2] - data[5][0], data[5][3] - data[5][1]);
+		segmented[0] = Processing.cutimage(buffer, data[0][0], data[0][1], data[0][2] - data[0][0]+1, data[0][3] - data[0][1]+1);
+		segmented[1] = Processing.cutimage(buffer, data[1][0], data[1][1], data[1][2] - data[1][0]+1, data[1][3] - data[1][1]+1);
+		segmented[2] = Processing.cutimage(buffer, data[2][0], data[2][1], data[2][2] - data[2][0]+1, data[2][3] - data[2][1]+1);
+		segmented[3] = Processing.cutimage(buffer, data[3][0], data[3][1], data[3][2] - data[3][0]+1, data[3][3] - data[3][1]+1);
+		segmented[4] = Processing.cutimage(buffer, data[4][0], data[4][1], data[4][2] - data[4][0]+1, data[4][3] - data[4][1]+1);
+		segmented[5] = Processing.cutimage(buffer, data[5][0], data[5][1], data[5][2] - data[5][0]+1, data[5][3] - data[5][1]+1);
 		return segmented;
 		//System.out.println("first [1] " + first[1]);
 		//System.out.println("order [0][1] " + order[0][1]);
