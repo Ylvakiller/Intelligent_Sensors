@@ -26,6 +26,7 @@ public class ThreadedProcessing extends Thread {
 	public ThreadedProcessing(String arg0, AtomicInteger count) {
 		super(arg0);
 		count=count;
+		ThreadedProcessing.realTime.set(false);
 		// TODO Auto-generated constructor stub
 	}
 	public ThreadedProcessing(ThreadGroup arg0, Runnable arg1) {
@@ -67,13 +68,16 @@ public class ThreadedProcessing extends Thread {
 	public void run(){
 
 		int location = this.increment();
-		ThreadedProcessing.realTime.set(false);
+		
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		try {
 			AltUI.updateScreen(location, Processing.ScaleThreadIcon(currentBuffer));
 			AltUI.setToolTop(location, ("Plate number " + Thread.currentThread().getName()));//Allows the user to easily see what that plate it
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		if(!AltUI.notWait){
+			ThreadedProcessing.wait(location);
 		}
 		BufferedImage procesBuffer = Processing.copyImage(currentBuffer);
 		procesBuffer = Processing.histogramEqualisation(procesBuffer, String.valueOf(location));

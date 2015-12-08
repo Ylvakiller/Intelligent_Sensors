@@ -49,6 +49,12 @@ public class Runner {
 	 * This will decide which interface to use, either the normal one or the experimental multitreaded version.
 	 */
 	public static boolean altUI = true;
+
+	/**
+	 * Setting this to true will keep the user updated about the different steps happening in the processes
+	 */
+	public static boolean progressMessages = true;
+	
 	/**
 	 * Main method, runs the whole program
 	 * @param args

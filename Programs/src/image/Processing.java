@@ -33,7 +33,9 @@ public class Processing {
 	 * @return the image after color filtering it
 	 */
 	protected static BufferedImage colorFilter(BufferedImage buffer, String number){
-		if (!Runner.altUI){Runner.menuOutput.append("Applying color filter\n");}
+		if (Runner.progressMessages){
+			System.out.println("Applying color filter");
+		}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -81,7 +83,9 @@ public class Processing {
 	 * @return the orinial picture with the filter applied
 	 */
 	private static BufferedImage comparativeFilter(BufferedImage buffer, String number){
-		System.out.println("Calculating and applying the comparitive color filter");
+		if (Runner.progressMessages){
+			System.out.println("Calculating and applying the comparitive color filter");
+		}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -144,7 +148,9 @@ public class Processing {
 	 * @return The processed Image
 	 */
 	public static BufferedImage blackFilter(BufferedImage buffer, String number){
-		System.out.println("Applying black filter");
+		if (Runner.progressMessages){
+			System.out.println("Applying black filter");
+		}
 		int x = 0, y = 0;
 
 		int xMax = buffer.getWidth();
@@ -198,7 +204,9 @@ public class Processing {
 	 * @return the image after histogram equalization is applied
 	 */
 	protected static BufferedImage histogramEqualisation(BufferedImage buffer, String number){
-		System.out.println("Applying Histogram Equalisation");
+		if (Runner.progressMessages){
+			System.out.println("Applying Histogram Equalisation");
+		}
 		int M = buffer.getWidth();
 		int N = buffer.getHeight();
 		
@@ -275,7 +283,9 @@ public class Processing {
 			}
 			i++;
 		}
-		System.out.println("Calculated Histogram information\nProcessing date to image");
+		if (Runner.progressMessages){
+			System.out.println("Calculated Histogram information\nProcessing date to image");
+		}
 		x=0;
 		y=0;
 		while (x<M){
@@ -322,7 +332,9 @@ public class Processing {
 		xMax = buffer.getWidth();
 		yMax = buffer.getHeight();
 		int amountOfBlobs = 1;//this is the next int that has not been used to identify a blob
-		System.out.println("Running Blob Detection");
+		if (Runner.progressMessages){
+			System.out.println("Running Blob Detection");
+		}
 		int[][] blobArray = new int[xMax][yMax];
 		int[][] connectedBlobs = new int[(xMax*yMax)/8][1000];
 		int[] mass = new int[(xMax*yMax)/8];
@@ -818,7 +830,9 @@ public class Processing {
 		connectedBlobs = Processing.findLowestBlobRecursive(connectedBlobs, amountOfBlobs);
 		mass = calculateConnectedMass(connectedBlobs, mass);
 		int[] largestBlobs = findLargestBlobs(mass,amountOfBlobs);
-		if (!Runner.altUI){Runner.menuOutput.append("Processing blob information to screen:\n");}
+		if (Runner.progressMessages){
+			System.out.println("Processing blob information to screen");
+		}
 		x = 0;
 		y = 0;
 		while (x<xMax){
