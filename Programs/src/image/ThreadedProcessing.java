@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import main.AltUI;
+import main.PlateNotFoundException;
 
 public class ThreadedProcessing extends Thread {
 	private static Object waiter = new Object();
@@ -53,7 +54,7 @@ public class ThreadedProcessing extends Thread {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public static ThreadLocal<Boolean> realTime = new ThreadLocal<Boolean>() {
 
 		@Override
@@ -62,7 +63,7 @@ public class ThreadedProcessing extends Thread {
 		}
 
 	};
-	
+
 	public int location;
 	public boolean done = false;
 	/**
@@ -70,7 +71,7 @@ public class ThreadedProcessing extends Thread {
 	 */
 	public void run(){
 
-		
+
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		//System.out.println("Thread started with name " + Thread.currentThread().getName() + " And location " + location);
 		try {
@@ -102,32 +103,53 @@ public class ThreadedProcessing extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if ((float)currentBuffer.getWidth()/(float)currentBuffer.getHeight()<3.5){
+			try {
+				throw new PlateNotFoundException();
+			} catch (PlateNotFoundException e) {
+				//If this is the case we need to rerun an alternative colorfilter which I have to setup and run through the first part again until we find the numberplate
+			}
+		}else{
+			currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
+			FileAccess.writePlateBlackColorFilter(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+			currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
+			FileAccess.writePlateBlobDetection(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+			BufferedImage[] segmented= Processing.segMent(currentBuffer);
 
-		currentBuffer = Processing.blackFilter(currentBuffer, String.valueOf(location));
-		FileAccess.writePlateBlackColorFilter(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
-		currentBuffer = Processing.blobDetection(currentBuffer, String.valueOf(location));
-		FileAccess.writePlateBlobDetection(currentBuffer, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
-		BufferedImage[] segmented= Processing.segMent(currentBuffer);
-		
-		int i = 0;
-		while (i<segmented.length){
-			segmented[i] = Processing.getMono(segmented[i]);
-			i++;
+			int i = 0;
+			while (i<segmented.length){
+				segmented[i] = Processing.getMono(segmented[i]);
+				i++;
+			}
+			FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+			BufferedImage[] templates = FileAccess.getTemplates();
+			//It might be worth looking into a connected algorithm if time allows before running the next step
+			double[][] chars= new double[6][];
+			double percentage = 1;
+			i=0;
+			while (i<6){
+				chars[i] = Processing.getChar(segmented[i], templates);
+				percentage = percentage*chars[i][1];
+				i++;
+
+			}
+			String temp = String.valueOf((char)chars[0][0]) + String.valueOf((char)chars[1][0]) + String.valueOf((char)chars[2][0]) + String.valueOf((char)chars[3][0]) + String.valueOf((char)chars[4][0]) + String.valueOf((char)chars[5][0]);
+			/*if (Integer.parseInt(Thread.currentThread().getName())==12){
+			System.out.println("I am " + Math.round(percentage*100) + "% confident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
+			}*/
+			//System.out.println("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
+			if (temp.equalsIgnoreCase(AltUI.correct[Integer.parseInt(Thread.currentThread().getName())-1])){
+				System.out.println("|CORRECT|" + Math.round(percentage*100));
+				
+			}else{
+				System.err.println("-INCORRECT-" + Math.round(percentage*100));
+			}
 		}
-		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
-		BufferedImage[] templates = FileAccess.getTemplates();
-		//It might be worth looking into a connected algorithm if time allows before running the next step
-		double[][] chars= new double[6][];
-		double percentage = 1;
-		i=0;
-		while (i<6){
-			chars[i] = Processing.getChar(segmented[i], templates);
-			percentage = percentage*chars[i][1];
-			i++;
+		if(!AltUI.notWait){
+			ThreadedProcessing.wait(location);
 		}
-		System.out.println("I am " + Math.round(percentage*100) + "% confident that number plate " + Thread.currentThread().getName() + " is \t" + (char)chars[0][0]+ (char)chars[1][0]+ (char)chars[2][0]+ (char)chars[3][0]+ (char)chars[4][0]+ (char)chars[5][0]);
 		try {
-			Thread.sleep(15000);
+			Thread.sleep(15);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
