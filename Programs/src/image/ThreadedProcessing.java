@@ -274,11 +274,11 @@ public class ThreadedProcessing extends Thread {
 			}*/
 		//System.out.println("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
 		if (temp.equalsIgnoreCase(AltUI.correct[Integer.parseInt(Thread.currentThread().getName())-1])){
-			//System.out.println("|CORRECT|" + Math.round(percentage*100) + "|\t" +  Thread.currentThread().getName());
-
+			System.out.print("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
+			System.out.println("\tThis is the correct numberplate");
 		}else{
-			System.err.println("-INCORRECT-" + Math.round(percentage*100) + "|\t" +  Thread.currentThread().getName());
-			System.out.println("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
+			System.out.print("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
+			System.out.println("\tHowever this is not the correct numberplate");
 		}
 		if(!AltUI.notWait){
 			ThreadedProcessing.wait(location);

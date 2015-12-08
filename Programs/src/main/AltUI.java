@@ -139,7 +139,7 @@ public class AltUI {
 				tglbtnKeepGoingAll.setBounds(140, 65, 130, 25);
 				buttonPanel.add(tglbtnKeepGoingAll);
 
-				JToggleButton tglbtnMessages = new JToggleButton("Progress Updates");
+				JToggleButton tglbtnMessages = new JToggleButton("Disable Progress Updates");
 				tglbtnMessages.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						Runner.progressMessages= !Runner.progressMessages;
