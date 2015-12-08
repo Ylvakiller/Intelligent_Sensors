@@ -40,8 +40,12 @@ public class AltUI {
 	public static ThreadedProcessing proc4;
 	public static ThreadedProcessing[] threadArray = new ThreadedProcessing[4];
 	public static boolean notWait = false;
+	public static String[] correct;
+	public static Object next = new Object();
 
 	public AltUI() {
+		AltUI.setupCorrect();
+		
 		//This is the top container, anything that has directely to do with thise container will be on this indentation level
 		JFrame topContainer = new JFrame("Experimental interface for the numberplate recogniser");
 		topContainer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -123,7 +127,7 @@ public class AltUI {
 					}
 				});
 				btnNextAll.setActionCommand("NextStepAll");
-				btnNextAll.setBounds(5, 66, 130, 25);
+				btnNextAll.setBounds(5, 65, 130, 25);
 				buttonPanel.add(btnNextAll);
 
 				JToggleButton tglbtnKeepGoingAll = new JToggleButton("Keep Going All");
@@ -132,9 +136,19 @@ public class AltUI {
 						notWait= !notWait;
 					}
 				});
-				tglbtnKeepGoingAll.setBounds(140, 68, 130, 23);
+				tglbtnKeepGoingAll.setBounds(140, 65, 130, 25);
 				buttonPanel.add(tglbtnKeepGoingAll);
 
+				JToggleButton tglbtnMessages = new JToggleButton("Progress Updates");
+				tglbtnMessages.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						Runner.progressMessages= !Runner.progressMessages;
+					}
+				});
+
+
+				tglbtnMessages.setBounds(5, 95, 265, 25);
+				buttonPanel.add(tglbtnMessages);
 				JPanel textPanel = new JPanel();
 				textPanel.setBounds(0, buttonPanel.getHeight(), sidePanel.getWidth(), sidePanel.getHeight()-buttonPanel.getHeight());
 				textPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,null));
@@ -144,11 +158,11 @@ public class AltUI {
 				JScrollPane scrollPane_1 = new JScrollPane();
 				scrollPane_1.setBounds(3, 3, 269, 749);
 				textPanel.add(scrollPane_1);
-
+				JScrollPane scrollPane;
 				Runner.menuOutput = new JTextArea();
 				scrollPane_1.setViewportView(Runner.menuOutput);
 				{
-					JScrollPane scrollPane = new JScrollPane();
+					scrollPane = new JScrollPane();
 					scrollPane.setBounds(0, 0, textPanel.getWidth(), textPanel.getHeight());
 					scrollPane.setAutoscrolls(true);
 
@@ -236,7 +250,7 @@ public class AltUI {
 			}
 			plateContainer.setVisible(true);
 		}
-		
+
 
 		
 		topContainer.setVisible(true);
@@ -250,10 +264,10 @@ public class AltUI {
 	public void startProcessing(){
 		//ThreadedProcessing.count = new AtomicInteger(0);
 		try {
-			proc1 = new ThreadedProcessing("2");
-			proc2 = new ThreadedProcessing("4");
-			proc3 = new ThreadedProcessing("16");
-			proc4 = new ThreadedProcessing("25");
+			proc1 = new ThreadedProcessing("1",1);
+			proc2 = new ThreadedProcessing("2",2);
+			proc3 = new ThreadedProcessing("3",3);
+			proc4 = new ThreadedProcessing("4",4);
 			proc1.start();
 			Thread.sleep(1);//these 1 millisecond delay are there to remove a bug that would happen once every 100 runs or so
 			proc2.start();//This bug would cause multiple thread to have the same location identifier, this should not happen due to the way the syncronised atomicInteger is implemented
@@ -261,6 +275,36 @@ public class AltUI {
 			proc3.start();//Due to the size of this program and the fact that there are plenty of other parts which ones optimized would have a far greater impact on runtime I intend to keep it like it is for now
 			Thread.sleep(1);
 			proc4.start();
+			int i =5;
+			while (i<=26){
+				synchronized(next){
+					next.wait();
+				}
+				//System.out.println("Something is done");
+				if (proc1.done){
+					proc1 = new ThreadedProcessing(Integer.toString(i),proc1.location);
+					proc1.start();
+					i++;
+				}
+				if (proc2.done){
+					proc2 = new ThreadedProcessing(Integer.toString(i),proc2.location);
+					proc2.start();
+					i++;
+				}
+				if (proc3.done){
+					proc3 = new ThreadedProcessing(Integer.toString(i),proc3.location);
+					proc3.start();
+					i++;
+				}
+				if (proc4.done){
+					proc4 = new ThreadedProcessing(Integer.toString(i),proc4.location);
+					proc4.start();
+					i++;
+				}
+				
+			}
+
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -290,7 +334,7 @@ public class AltUI {
 			break;
 		}
 	}
-	
+
 	/**
 	 * This method is usefull in multi monitor displays, it allows the program to start on a different screen, handy for debugging and testing
 	 * @param screen the number of the screen to display on. (0 is primary, starts counting up from there)
@@ -308,25 +352,56 @@ public class AltUI {
 			throw new RuntimeException("No Screens Found!");
 		}
 	}
-	
+
 	/**
 	 * Will set the tooltip of a specific section to a specific text
 	 * @param section The section to change the tooltip from
 	 * @param text The text to display
 	 */
 	public static void setToolTop(int section, String text){ switch (section){
-		case 1:
-			picLabel_1.setToolTipText(text);
-			break;
-		case 2:
-			picLabel_2.setToolTipText(text);
-			break;
-		case 3:
-			picLabel_3.setToolTipText(text);
-			break;
-		case 4:
-			picLabel_4.setToolTipText(text);
-			break;
-		}
+	case 1:
+		picLabel_1.setToolTipText(text);
+		break;
+	case 2:
+		picLabel_2.setToolTipText(text);
+		break;
+	case 3:
+		picLabel_3.setToolTipText(text);
+		break;
+	case 4:
+		picLabel_4.setToolTipText(text);
+		break;
 	}
+	}
+	
+	private static void setupCorrect(){
+		correct = new String[26];
+		correct[0]= "14LHJS";
+		correct[1]= "98ZDBL";
+		correct[2]= "";
+		correct[3]= "";
+		correct[4]= "";
+		correct[5]= "";
+		correct[6]= "";
+		correct[7]= "";
+		correct[8]= "";
+		correct[9]= "";
+		correct[10]= "";
+		correct[11]= "";
+		correct[12]= "";
+		correct[13]= "";
+		correct[14]= "";
+		correct[15]= "";
+		correct[16]= "";
+		correct[17]= "";
+		correct[18]= "";
+		correct[19]= "";
+		correct[20]= "";
+		correct[21]= "";
+		correct[22]= "";
+		correct[23]= "";
+		correct[24]= "";
+		correct[25]= "";
+		correct[26]= "";
+		}
 }

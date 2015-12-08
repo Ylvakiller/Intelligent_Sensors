@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import main.AltUI;
 
 public class ThreadedProcessing extends Thread {
-	public static AtomicInteger count;
 	private static Object waiter = new Object();
 
 	public ThreadedProcessing() {
@@ -23,9 +22,9 @@ public class ThreadedProcessing extends Thread {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
-	public ThreadedProcessing(String arg0, AtomicInteger count) {
+	public ThreadedProcessing(String arg0, int location) {
 		super(arg0);
-		count=count;
+		this.location = location;
 		ThreadedProcessing.realTime.set(false);
 		// TODO Auto-generated constructor stub
 	}
@@ -54,9 +53,7 @@ public class ThreadedProcessing extends Thread {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub
 	}
-	/**
-	 * This method should hold the code that needs to be runned in this tread
-	 */
+	
 	public static ThreadLocal<Boolean> realTime = new ThreadLocal<Boolean>() {
 
 		@Override
@@ -65,11 +62,17 @@ public class ThreadedProcessing extends Thread {
 		}
 
 	};
+	
+	public int location;
+	public boolean done = false;
+	/**
+	 * This method should hold the code that needs to be runned in this tread
+	 */
 	public void run(){
 
-		int location = this.increment();
 		
 		BufferedImage currentBuffer = FileAccess.getImage(FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
+		//System.out.println("Thread started with name " + Thread.currentThread().getName() + " And location " + location);
 		try {
 			AltUI.updateScreen(location, Processing.ScaleThreadIcon(currentBuffer));
 			AltUI.setToolTop(location, ("Plate number " + Thread.currentThread().getName()));//Allows the user to easily see what that plate it
@@ -123,14 +126,16 @@ public class ThreadedProcessing extends Thread {
 			i++;
 		}
 		System.out.println("I am " + Math.round(percentage*100) + "% confident that number plate " + Thread.currentThread().getName() + " is \t" + (char)chars[0][0]+ (char)chars[1][0]+ (char)chars[2][0]+ (char)chars[3][0]+ (char)chars[4][0]+ (char)chars[5][0]);
-	}
-
-	public synchronized int increment() {
-		if(count==null){
-			count = new AtomicInteger(0);
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return count.incrementAndGet();
-
+		done = true;
+		synchronized(AltUI.next){
+			AltUI.next.notify();;
+		}
 	}
 	private static void wait(int location){
 		try {
