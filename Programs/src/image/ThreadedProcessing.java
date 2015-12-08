@@ -2,12 +2,9 @@ package image;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import main.AltUI;
-import main.PlateNotFoundException;
 import main.Runner;
-import main.SegmentSizeException;
 
 public class ThreadedProcessing extends Thread {
 	private static Object waiter = new Object();

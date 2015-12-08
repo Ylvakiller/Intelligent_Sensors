@@ -1,5 +1,7 @@
 package main;
 
+import image.ThreadedProcessing;
+
 import java.awt.Button;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -15,11 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.EtchedBorder;
-
-import image.ThreadedProcessing;
-
 import javax.swing.JToggleButton;
+import javax.swing.border.EtchedBorder;
 
 /*
  * This class will hold my attempt at making a multi treaded interface for the program, showing to start 4 numberplate at the same time.

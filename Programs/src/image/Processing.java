@@ -5,16 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import main.PlateNotFoundException;
 import main.Runner;
-import main.SegmentSizeException;
 
 /**
  * This class is meant to do all the filtering of the image
