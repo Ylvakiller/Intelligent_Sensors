@@ -1427,5 +1427,24 @@ public class Processing {
 		}
 		return source;
 	}
-
+	
+	/**
+	 * This method will smooth an area in order to connect certain blobs before segmentation
+	 * @param source
+	 * @return
+	 */
+	public static BufferedImage areaSmooth(BufferedImage source){
+		int x = 0;
+		while (x<source.getWidth()){
+			int y = 0;
+			while(y<source.getHeight()){
+				if (source.getRGB(x, y)!=Color.BLACK.getRGB()){
+					source.setRGB(x, y, Color.WHITE.getRGB());
+				}
+				y++;
+			}
+			x++;
+		}
+		return source;
+	}
 }
