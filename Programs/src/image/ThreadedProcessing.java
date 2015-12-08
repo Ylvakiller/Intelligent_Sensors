@@ -134,15 +134,15 @@ public class ThreadedProcessing extends Thread {
 
 			}
 			String temp = String.valueOf((char)chars[0][0]) + String.valueOf((char)chars[1][0]) + String.valueOf((char)chars[2][0]) + String.valueOf((char)chars[3][0]) + String.valueOf((char)chars[4][0]) + String.valueOf((char)chars[5][0]);
-			/*if (Integer.parseInt(Thread.currentThread().getName())==12){
+			/*if (Integer.parseInt(Thread.currentThread().getName())==26){
 			System.out.println("I am " + Math.round(percentage*100) + "% confident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
 			}*/
 			//System.out.println("I am " + Math.round(percentage*100) + "%\tconfident that number plate " + Thread.currentThread().getName() + " is \t" + temp);
 			if (temp.equalsIgnoreCase(AltUI.correct[Integer.parseInt(Thread.currentThread().getName())-1])){
-				System.out.println("|CORRECT|" + Math.round(percentage*100));
+				//System.out.println("|CORRECT|" + Math.round(percentage*100));
 				
 			}else{
-				System.err.println("-INCORRECT-" + Math.round(percentage*100));
+				System.err.println("-INCORRECT-" + Math.round(percentage*100) + "|" +  Thread.currentThread().getName());
 			}
 		}
 		if(!AltUI.notWait){

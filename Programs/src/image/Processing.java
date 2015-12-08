@@ -855,6 +855,8 @@ public class Processing {
 						buffer.setRGB(x, y, Color.PINK.getRGB());
 					}else if (baseBlob == largestBlobs[7]){
 						buffer.setRGB(x, y, Color.BLUE.getRGB());
+					}else if (baseBlob == largestBlobs[8]){
+						buffer.setRGB(x, y, Color.LIGHT_GRAY.getRGB());
 					}
 				}
 				y++;
@@ -989,48 +991,53 @@ public class Processing {
 	 */
 	private static int[] findLargestBlobs(int[] mass,int amountOfBlobs){
 		int i=1;
-		int[] largestBlobs = new int[8];
+		int[] largestBlobs = new int[9];
 		while (i<amountOfBlobs){
 			if (mass[i]!=0){//means that this is a base blob
-				if (mass[i]>mass[largestBlobs[7]]){
-					if(mass[i]>mass[largestBlobs[6]]){
-						largestBlobs[7] = largestBlobs[6];
-						if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
-							largestBlobs[6] = largestBlobs[5];
-							if (mass[i]>mass[largestBlobs[4]]){
-								largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
-								if (mass[i]>mass[largestBlobs[3]]){
+				if (mass[i]>mass[largestBlobs[8]]){
+					if (mass[i]>mass[largestBlobs[7]]){
+						largestBlobs[8] = largestBlobs[7];
+						if(mass[i]>mass[largestBlobs[6]]){
+							largestBlobs[7] = largestBlobs[6];
+							if (mass[i]>mass[largestBlobs[5]]){//if its larger then the now 6th largest blob then it needs to be in the array
+								largestBlobs[6] = largestBlobs[5];
+								if (mass[i]>mass[largestBlobs[4]]){
+									largestBlobs[5] =largestBlobs[4];//we can already move this blobnumber to the next place
+									if (mass[i]>mass[largestBlobs[3]]){
 
-									largestBlobs[4] =largestBlobs[3];//we can already move this blobnumber to the next place
-									if (mass[i]>mass[largestBlobs[2]]){
+										largestBlobs[4] =largestBlobs[3];//we can already move this blobnumber to the next place
+										if (mass[i]>mass[largestBlobs[2]]){
 
-										largestBlobs[3] =largestBlobs[2];//we can already move this blobnumber to the next place
-										if (mass[i]>mass[largestBlobs[1]]){
+											largestBlobs[3] =largestBlobs[2];//we can already move this blobnumber to the next place
+											if (mass[i]>mass[largestBlobs[1]]){
 
-											largestBlobs[2] =largestBlobs[1];//we can already move this blobnumber to the next place
-											if (mass[i]>mass[largestBlobs[0]]){
-												largestBlobs[1] =largestBlobs[0];
-												largestBlobs[0] = i;//save current blob number as the largest blob
-											}else{//means this blob should be at spot 1
-												largestBlobs[1] = i;//save current blob number as the second largest blob
+												largestBlobs[2] =largestBlobs[1];//we can already move this blobnumber to the next place
+												if (mass[i]>mass[largestBlobs[0]]){
+													largestBlobs[1] =largestBlobs[0];
+													largestBlobs[0] = i;//save current blob number as the largest blob
+												}else{//means this blob should be at spot 1
+													largestBlobs[1] = i;//save current blob number as the second largest blob
+												}
+											}else{//means this blob should be at spot 2
+												largestBlobs[2] = i;//save current blob number as the third largest blob
 											}
-										}else{//means this blob should be at spot 2
-											largestBlobs[2] = i;//save current blob number as the third largest blob
+										}else{//means this blob should be at spot 3
+											largestBlobs[3] = i;//save current blob number as the fourth largest blob
 										}
-									}else{//means this blob should be at spot 3
-										largestBlobs[3] = i;//save current blob number as the fourth largest blob
+									}else{//means this blob should be at spot 4
+										largestBlobs[4] = i;//save current blob number as the fifth largest blob
 									}
-								}else{//means this blob should be at spot 4
-									largestBlobs[4] = i;//save current blob number as the fifth largest blob
+								}else{//means this blob should be at spot 5
+									largestBlobs[5] = i;
 								}
-							}else{//means this blob should be at spot 5
-								largestBlobs[5] = i;
+							}else{//means that this spot should be at spot 6
+								largestBlobs[6] = i;
 							}
-						}else{//means that this spot should be at spot 6
-							largestBlobs[6] = i;
+						}else{
+							largestBlobs[7] = i;
 						}
 					}else{
-						largestBlobs[7] = i;
+						largestBlobs[8] = i;
 					}
 				}
 			}
@@ -1259,7 +1266,7 @@ public class Processing {
 	 * @return Array with the 6 largest images
 	 */
 	public static BufferedImage[] segMent(BufferedImage buffer){
-		int[][] data = new int[8][];
+		int[][] data = new int[9][];
 		data[0] = Processing.findMinMaxOfBlob(buffer, Color.RED);
 		data[1] = Processing.findMinMaxOfBlob(buffer, Color.GREEN);
 		data[2] = Processing.findMinMaxOfBlob(buffer, Color.YELLOW);
@@ -1268,32 +1275,48 @@ public class Processing {
 		data[5] = Processing.findMinMaxOfBlob(buffer, Color.ORANGE);
 		data[6] = Processing.findMinMaxOfBlob(buffer, Color.PINK);
 		data[7] = Processing.findMinMaxOfBlob(buffer, Color.blue);
+		data[8] = Processing.findMinMaxOfBlob(buffer, Color.LIGHT_GRAY);
 		int invalid =6;
 		boolean found = false;
-		for (int i = 0; i<6; i++){
+		for (int i = 0; i<8; i++){
 			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
 				invalid =i;
+				break;
 			}
 		}
-		
+
 		int[] temp = data[invalid];
-		while (invalid<7){
+		while (invalid<8){
 			data[invalid] = data[invalid+1];
 			invalid++;
 		}
 		data[invalid] = temp;
-		for (int i = 0; i<6; i++){
+		for (int i = 0; i<8; i++){
 			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
 				invalid =i;
+				break;
 			}
 		}
 		temp = data[invalid];
-		while (invalid<6){
+		while (invalid<8){
+			data[invalid] = data[invalid+1];
+			invalid++;
+		}
+		data[invalid] = temp;
+		for (int i = 0; i<8; i++){
+			if (data[i][2]-data[i][0]>(buffer.getWidth()/3)){
+				invalid =i;
+				break;
+			}
+		}
+		temp = data[invalid];
+		while (invalid<8){
 			data[invalid] = data[invalid+1];
 			invalid++;
 		}
 		data[invalid] = temp;
 		
+
 		for (int i =0; i <5;){
 			if (data[i][0]>data[i+1][0]){//the next blob is further to the left as the current blob, switching them around
 				temp = data[i];
@@ -1427,7 +1450,7 @@ public class Processing {
 		}
 		return source;
 	}
-	
+
 	/**
 	 * This method will smooth an area in order to connect certain blobs before segmentation
 	 * @param source
