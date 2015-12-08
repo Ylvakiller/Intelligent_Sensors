@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.swing.ImageIcon;
 
@@ -1271,8 +1273,8 @@ public class Processing {
 	 * @param templates
 	 */
 	public static void getChar(BufferedImage segment, BufferedImage[] templates){
-		int best = 0;
 		int i=0;
+		double [] percentage = new double[36];
 		while (i<36){
 			BufferedImage tempSegment;
 			if(segment.getWidth()<templates[i].getWidth()){
@@ -1286,19 +1288,50 @@ public class Processing {
 				tempSegment = segment;
 			}
 			//At this point we are sure that tempSegment is in no direction smaller than the current template
-			BufferedImage tempTemp;
+			BufferedImage tempTemplate;
 			if(tempSegment.getWidth()>templates[i].getWidth()){
-				tempTemp = Processing.scaleImage(templates[i], tempSegment.getWidth(), templates[i].getHeight());
-				if(tempTemp.getHeight()>tempSegment.getHeight()){
-					tempTemp = Processing.scaleImage(tempTemp, tempTemp.getWidth(), tempSegment.getHeight());
+				tempTemplate = Processing.scaleImage(templates[i], tempSegment.getWidth(),templates[i].getHeight());
+				if (tempSegment.getHeight()>tempTemplate.getHeight()){
+					tempTemplate = Processing.scaleImage(tempTemplate, tempTemplate.getWidth(), tempSegment.getHeight());
 				}
-			}else if(tempSegment.getHeight()>templates[i].getHeight()){
-				tempTemp = Processing.scaleImage(templates[i], templates[i].getWidth(), tempSegment.getHeight());
+			}else if (tempSegment.getHeight()>templates[i].getHeight()){
+				tempTemplate = Processing.scaleImage(templates[i], templates[i].getWidth(), tempSegment.getHeight());
 			}else{
-				tempTemp = tempSegment;
+				tempTemplate = templates[i];
 			}
-			//By now the 2 temp images are exactely the same size
+			if (tempTemplate.getWidth()!=tempSegment.getWidth()||tempTemplate.getHeight()!=tempSegment.getHeight()){
+				System.err.println("Something went wrong");
+			}
+			//If the code gets to here then both temp images are the same size
+			int x = 0;
+			double same =0;
+			double total = 0;
+			while (x<tempSegment.getWidth()){
+				int y = 0;
+				while (y<tempSegment.getHeight()){
+					if (tempSegment.getRGB(x, y)==tempTemplate.getRGB(x, y)){
+						same++;
+					}
+						total++;
+					
+					y++;
+					
+				}
+				x++;
+			}
+			
+			percentage [i] = same/total;
+			i++;
 		}
+		i=0;
+		int best = 0;
+		while (i<36){
+			if (percentage[best]<percentage[i]){
+				best=i;
+			}
+			i++;
+		}
+		System.out.println(percentage[best]);
 	}
 	/**
 	 * Will scale the given source to the given dimensions

@@ -105,6 +105,8 @@ public class ThreadedProcessing extends Thread {
 		}
 		FileAccess.writeSegmented(segmented, FileAccess.getFileNumber(Integer.parseInt(Thread.currentThread().getName())));
 		BufferedImage[] templates = FileAccess.getTemplates();
+		//It might be worth looking into a connected algorithm if time allows before running the next step
+		Processing.getChar(segmented[0], templates);
 	}
 
 	public synchronized int increment() {
